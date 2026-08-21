@@ -58,6 +58,8 @@ Planned:
 ├── profiles/                   # Versioned organizational profile definitions
 ├── src/xyz_okf/
 │   ├── cli.py                  # User and CI commands
+│   ├── connector_conformance.py # Reusable source sandbox certification
+│   ├── discovery.py            # Governed source discovery evidence model
 │   ├── identity.py             # Stable identity and canonical digest profiles
 │   ├── models.py               # Typed OKF/profile/report models
 │   ├── parser.py               # UTF-8, YAML frontmatter and Markdown parsing

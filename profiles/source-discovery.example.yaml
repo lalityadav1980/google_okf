@@ -1,0 +1,42 @@
+schema_version: "1.0"
+discovery_status: draft
+source_system: synthetic-collaboration
+source_kind: other
+product_version: "sandbox-1"
+owners:
+  product: role:collaboration-product-owner
+  content: role:pilot-content-owner
+  identity_access: role:identity-access-owner
+  records_privacy: role:records-privacy-owner
+  engineering: role:connector-engineering
+collections:
+  - collection_ref: synthetic:pilot-collection
+    purpose: Exercise the source discovery and connector certification contract with synthetic data.
+    owner_role: role:pilot-content-owner
+    maximum_classification: INTERNAL
+    residency_regions: [test-region]
+    estimated_items: 100
+capabilities:
+  attachments: &unknown
+    state: unknown
+    evidence_refs: []
+    notes: Source-owner evidence is required before connector implementation.
+  audit: *unknown
+  body_conversion: *unknown
+  classification: *unknown
+  deletion_signal: *unknown
+  entitlements: *unknown
+  incremental_changes: *unknown
+  rate_limits: *unknown
+  records_controls: *unknown
+  residency: *unknown
+  sandbox: *unknown
+  stable_identity: *unknown
+  version_identity: *unknown
+open_decisions:
+  - decision_id: DISC-001
+    question: Which approved sandbox identity and collection will provide certification evidence?
+    owner_role: role:source-product-owner
+    blocking: true
+    due_by: null
+credentials_in_document: false

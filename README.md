@@ -68,6 +68,8 @@ indexing services.
     authorize-before-retrieval invariant, catalog lifecycle, OpenAPI, and tests.
 20. [ADR-0006](docs/adr/0006-authorization-before-retrieval.md) — retrieval
     authorization, immutable routing, withdrawal, and public error decisions.
+21. [Source and platform discovery](docs/15-source-and-platform-discovery.md) —
+    Confluence/SharePoint evidence gates, YODA/RACK maps, and connector certification.
 
 ## Framework quick start
 
@@ -112,6 +114,7 @@ The first vertical slice includes:
 - a CLI validator with text and JSON output;
 - controlled type, metadata, verification, freshness, link, and relationship checks;
 - a portable connector contract for Confluence, SharePoint, YODA, and RACK;
+- a source-discovery schema and content-minimized connector certification suite;
 - a verified-release catalog with promotion, rollback, and withdrawal behavior;
 - a provider-neutral authorization port and deny-by-default reference evaluator;
 - an OpenID Connect-declared, release-aware FastAPI/OpenAPI serving contract;

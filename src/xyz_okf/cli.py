@@ -12,6 +12,8 @@ from pydantic import BaseModel, ValidationError
 from rich.console import Console
 from rich.table import Table
 
+from xyz_okf.connector_conformance import ConnectorCertificationReport
+from xyz_okf.discovery import SourceDiscoveryProfile
 from xyz_okf.identity import (
     IdentityPolicy,
     SourceAnchor,
@@ -358,6 +360,20 @@ def verify_release_command(archive_path: YamlArgument) -> None:
 def release_manifest_schema_command() -> None:
     """Print the JSON Schema for the release manifest contract."""
     typer.echo(json.dumps(ReleaseManifest.model_json_schema(), indent=2, sort_keys=True))
+
+
+@app.command("source-discovery-schema")
+def source_discovery_schema_command() -> None:
+    """Print the JSON Schema for source/platform discovery evidence."""
+    typer.echo(json.dumps(SourceDiscoveryProfile.model_json_schema(), indent=2, sort_keys=True))
+
+
+@app.command("connector-report-schema")
+def connector_report_schema_command() -> None:
+    """Print the JSON Schema for content-minimized connector certification reports."""
+    typer.echo(
+        json.dumps(ConnectorCertificationReport.model_json_schema(), indent=2, sort_keys=True)
+    )
 
 
 @app.command("validate")

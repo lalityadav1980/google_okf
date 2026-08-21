@@ -6,6 +6,8 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from xyz_okf.cli import app
+from xyz_okf.connector_conformance import ConnectorCertificationReport
+from xyz_okf.discovery import SourceDiscoveryProfile
 
 PROJECT_ROOT = Path(__file__).parents[1]
 RUNNER = CliRunner()
@@ -160,3 +162,13 @@ def test_hash_commands_return_named_canonical_profiles() -> None:
     assert concept.exit_code == 0, concept.output
     assert json.loads(source.output)["canonical_profile"] == "xyz-okf-source-c14n-v1"
     assert json.loads(concept.output)["canonical_profile"] == "xyz-okf-concept-c14n-v1"
+
+
+def test_discovery_and_connector_report_schema_commands_match_models() -> None:
+    discovery = RUNNER.invoke(app, ["source-discovery-schema"])
+    connector_report = RUNNER.invoke(app, ["connector-report-schema"])
+
+    assert discovery.exit_code == 0, discovery.output
+    assert connector_report.exit_code == 0, connector_report.output
+    assert json.loads(discovery.output) == SourceDiscoveryProfile.model_json_schema()
+    assert json.loads(connector_report.output) == ConnectorCertificationReport.model_json_schema()

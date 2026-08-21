@@ -1,0 +1,263 @@
+{
+  "$defs": {
+    "CapabilityEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_refs": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Refs",
+          "type": "array"
+        },
+        "notes": {
+          "minLength": 1,
+          "title": "Notes",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/$defs/EvidenceState"
+        }
+      },
+      "required": [
+        "state",
+        "notes"
+      ],
+      "title": "CapabilityEvidence",
+      "type": "object"
+    },
+    "CollectionScope": {
+      "additionalProperties": false,
+      "properties": {
+        "collection_ref": {
+          "minLength": 1,
+          "title": "Collection Ref",
+          "type": "string"
+        },
+        "estimated_items": {
+          "minimum": 0,
+          "title": "Estimated Items",
+          "type": "integer"
+        },
+        "maximum_classification": {
+          "enum": [
+            "PUBLIC",
+            "INTERNAL",
+            "CONFIDENTIAL",
+            "RESTRICTED"
+          ],
+          "title": "Maximum Classification",
+          "type": "string"
+        },
+        "owner_role": {
+          "minLength": 1,
+          "title": "Owner Role",
+          "type": "string"
+        },
+        "purpose": {
+          "minLength": 1,
+          "title": "Purpose",
+          "type": "string"
+        },
+        "residency_regions": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Residency Regions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "collection_ref",
+        "purpose",
+        "owner_role",
+        "maximum_classification",
+        "residency_regions",
+        "estimated_items"
+      ],
+      "title": "CollectionScope",
+      "type": "object"
+    },
+    "DiscoveryOwners": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "minLength": 1,
+          "title": "Content",
+          "type": "string"
+        },
+        "engineering": {
+          "minLength": 1,
+          "title": "Engineering",
+          "type": "string"
+        },
+        "identity_access": {
+          "minLength": 1,
+          "title": "Identity Access",
+          "type": "string"
+        },
+        "product": {
+          "minLength": 1,
+          "title": "Product",
+          "type": "string"
+        },
+        "records_privacy": {
+          "minLength": 1,
+          "title": "Records Privacy",
+          "type": "string"
+        }
+      },
+      "required": [
+        "product",
+        "content",
+        "identity_access",
+        "records_privacy",
+        "engineering"
+      ],
+      "title": "DiscoveryOwners",
+      "type": "object"
+    },
+    "EvidenceState": {
+      "enum": [
+        "unknown",
+        "evidenced",
+        "gap"
+      ],
+      "title": "EvidenceState",
+      "type": "string"
+    },
+    "OpenDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "blocking": {
+          "title": "Blocking",
+          "type": "boolean"
+        },
+        "decision_id": {
+          "pattern": "^DISC-[0-9]{3}$",
+          "title": "Decision Id",
+          "type": "string"
+        },
+        "due_by": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Due By"
+        },
+        "owner_role": {
+          "minLength": 1,
+          "title": "Owner Role",
+          "type": "string"
+        },
+        "question": {
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        }
+      },
+      "required": [
+        "decision_id",
+        "question",
+        "owner_role",
+        "blocking"
+      ],
+      "title": "OpenDecision",
+      "type": "object"
+    },
+    "SourceKind": {
+      "enum": [
+        "confluence",
+        "sharepoint",
+        "internal-platform",
+        "other"
+      ],
+      "title": "SourceKind",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.xyz-bank.example.invalid/okf/source-discovery-v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "capabilities": {
+      "additionalProperties": {
+        "$ref": "#/$defs/CapabilityEvidence"
+      },
+      "title": "Capabilities",
+      "type": "object"
+    },
+    "collections": {
+      "items": {
+        "$ref": "#/$defs/CollectionScope"
+      },
+      "minItems": 1,
+      "title": "Collections",
+      "type": "array"
+    },
+    "credentials_in_document": {
+      "const": false,
+      "default": false,
+      "title": "Credentials In Document",
+      "type": "boolean"
+    },
+    "discovery_status": {
+      "enum": [
+        "draft",
+        "source-owner-review",
+        "approved"
+      ],
+      "title": "Discovery Status",
+      "type": "string"
+    },
+    "open_decisions": {
+      "items": {
+        "$ref": "#/$defs/OpenDecision"
+      },
+      "title": "Open Decisions",
+      "type": "array"
+    },
+    "owners": {
+      "$ref": "#/$defs/DiscoveryOwners"
+    },
+    "product_version": {
+      "minLength": 1,
+      "title": "Product Version",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_kind": {
+      "$ref": "#/$defs/SourceKind"
+    },
+    "source_system": {
+      "minLength": 1,
+      "title": "Source System",
+      "type": "string"
+    }
+  },
+  "required": [
+    "discovery_status",
+    "source_system",
+    "source_kind",
+    "product_version",
+    "owners",
+    "collections",
+    "capabilities",
+    "open_decisions"
+  ],
+  "title": "SourceDiscoveryProfile",
+  "type": "object"
+}

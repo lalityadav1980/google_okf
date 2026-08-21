@@ -184,6 +184,11 @@ actions:
     blocker: Pilot spaces, API identity, and source owner are not confirmed.
     depends_on: [OKF-203]
     acceptance: Approved mapping covers stable IDs, versions, changes, deletes, attachments, ACLs, classification, and rate limits.
+    partial_evidence:
+      - docs/15-source-and-platform-discovery.md
+      - docs/discovery/confluence-checklist.md
+      - profiles/source-discovery.example.yaml
+      - schemas/source-discovery-v1.schema.json
   - id: OKF-302
     epic: E30
     milestone: M2
@@ -194,6 +199,9 @@ actions:
     blocker: OKF-301 discovery is incomplete.
     depends_on: [OKF-301]
     acceptance: Connector contract, sandbox integration, entitlement, deletion, idempotency, and load tests pass.
+    partial_evidence:
+      - src/xyz_okf/connector_conformance.py
+      - tests/test_connector_conformance.py
   - id: OKF-311
     epic: E31
     milestone: M2
@@ -204,6 +212,11 @@ actions:
     blocker: Pilot sites/libraries, API identity, and records owner are not confirmed.
     depends_on: [OKF-203]
     acceptance: Approved mapping covers IDs, versions, changes, deletes, records, ACLs, classification, attachments, and throttling.
+    partial_evidence:
+      - docs/15-source-and-platform-discovery.md
+      - docs/discovery/sharepoint-checklist.md
+      - profiles/source-discovery.example.yaml
+      - schemas/source-discovery-v1.schema.json
   - id: OKF-312
     epic: E31
     milestone: M2
@@ -214,6 +227,9 @@ actions:
     blocker: OKF-311 discovery is incomplete.
     depends_on: [OKF-311]
     acceptance: Connector contract, sandbox integration, entitlement, deletion, idempotency, and load tests pass.
+    partial_evidence:
+      - src/xyz_okf/connector_conformance.py
+      - tests/test_connector_conformance.py
   - id: OKF-401
     epic: E40
     milestone: M3
@@ -326,6 +342,9 @@ actions:
     blocker: YODA product owner, current capabilities, interfaces, and roadmap are not documented.
     depends_on: []
     acceptance: Authoring, catalog, index, retrieval, agent, UX, identity, audit, and roadmap responsibilities are approved.
+    partial_evidence:
+      - docs/15-source-and-platform-discovery.md
+      - docs/discovery/YODA-capability-map.md
   - id: OKF-702
     epic: E70
     milestone: M4
@@ -336,6 +355,9 @@ actions:
     blocker: RACK product owner, current capabilities, interfaces, and roadmap are not documented.
     depends_on: []
     acceptance: Authoring, catalog, index, retrieval, agent, UX, identity, audit, and roadmap responsibilities are approved.
+    partial_evidence:
+      - docs/15-source-and-platform-discovery.md
+      - docs/discovery/RACK-capability-map.md
   - id: OKF-703
     epic: E70
     milestone: M4
