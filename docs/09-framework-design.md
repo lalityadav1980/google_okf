@@ -64,6 +64,7 @@ Planned:
 │   ├── profile.py              # Profile loader
 │   ├── producer.py             # Change planning, retry, publication and checkpoints
 │   ├── release.py              # Manifest, deterministic archive and verification
+│   ├── supply_chain.py         # Safe ORAS/Cosign digest command contracts
 │   ├── renderer.py             # Deterministic source-to-concept rendering
 │   ├── validator.py            # Bundle/profile validation engine
 │   └── connectors/base.py      # Portable source adapter contract

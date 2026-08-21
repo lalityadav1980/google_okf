@@ -60,6 +60,8 @@ indexing services.
     issue catalog, profile boundaries, fixture suite, and rule governance.
 16. [ADR-0005](docs/adr/0005-release-manifest-and-reproducible-archive.md) —
     release inventory, deterministic archive, validation, and digest boundary.
+17. [OCI signing and promotion](docs/12-oci-signing-and-promotion.md) — ORAS,
+    Cosign, media types, trust options, registry controls, and unblock inputs.
 
 ## Framework quick start
 

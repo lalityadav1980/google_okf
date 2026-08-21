@@ -235,9 +235,15 @@ actions:
     title: Publish and verify signed OCI bundle artifact
     owner_role: Platform Security Engineering
     priority: P0
-    status: READY
+    status: BLOCKED
+    blocker: Approved OCI repository, publisher identity, and KMS or certificate trust policy are not yet known; local ORAS/Cosign command contracts are complete.
     depends_on: [OKF-401]
     acceptance: ORAS push/pull and Cosign sign/verify succeed using an approved identity/KMS trust model and immutable digest.
+    partial_evidence:
+      - docs/12-oci-signing-and-promotion.md
+      - profiles/supply-chain.example.yaml
+      - src/xyz_okf/supply_chain.py
+      - tests/test_supply_chain.py
   - id: OKF-403
     epic: E40
     milestone: M3
