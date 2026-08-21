@@ -43,7 +43,7 @@ Planned:
 - source checkpoint store;
 - Confluence and SharePoint adapters;
 - release manifest, canonical hashing, archive, OCI, and Cosign integration;
-- OPA policies and entitlement adapter;
+- entitlement adapter;
 - serving API and hybrid index adapter;
 - YODA and RACK adapters; and
 - OpenTelemetry instrumentation and operational dashboards.

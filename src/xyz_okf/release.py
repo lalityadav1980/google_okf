@@ -58,6 +58,11 @@ class ReleaseFile(BaseModel):
     classification: Classification | None = None
     acl_ref: str | None = None
     source_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
+    criticality: Literal["low", "moderate", "high"] | None = None
+    status: Literal["draft", "stable", "deprecated"] | None = None
+    stale_after: AwareDatetime | None = None
+    source_count: int | None = Field(default=None, ge=0)
+    verified_count: int | None = Field(default=None, ge=0)
 
 
 class ReleaseManifest(BaseModel):
@@ -76,6 +81,7 @@ class ReleaseManifest(BaseModel):
     )
     bundle_id: str = Field(pattern=r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
     release_id: str = Field(pattern=r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
+    consumer_contract_version: Literal["1.0"] = "1.0"
     created_at: AwareDatetime
     source_commit: str = Field(pattern=r"^[0-9a-f]{7,64}$")
     prior_release_digest: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
@@ -215,6 +221,11 @@ def build_release(
             acl_ref = document.metadata.get("acl_ref")
             concept_uid = document.metadata.get("concept_uid")
             concept_type = document.metadata.get("type")
+            criticality = document.metadata.get("criticality")
+            status = document.metadata.get("status")
+            stale_after = document.metadata.get("stale_after")
+            sources = document.metadata.get("sources")
+            verified = document.metadata.get("verified", [])
             if classification not in _CLASSIFICATION_RANK:
                 raise ReleaseBuildError(
                     f"concept classification is missing or uncontrolled: {relative_path}"
@@ -226,6 +237,22 @@ def build_release(
                 raise ReleaseBuildError(f"concept_uid is missing: {relative_path}")
             if not isinstance(concept_type, str) or not concept_type:
                 raise ReleaseBuildError(f"concept type is missing: {relative_path}")
+            if criticality not in {"low", "moderate", "high"}:
+                raise ReleaseBuildError(f"concept criticality is missing: {relative_path}")
+            if status not in {"draft", "stable", "deprecated"}:
+                raise ReleaseBuildError(f"concept status is missing: {relative_path}")
+            if not isinstance(stale_after, datetime) or (
+                stale_after.tzinfo is None or stale_after.utcoffset() is None
+            ):
+                raise ReleaseBuildError(f"concept stale_after is missing or naive: {relative_path}")
+            if not isinstance(sources, list) or not sources:
+                raise ReleaseBuildError(f"concept sources are missing: {relative_path}")
+            if isinstance(verified, dict):
+                verified_count = 1
+            elif isinstance(verified, list):
+                verified_count = len(verified)
+            else:
+                raise ReleaseBuildError(f"concept verified field is invalid: {relative_path}")
             classifications.append(classification_value)
             values.update(
                 {
@@ -235,6 +262,11 @@ def build_release(
                     "classification": classification_value,
                     "acl_ref": acl_ref,
                     "source_sha256": _source_digest(document.metadata),
+                    "criticality": criticality,
+                    "status": status,
+                    "stale_after": stale_after,
+                    "source_count": len(sources),
+                    "verified_count": verified_count,
                 }
             )
         manifest_files.append(ReleaseFile.model_validate(values))

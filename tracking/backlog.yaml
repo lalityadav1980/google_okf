@@ -259,9 +259,14 @@ actions:
     title: Implement OPA release-admission policy
     owner_role: Information Security
     priority: P0
-    status: READY
+    status: IN_REVIEW
     depends_on: [OKF-401]
     acceptance: Policy gates classification, verification, source, profile, signature, and consumer compatibility with deny-by-default tests.
+    evidence:
+      - policies/release_admission.rego
+      - policies/release_admission_test.rego
+      - docs/13-release-admission-policy.md
+      - .github/workflows/ci.yml
   - id: OKF-502
     epic: E50
     milestone: M4

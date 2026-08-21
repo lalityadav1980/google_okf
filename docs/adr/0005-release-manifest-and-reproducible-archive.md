@@ -34,7 +34,9 @@ The archive contains the bundle plus a canonical JSON manifest at
 - a sorted file inventory with byte size and exact SHA-256.
 
 Concept entries also record canonical concept SHA-256, stable `concept_uid`,
-type, classification, `acl_ref`, and canonical source digest when present.
+type, classification, `acl_ref`, criticality, lifecycle/freshness, source and
+verification counts, and canonical source digest when present. The manifest
+declares its consumer-contract version for compatibility admission.
 
 Exact file/archive digests are authoritative integrity values. Canonical hashes
 are semantic comparison evidence and never replace exact digests for signature
@@ -76,4 +78,3 @@ Verification bounds uncompressed input size before parsing tar content.
   creates a recursive digest. The registry/catalog records the outer digest.
 - **Sign individual concept files:** deferred; signing the immutable release
   digest is simpler while the manifest retains per-file verification evidence.
-

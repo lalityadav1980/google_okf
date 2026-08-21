@@ -64,6 +64,9 @@ def test_manifest_captures_profile_identity_acl_classification_and_prior_release
     assert len(concepts) == 3
     assert all(entry.acl_ref for entry in concepts)
     assert all(entry.canonical_sha256 for entry in concepts)
+    assert all(entry.source_count == 1 for entry in concepts)
+    assert all(entry.verified_count == 1 for entry in concepts)
+    assert all(entry.status == "stable" and entry.stale_after for entry in concepts)
     assert [entry.path for entry in artifact.manifest.files] == sorted(
         entry.path for entry in artifact.manifest.files
     )

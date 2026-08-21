@@ -62,6 +62,8 @@ indexing services.
     release inventory, deterministic archive, validation, and digest boundary.
 17. [OCI signing and promotion](docs/12-oci-signing-and-promotion.md) — ORAS,
     Cosign, media types, trust options, registry controls, and unblock inputs.
+18. [Release admission policy](docs/13-release-admission-policy.md) — OPA input,
+    denial catalog, environment policy, evidence, tests, and lifecycle use.
 
 ## Framework quick start
 
