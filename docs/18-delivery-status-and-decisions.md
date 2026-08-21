@@ -16,7 +16,7 @@ Local quality evidence on 21 August 2026:
 - two independent package builds produced byte-identical wheel, source archive,
   normalized CycloneDX runtime SBOM, and canonical digest evidence;
 - the wheel contains the release-admission policy and all versioned JSON/OpenAPI contracts;
-- 135 tests pass with 86% branch-aware coverage;
+- 139 tests pass with 86% branch-aware coverage;
 - OPA 1.17 release-admission policy has 21 passing Rego tests;
 - sample bundle validation and deterministic release build/verification pass;
 - no business-line-specific terminology is present in repository content; and

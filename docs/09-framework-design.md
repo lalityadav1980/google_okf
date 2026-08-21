@@ -278,7 +278,9 @@ The framework package has a separate supply-chain boundary. CI builds a
 byte-reproducible wheel and source distribution, normalizes uv's CycloneDX 1.5
 runtime export, binds it to the `uv.lock` SHA-256, verifies that the wheel
 contains the release-admission policy and versioned schemas, and writes a typed
-digest inventory. This evidence is not a signature or production provenance;
+digest inventory. A separate verifier fails on an unexpected/tampered artifact,
+noncanonical evidence/SBOM, missing wheel contract, or externally expected
+commit/lock mismatch. This evidence is not a signature or production provenance;
 the approved trust service must sign/retain it after `DEC-005`. See
 [framework supply-chain and repository security](19-framework-supply-chain-and-security.md).
 

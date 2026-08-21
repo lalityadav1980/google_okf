@@ -79,11 +79,20 @@ jobs:
 
       - name: Build framework distributions, SBOM, and digest evidence
         run: |
-          uv build --no-build-isolation --out-dir dist/framework
+          uv build --no-build-isolation --no-create-gitignore --out-dir dist/framework
           uv run --locked python scripts/build_framework_evidence.py \
             --dist-dir dist/framework \
             --source-commit "${GITHUB_SHA}" \
             --created-at "$(git show -s --format=%cI HEAD)"
+          uv run --locked python scripts/verify_framework_evidence.py \
+            --dist-dir dist/framework \
+            --expected-source-commit "${GITHUB_SHA}" \
+            --expected-lock-file uv.lock
+          uv run --locked python scripts/check_framework_reproducibility.py \
+            --reference-dir dist/framework \
+            --source-commit "${GITHUB_SHA}" \
+            --created-at "$(git show -s --format=%cI HEAD)" \
+            --lock-file uv.lock
 
       - name: Retain framework supply-chain evidence
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

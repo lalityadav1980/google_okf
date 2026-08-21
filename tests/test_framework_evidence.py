@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import hashlib
 import json
+import shutil
 import zipfile
 from datetime import UTC, datetime
 from pathlib import Path
@@ -9,13 +11,16 @@ import pytest
 from pydantic import ValidationError
 
 from xyz_okf.framework_evidence import (
+    FRAMEWORK_EVIDENCE_NAME,
     FRAMEWORK_SBOM_NAME,
     REQUIRED_WHEEL_CONTRACTS,
     FrameworkBuildEvidence,
     FrameworkEvidenceError,
     build_framework_evidence,
+    compare_framework_evidence_directories,
     framework_evidence_bytes,
     normalize_cyclonedx_sbom,
+    verify_framework_evidence_directory,
     verify_framework_wheel,
 )
 
@@ -64,6 +69,30 @@ def _write_wheel(path: Path, members: set[str]) -> None:
     with zipfile.ZipFile(path, "w") as wheel:
         for member in sorted(members):
             wheel.writestr(member, b"contract\n")
+
+
+def _write_valid_evidence(
+    root: Path, *, source_content: bytes = b"source distribution"
+) -> FrameworkBuildEvidence:
+    root.mkdir()
+    wheel = root / "xyz_bank_okf-0.1.0-py3-none-any.whl"
+    source = root / "xyz_bank_okf-0.1.0.tar.gz"
+    sbom = root / FRAMEWORK_SBOM_NAME
+    _write_wheel(wheel, set(REQUIRED_WHEEL_CONTRACTS) | {"xyz_okf/__init__.py"})
+    source.write_bytes(source_content)
+    sbom.write_bytes(_normalize(_raw_sbom()))
+    evidence = build_framework_evidence(
+        [wheel, source, sbom],
+        artifact_root=root,
+        package_version="0.1.0",
+        source_commit="c" * 40,
+        created_at=datetime(2026, 8, 21, tzinfo=UTC),
+        python_version="3.13.7",
+        uv_version="0.11.7",
+        uv_lock_sha256=LOCK_SHA256,
+    )
+    (root / FRAMEWORK_EVIDENCE_NAME).write_bytes(framework_evidence_bytes(evidence))
+    return evidence
 
 
 def test_cyclonedx_normalization_is_deterministic_and_binds_lock() -> None:
@@ -194,3 +223,82 @@ def test_committed_framework_evidence_schema_matches_model() -> None:
         )
     )
     assert committed == FrameworkBuildEvidence.model_json_schema()
+
+
+def test_framework_evidence_directory_verifies_exact_inventory_and_expectations(
+    tmp_path: Path,
+) -> None:
+    root = tmp_path / "evidence"
+    expected = _write_valid_evidence(root)
+
+    verified = verify_framework_evidence_directory(
+        root,
+        expected_source_commit="c" * 40,
+        expected_uv_lock_sha256=LOCK_SHA256,
+        expected_evidence_sha256=hashlib.sha256(
+            (root / FRAMEWORK_EVIDENCE_NAME).read_bytes()
+        ).hexdigest(),
+    )
+    assert verified == expected
+
+    with pytest.raises(FrameworkEvidenceError, match="source commit"):
+        verify_framework_evidence_directory(root, expected_source_commit="d" * 40)
+    with pytest.raises(FrameworkEvidenceError, match="lock digest"):
+        verify_framework_evidence_directory(root, expected_uv_lock_sha256="d" * 64)
+    with pytest.raises(FrameworkEvidenceError, match="evidence digest"):
+        verify_framework_evidence_directory(root, expected_evidence_sha256="d" * 64)
+
+
+def test_framework_evidence_directory_rejects_tamper_and_unexpected_files(
+    tmp_path: Path,
+) -> None:
+    root = tmp_path / "evidence"
+    _write_valid_evidence(root)
+    wheel = root / "xyz_bank_okf-0.1.0-py3-none-any.whl"
+    wheel.write_bytes(wheel.read_bytes() + b"tampered")
+
+    with pytest.raises(FrameworkEvidenceError, match="digest/size mismatch"):
+        verify_framework_evidence_directory(root)
+
+    root = tmp_path / "unexpected"
+    _write_valid_evidence(root)
+    (root / "unexpected.txt").write_text("unexpected\n", encoding="utf-8")
+    with pytest.raises(FrameworkEvidenceError, match="inventory mismatch"):
+        verify_framework_evidence_directory(root)
+
+
+def test_framework_evidence_directory_rejects_noncanonical_manifest(tmp_path: Path) -> None:
+    root = tmp_path / "evidence"
+    evidence = _write_valid_evidence(root)
+    (root / FRAMEWORK_EVIDENCE_NAME).write_text(
+        json.dumps(evidence.model_dump(mode="json"), indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(FrameworkEvidenceError, match="canonically encoded"):
+        verify_framework_evidence_directory(root)
+
+
+def test_framework_build_comparison_requires_all_four_files_to_match(tmp_path: Path) -> None:
+    first = tmp_path / "first"
+    second = tmp_path / "second"
+    _write_valid_evidence(first)
+    shutil.copytree(first, second)
+
+    digests = compare_framework_evidence_directories(
+        first,
+        second,
+        expected_source_commit="c" * 40,
+        expected_uv_lock_sha256=LOCK_SHA256,
+    )
+    assert set(digests) == {
+        FRAMEWORK_EVIDENCE_NAME,
+        FRAMEWORK_SBOM_NAME,
+        "xyz_bank_okf-0.1.0-py3-none-any.whl",
+        "xyz_bank_okf-0.1.0.tar.gz",
+    }
+
+    third = tmp_path / "third"
+    _write_valid_evidence(third, source_content=b"different source distribution")
+    with pytest.raises(FrameworkEvidenceError, match="documents differ"):
+        compare_framework_evidence_directories(first, third)

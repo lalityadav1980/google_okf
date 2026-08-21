@@ -90,7 +90,9 @@ def test_security_dependencies_and_ci_supply_chain_gates_are_locked() -> None:
         "scripts/check_secrets.py",
         "scripts/audit_runtime_dependencies.py",
         "scripts/build_framework_evidence.py",
-        "uv build --no-build-isolation --out-dir dist/framework",
+        "scripts/check_framework_reproducibility.py",
+        "scripts/verify_framework_evidence.py",
+        "uv build --no-build-isolation --no-create-gitignore --out-dir dist/framework",
         "retention-days: 14",
     }
     assert all(command in workflow for command in required_commands)

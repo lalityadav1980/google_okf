@@ -96,11 +96,13 @@ actions:
     priority: P0
     status: IN_REVIEW
     depends_on: [OKF-002]
-    acceptance: CI builds byte-reproducible wheel/source distributions, a normalized CycloneDX runtime SBOM bound to uv.lock, and a digest manifest while verifying packaged schemas and release-admission policy.
+    acceptance: CI builds byte-reproducible wheel/source distributions, a normalized CycloneDX runtime SBOM bound to uv.lock, and a digest manifest; an independent fail-closed verifier proves exact inventory, expected commit/lock, hashes, canonical SBOM/evidence, and packaged schemas/policy.
     evidence:
       - src/xyz_okf/framework_evidence.py
       - schemas/framework-build-evidence-v1.schema.json
       - scripts/build_framework_evidence.py
+      - scripts/check_framework_reproducibility.py
+      - scripts/verify_framework_evidence.py
       - tests/test_framework_evidence.py
       - .github/workflows/ci.yml
       - docs/19-framework-supply-chain-and-security.md

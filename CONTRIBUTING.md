@@ -17,10 +17,12 @@ uv sync --locked
 Run before opening a pull request:
 
 ```bash
-uv run ruff format --check src tests
-uv run ruff check src tests
-uv run mypy src
-uv run pytest
+uv run --locked ruff format --check src tests scripts
+uv run --locked ruff check src tests scripts
+uv run --locked python scripts/check_secrets.py
+uv run --locked python scripts/audit_runtime_dependencies.py
+uv run --locked mypy src
+uv run --locked pytest
 uv run xyz-okf validate examples/pilot-bundle \
   --profile profiles/xyz-bank-pilot.yaml
 ```
@@ -28,8 +30,8 @@ uv run xyz-okf validate examples/pilot-bundle \
 To apply formatting locally:
 
 ```bash
-uv run ruff format src tests
-uv run ruff check --fix src tests
+uv run ruff format src tests scripts
+uv run ruff check --fix src tests scripts
 ```
 
 ## Work tracking
@@ -77,4 +79,3 @@ Use a short conventional prefix:
 This repository does not yet have an approved project license. Do not distribute
 or reuse its code outside the repository owner's permissions until action
 `OKF-004` is completed.
-

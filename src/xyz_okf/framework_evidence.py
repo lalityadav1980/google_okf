@@ -272,3 +272,124 @@ def framework_evidence_bytes(evidence: FrameworkBuildEvidence) -> bytes:
     return (
         json.dumps(payload, ensure_ascii=False, separators=(",", ":"), sort_keys=True) + "\n"
     ).encode("utf-8")
+
+
+def verify_framework_evidence_directory(
+    artifact_root: Path,
+    *,
+    expected_source_commit: str | None = None,
+    expected_uv_lock_sha256: str | None = None,
+    expected_evidence_sha256: str | None = None,
+) -> FrameworkBuildEvidence:
+    """Verify artifact consistency plus optional externally supplied commit/lock expectations."""
+    if artifact_root.is_symlink() or not artifact_root.is_dir():
+        raise FrameworkEvidenceError(f"artifact_root must be a regular directory: {artifact_root}")
+    root = artifact_root.resolve()
+    evidence_path = root / FRAMEWORK_EVIDENCE_NAME
+    if evidence_path.is_symlink() or not evidence_path.is_file():
+        raise FrameworkEvidenceError(f"framework evidence is missing: {evidence_path}")
+    evidence_content = evidence_path.read_bytes()
+    if expected_evidence_sha256 is not None:
+        if not _HEX_SHA256.fullmatch(expected_evidence_sha256):
+            raise FrameworkEvidenceError(
+                "expected_evidence_sha256 must be a lowercase SHA-256 digest"
+            )
+        if sha256_bytes(evidence_content) != expected_evidence_sha256:
+            raise FrameworkEvidenceError("framework evidence digest does not match expected")
+    try:
+        evidence = FrameworkBuildEvidence.model_validate_json(evidence_content)
+    except ValueError as exc:
+        raise FrameworkEvidenceError("framework evidence is not valid") from exc
+    if framework_evidence_bytes(evidence) != evidence_content:
+        raise FrameworkEvidenceError("framework evidence is not canonically encoded")
+    if expected_source_commit is not None and evidence.source_commit != expected_source_commit:
+        raise FrameworkEvidenceError("framework evidence source commit does not match expected")
+    if expected_uv_lock_sha256 is not None and evidence.uv_lock_sha256 != expected_uv_lock_sha256:
+        raise FrameworkEvidenceError("framework evidence lock digest does not match expected")
+
+    expected_paths = {artifact.path for artifact in evidence.artifacts}
+    expected_paths.add(FRAMEWORK_EVIDENCE_NAME)
+    actual_paths: set[str] = set()
+    for candidate in root.iterdir():
+        if candidate.is_symlink() or not candidate.is_file():
+            raise FrameworkEvidenceError(
+                f"unexpected non-file framework artifact: {candidate.name}"
+            )
+        actual_paths.add(candidate.name)
+    if actual_paths != expected_paths:
+        missing = sorted(expected_paths.difference(actual_paths))
+        unexpected = sorted(actual_paths.difference(expected_paths))
+        raise FrameworkEvidenceError(
+            f"framework artifact inventory mismatch; missing={missing}; unexpected={unexpected}"
+        )
+
+    wheel_paths: list[Path] = []
+    sbom_path: Path | None = None
+    for artifact in evidence.artifacts:
+        candidate = root / artifact.path
+        if candidate.is_symlink() or not candidate.is_file():
+            raise FrameworkEvidenceError(f"framework artifact is missing: {artifact.path}")
+        content = candidate.read_bytes()
+        if len(content) != artifact.size or sha256_bytes(content) != artifact.sha256:
+            raise FrameworkEvidenceError(
+                f"framework artifact digest/size mismatch: {artifact.path}"
+            )
+        if _artifact_media_type(candidate) != artifact.media_type:
+            raise FrameworkEvidenceError(f"framework artifact media type mismatch: {artifact.path}")
+        if candidate.suffix == ".whl":
+            wheel_paths.append(candidate)
+        elif candidate.name == FRAMEWORK_SBOM_NAME:
+            sbom_path = candidate
+
+    if len(wheel_paths) != 1 or sbom_path is None:
+        raise FrameworkEvidenceError(
+            "framework evidence must contain one wheel and one runtime SBOM"
+        )
+    verify_framework_wheel(wheel_paths[0])
+    try:
+        sbom_payload = json.loads(sbom_path.read_bytes())
+    except json.JSONDecodeError as exc:
+        raise FrameworkEvidenceError("runtime SBOM is not valid JSON") from exc
+    normalized_sbom = normalize_cyclonedx_sbom(
+        sbom_payload,
+        package_name=evidence.package_name,
+        package_version=evidence.package_version,
+        uv_lock_sha256=evidence.uv_lock_sha256,
+    )
+    if normalized_sbom != sbom_path.read_bytes():
+        raise FrameworkEvidenceError("runtime SBOM is not canonically normalized")
+    return evidence
+
+
+def compare_framework_evidence_directories(
+    first_root: Path,
+    second_root: Path,
+    *,
+    expected_source_commit: str | None = None,
+    expected_uv_lock_sha256: str | None = None,
+) -> dict[str, str]:
+    """Verify two builds and prove every retained artifact is byte-identical."""
+    first = verify_framework_evidence_directory(
+        first_root,
+        expected_source_commit=expected_source_commit,
+        expected_uv_lock_sha256=expected_uv_lock_sha256,
+    )
+    second = verify_framework_evidence_directory(
+        second_root,
+        expected_source_commit=expected_source_commit,
+        expected_uv_lock_sha256=expected_uv_lock_sha256,
+    )
+    if first != second:
+        raise FrameworkEvidenceError("framework evidence documents differ between builds")
+
+    paths = [FRAMEWORK_EVIDENCE_NAME, *(artifact.path for artifact in first.artifacts)]
+    digests: dict[str, str] = {}
+    for relative_path in sorted(paths):
+        first_content = (first_root / relative_path).read_bytes()
+        second_content = (second_root / relative_path).read_bytes()
+        if first_content != second_content:
+            raise FrameworkEvidenceError(
+                f"framework artifact is not byte-reproducible: {relative_path}"
+            )
+        digests[relative_path] = sha256_bytes(first_content)
+    return digests

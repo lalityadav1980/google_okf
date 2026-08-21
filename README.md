@@ -134,8 +134,8 @@ The first vertical slice includes:
 - OpenTelemetry API spans/metrics with hashed identifiers and no content fields;
 - a versioned pilot benchmark, deterministic scorer, and assurance evidence plan;
 - a reproducible framework wheel/source build, normalized CycloneDX runtime
-  SBOM, lock-bound digest manifest, packaged policy/schema contracts, secret
-  scan, and runtime dependency audit;
+  SBOM, lock-bound digest manifest, independent artifact verifier, packaged
+  policy/schema contracts, secret scan, and runtime dependency audit;
 - a conformant synthetic pilot bundle; and
 - automated CI, tests, issue forms, and pull-request controls.
 

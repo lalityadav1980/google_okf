@@ -35,9 +35,9 @@ the bank trust decisions in `DEC-005`.
 | Source secret detection | `detect-secrets` scans Git-visible files without a baseline and without network verification | Any non-allowlisted finding fails; output shows path/type/line but never the value | `scripts/check_secrets.py` |
 | Runtime vulnerability audit | uv exports exact, hashed, non-development runtime requirements; `pip-audit` checks them without invoking pip | Export, collection, or known-vulnerability finding fails | `scripts/audit_runtime_dependencies.py` |
 | Runtime SBOM | uv exports CycloneDX 1.5 for locked runtime dependencies | Wrong format/root or invalid lock digest fails | `scripts/build_framework_evidence.py` |
-| Reproducible SBOM | Volatile timestamp/UUID are removed or deterministically replaced; arrays and JSON encoding are normalized | Same lock/package/toolchain must produce identical bytes | `normalize_cyclonedx_sbom` tests |
+| Reproducible build | Volatile SBOM timestamp/UUID are normalized; build time is explicit; CI performs an isolated second package/evidence build and byte-compares all four retained files | Any byte difference fails | `normalize_cyclonedx_sbom` and directory-comparison tests; `scripts/check_framework_reproducibility.py` |
 | Contract-bearing wheel | Hatch includes the OPA admission policy and all committed JSON/OpenAPI schemas | Missing, duplicate, unsafe, or symlinked wheel members fail | `verify_framework_wheel` tests |
-| Digest inventory | A typed manifest records source commit, explicit creation time, Python/uv versions, lock digest, size, media type, and SHA-256 for wheel/source/SBOM | Unsafe, duplicate, unsorted, external, or unsupported artifacts fail | `framework-build-evidence-v1.schema.json` |
+| Digest inventory and independent verification | A typed manifest records source commit, explicit creation time, Python/uv versions, lock digest, size, media type, and SHA-256 for wheel/source/SBOM; a separate verifier rechecks canonical encoding, exact inventory, hashes, expected commit/lock, SBOM normalization, and wheel contracts | Unsafe, duplicate, unsorted, external, unexpected, missing, tampered, or unsupported artifacts fail | `framework-build-evidence-v1.schema.json`, `scripts/verify_framework_evidence.py` |
 | CI evidence retention | Pinned `actions/upload-artifact` stores the four framework artifacts for 14 days | Missing output fails the workflow | `.github/workflows/ci.yml` |
 
 The only source allowlist is an explicitly labelled, deterministic SHA-256 test
@@ -59,6 +59,9 @@ One framework build creates exactly:
 The build-evidence file deliberately does not hash itself. A signed OCI
 attestation or approved provenance service must sign/retain its digest at the
 next trust boundary. A CI artifact download alone is not an authenticity claim.
+The verifier accepts `--expected-evidence-sha256` when that digest is supplied
+through an independently trusted channel; expected source commit and lock file
+can also be pinned by the caller.
 
 The runtime wheel must contain:
 
@@ -86,11 +89,20 @@ Run a framework evidence build:
 
 ```bash
 evidence_dir="$(mktemp -d /tmp/xyz-okf-framework.XXXXXX)"
-uv build --no-build-isolation --out-dir "$evidence_dir"
+uv build --no-build-isolation --no-create-gitignore --out-dir "$evidence_dir"
 uv run python scripts/build_framework_evidence.py \
   --dist-dir "$evidence_dir" \
   --source-commit "$(git rev-parse HEAD)" \
   --created-at "$(git show -s --format=%cI HEAD)"
+uv run python scripts/verify_framework_evidence.py \
+  --dist-dir "$evidence_dir" \
+  --expected-source-commit "$(git rev-parse HEAD)" \
+  --expected-lock-file uv.lock
+uv run python scripts/check_framework_reproducibility.py \
+  --reference-dir "$evidence_dir" \
+  --source-commit "$(git rev-parse HEAD)" \
+  --created-at "$(git show -s --format=%cI HEAD)" \
+  --lock-file uv.lock
 ```
 
 The schema is generated from the frozen Pydantic contract and guarded by a
