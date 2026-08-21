@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+import tomllib
 from pathlib import Path
 from typing import Any
 
@@ -74,3 +76,24 @@ def test_every_blocked_action_has_an_open_decision_and_safe_default() -> None:
             covered.update(decision["blocks"])
 
     assert blocked_actions <= covered
+
+
+def test_security_dependencies_and_ci_supply_chain_gates_are_locked() -> None:
+    with (PROJECT_ROOT / "pyproject.toml").open("rb") as handle:
+        project = tomllib.load(handle)
+    dev_dependencies = project["dependency-groups"]["dev"]
+    assert any(dependency.startswith("detect-secrets") for dependency in dev_dependencies)
+    assert any(dependency.startswith("pip-audit") for dependency in dev_dependencies)
+
+    workflow = (PROJECT_ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    required_commands = {
+        "scripts/check_secrets.py",
+        "scripts/audit_runtime_dependencies.py",
+        "scripts/build_framework_evidence.py",
+        "uv build --no-build-isolation --out-dir dist/framework",
+        "retention-days: 14",
+    }
+    assert all(command in workflow for command in required_commands)
+    action_references = re.findall(r"uses:\s+[^@\s]+@([^\s#]+)", workflow)
+    assert action_references
+    assert all(re.fullmatch(r"[0-9a-f]{40}", reference) for reference in action_references)

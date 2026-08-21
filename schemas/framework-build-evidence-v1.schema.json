@@ -1,0 +1,108 @@
+{
+  "$defs": {
+    "FrameworkArtifact": {
+      "additionalProperties": false,
+      "properties": {
+        "media_type": {
+          "minLength": 1,
+          "title": "Media Type",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "size": {
+          "minimum": 0,
+          "title": "Size",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "path",
+        "size",
+        "media_type",
+        "sha256"
+      ],
+      "title": "FrameworkArtifact",
+      "type": "object"
+    }
+  },
+  "$id": "https://schemas.xyz-bank.example.invalid/okf/framework-build-evidence-v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "artifacts": {
+      "items": {
+        "$ref": "#/$defs/FrameworkArtifact"
+      },
+      "minItems": 3,
+      "title": "Artifacts",
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "media_type": {
+      "const": "application/vnd.xyz-bank.okf.build-evidence.v1+json",
+      "default": "application/vnd.xyz-bank.okf.build-evidence.v1+json",
+      "title": "Media Type",
+      "type": "string"
+    },
+    "package_name": {
+      "const": "xyz-bank-okf",
+      "default": "xyz-bank-okf",
+      "title": "Package Name",
+      "type": "string"
+    },
+    "package_version": {
+      "pattern": "^[0-9A-Za-z][0-9A-Za-z.+-]*$",
+      "title": "Package Version",
+      "type": "string"
+    },
+    "python_version": {
+      "minLength": 1,
+      "title": "Python Version",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_commit": {
+      "pattern": "^[0-9a-f]{7,64}$",
+      "title": "Source Commit",
+      "type": "string"
+    },
+    "uv_lock_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Uv Lock Sha256",
+      "type": "string"
+    },
+    "uv_version": {
+      "minLength": 1,
+      "title": "Uv Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "package_version",
+    "source_commit",
+    "created_at",
+    "python_version",
+    "uv_version",
+    "uv_lock_sha256",
+    "artifacts"
+  ],
+  "title": "FrameworkBuildEvidence",
+  "type": "object"
+}

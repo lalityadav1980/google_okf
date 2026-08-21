@@ -118,6 +118,5 @@ def test_identity_and_hash_vectors_are_stable() -> None:
     )
 
     assert identity.concept_uid == "urn:xyz-bank:okf:concept:e744428b-1161-5368-8868-c666d67a80f2"
-    assert canonical_source_record_sha256(_record()) == (
-        "46c4f9204e473ccd4d3cca934f3a8f92498885bec6822a95d729da25db2f2cd3"
-    )
+    expected_digest = "46c4f9204e473ccd4d3cca934f3a8f92498885bec6822a95d729da25db2f2cd3"  # pragma: allowlist secret  # noqa: E501
+    assert canonical_source_record_sha256(_record()) == expected_digest

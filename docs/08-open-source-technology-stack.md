@@ -53,6 +53,9 @@ model, and intended use before production approval.
 | CLI | Typer + Rich | MIT | Selected. Typed commands and readable local/CI validation reports. |
 | Tests | pytest + pytest-cov | MIT | Selected. Supports unit, fixture, contract, integration, and conformance tests. |
 | Lint and format | Ruff | MIT | Selected. One fast, reproducible linter/formatter with `pyproject.toml` configuration. |
+| Runtime advisory audit | pip-audit | Apache-2.0 | Selected. Audits an exact hash-checked runtime export from `uv.lock`; advisory results remain time-specific and require triage. |
+| Source secret detection | detect-secrets | Apache-2.0 | Selected. Baseline-free, value-redacted CI scan with explicit line-level review exceptions only. |
+| Software bill of materials | uv CycloneDX 1.5 export | Apache-2.0/MIT | Selected for locked Python runtime dependencies; normalized and bound to the `uv.lock` digest. |
 | Static types | mypy | MIT | Selected for strict checking of the framework and connector contracts. |
 | Version control | Git | GPL-2.0-only | Selected as the portable history/review substrate; hosting platform remains replaceable. |
 
@@ -69,6 +72,9 @@ Official project references:
 - [Ruff linter](https://docs.astral.sh/ruff/linter/) and
   [formatter](https://docs.astral.sh/ruff/formatter/)
 - [pytest fixtures and scalable tests](https://docs.pytest.org/en/stable/explanation/fixtures.html)
+- [PyPA pip-audit](https://github.com/pypa/pip-audit),
+  [detect-secrets](https://github.com/Yelp/detect-secrets), and
+  [CycloneDX](https://cyclonedx.org/docs/1.5/json/)
 
 ## 4. Production platform stack — recommended
 
@@ -150,19 +156,33 @@ and databases.
 
 ## 7. Open-source governance actions
 
-Before the first distributable release:
+Implemented engineering controls:
+
+- locked direct/transitive Python dependencies and locked CI installation;
+- pinned third-party CI actions;
+- Ruff security rules and a baseline-free tracked-source secret scan;
+- hash-checked runtime dependency advisory audit;
+- normalized CycloneDX runtime SBOM bound to the lock digest;
+- reproducible wheel/source artifacts and canonical SHA-256 inventory; and
+- wheel verification for embedded policy and schema contracts.
+
+Before the first approved distributable release:
 
 1. Select and approve a license for this repository. It is currently unlicensed;
    public visibility alone does not make the code open source.
-2. Generate an SBOM for Python, container, and workflow dependencies.
-3. Pin direct dependencies and CI actions; verify lockfile and action updates.
-4. Run dependency, secret, license, and vulnerability scanning.
-5. Define patch/update SLOs by severity.
-6. Record provenance for built packages and OCI artifacts.
-7. Maintain a component register with owner, version, license, support route,
+2. Approve dependency licenses/attribution and run the bank-approved license
+   policy gate; the generated SBOM does not constitute legal approval.
+3. Add container, operating-system, workflow, and infrastructure SBOM/scans
+   when those artifact types enter scope.
+4. Define vulnerability and dependency patch/update SLOs by severity.
+5. Sign and retain approved provenance for built packages and OCI artifacts.
+6. Maintain a component register with owner, version, license, support route,
    data classification, and exit strategy.
-8. Prefer standards-based interfaces so a component can be replaced without
+7. Prefer standards-based interfaces so a component can be replaced without
    changing OKF bundles.
+
+The implemented evidence and its limits are specified in
+[framework supply-chain and repository security](19-framework-supply-chain-and-security.md).
 
 ## 8. Technology decision checkpoints
 

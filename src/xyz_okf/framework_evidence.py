@@ -1,0 +1,274 @@
+from __future__ import annotations
+
+import copy
+import json
+import re
+import stat
+import uuid
+import zipfile
+from collections.abc import Iterable, Mapping, Sequence
+from datetime import datetime
+from pathlib import Path, PurePosixPath
+from typing import Any, Literal
+
+from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, model_validator
+
+from xyz_okf.identity import sha256_bytes
+
+FRAMEWORK_SBOM_NAME = "xyz-bank-okf-runtime.cdx.json"
+FRAMEWORK_EVIDENCE_NAME = "xyz-bank-okf-build-evidence.json"
+FRAMEWORK_EVIDENCE_MEDIA_TYPE: Literal["application/vnd.xyz-bank.okf.build-evidence.v1+json"] = (
+    "application/vnd.xyz-bank.okf.build-evidence.v1+json"
+)
+SBOM_MEDIA_TYPE = "application/vnd.cyclonedx+json; version=1.5"
+REQUIRED_WHEEL_CONTRACTS = frozenset(
+    {
+        "xyz_okf/assets/policies/release_admission.rego",
+        "xyz_okf/assets/schemas/framework-build-evidence-v1.schema.json",
+        "xyz_okf/assets/schemas/pilot-benchmark-v1.schema.json",
+        "xyz_okf/assets/schemas/release-manifest-v1.schema.json",
+        "xyz_okf/assets/schemas/serving-api-v1.openapi.json",
+        "xyz_okf/assets/schemas/source-discovery-v1.schema.json",
+    }
+)
+
+_HEX_SHA256 = re.compile(r"^[0-9a-f]{64}$")
+_SOURCE_COMMIT = re.compile(r"^[0-9a-f]{7,64}$")
+
+
+class FrameworkEvidenceError(ValueError):
+    """Framework build evidence cannot be created or verified safely."""
+
+
+class FrameworkArtifact(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    path: str
+    size: int = Field(ge=0)
+    media_type: str = Field(min_length=1)
+    sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+
+class FrameworkBuildEvidence(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+        frozen=True,
+        json_schema_extra={
+            "$id": (
+                "https://schemas.xyz-bank.example.invalid/okf/"
+                "framework-build-evidence-v1.schema.json"
+            ),
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+        },
+    )
+
+    schema_version: Literal["1.0"] = "1.0"
+    media_type: Literal["application/vnd.xyz-bank.okf.build-evidence.v1+json"] = (
+        FRAMEWORK_EVIDENCE_MEDIA_TYPE
+    )
+    package_name: Literal["xyz-bank-okf"] = "xyz-bank-okf"
+    package_version: str = Field(pattern=r"^[0-9A-Za-z][0-9A-Za-z.+-]*$")
+    source_commit: str = Field(pattern=r"^[0-9a-f]{7,64}$")
+    created_at: AwareDatetime
+    python_version: str = Field(min_length=1)
+    uv_version: str = Field(min_length=1)
+    uv_lock_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    artifacts: list[FrameworkArtifact] = Field(min_length=3)
+
+    @model_validator(mode="after")
+    def validate_artifact_order_and_uniqueness(self) -> FrameworkBuildEvidence:
+        paths = [artifact.path for artifact in self.artifacts]
+        if paths != sorted(paths):
+            raise ValueError("framework artifacts must be sorted by path")
+        if len(paths) != len(set(paths)):
+            raise ValueError("framework artifact paths must be unique")
+        for path in paths:
+            _safe_relative_path(path)
+        return self
+
+
+def _safe_relative_path(value: str) -> PurePosixPath:
+    if not value or value.startswith("/") or "\\" in value or "//" in value:
+        raise FrameworkEvidenceError(f"unsafe artifact path: {value}")
+    path = PurePosixPath(value)
+    if value != path.as_posix() or any(part in {"", ".", ".."} for part in path.parts):
+        raise FrameworkEvidenceError(f"unsafe artifact path: {value}")
+    return path
+
+
+def _sort_properties(container: dict[str, Any]) -> None:
+    properties = container.get("properties")
+    if isinstance(properties, list):
+        properties.sort(key=lambda value: (str(value.get("name", "")), str(value.get("value", ""))))
+
+
+def normalize_cyclonedx_sbom(
+    payload: Mapping[str, Any],
+    *,
+    package_name: str,
+    package_version: str,
+    uv_lock_sha256: str,
+) -> bytes:
+    """Normalize uv's volatile CycloneDX fields into deterministic JSON bytes."""
+    if payload.get("bomFormat") != "CycloneDX" or payload.get("specVersion") != "1.5":
+        raise FrameworkEvidenceError("expected a CycloneDX 1.5 JSON document")
+    if not _HEX_SHA256.fullmatch(uv_lock_sha256):
+        raise FrameworkEvidenceError("uv_lock_sha256 must be a lowercase SHA-256 digest")
+
+    normalized = copy.deepcopy(dict(payload))
+    normalized["serialNumber"] = "urn:uuid:" + str(
+        uuid.uuid5(
+            uuid.NAMESPACE_URL,
+            f"urn:xyz-bank:okf:framework:{package_name}:{package_version}:{uv_lock_sha256}",
+        )
+    )
+    metadata = normalized.get("metadata")
+    if not isinstance(metadata, dict):
+        raise FrameworkEvidenceError("CycloneDX metadata must be an object")
+    metadata.pop("timestamp", None)
+    component = metadata.get("component")
+    if not isinstance(component, dict):
+        raise FrameworkEvidenceError("CycloneDX metadata.component must be an object")
+    if component.get("name") != package_name or component.get("version") != package_version:
+        raise FrameworkEvidenceError("CycloneDX root component does not match the package")
+    properties = component.setdefault("properties", [])
+    if not isinstance(properties, list):
+        raise FrameworkEvidenceError("CycloneDX component properties must be an array")
+    properties[:] = [
+        value
+        for value in properties
+        if not (isinstance(value, dict) and value.get("name") == "xyz-bank-okf:uv-lock-sha256")
+    ]
+    properties.append({"name": "xyz-bank-okf:uv-lock-sha256", "value": uv_lock_sha256})
+    _sort_properties(component)
+
+    components = normalized.get("components", [])
+    if not isinstance(components, list):
+        raise FrameworkEvidenceError("CycloneDX components must be an array")
+    for dependency_component in components:
+        if not isinstance(dependency_component, dict):
+            raise FrameworkEvidenceError("CycloneDX components must contain objects")
+        _sort_properties(dependency_component)
+        hashes = dependency_component.get("hashes")
+        if isinstance(hashes, list):
+            hashes.sort(
+                key=lambda value: (str(value.get("alg", "")), str(value.get("content", "")))
+            )
+    components.sort(
+        key=lambda value: (
+            str(value.get("bom-ref", "")),
+            str(value.get("name", "")),
+            str(value.get("version", "")),
+        )
+    )
+
+    dependencies = normalized.get("dependencies", [])
+    if not isinstance(dependencies, list):
+        raise FrameworkEvidenceError("CycloneDX dependencies must be an array")
+    for dependency in dependencies:
+        if not isinstance(dependency, dict):
+            raise FrameworkEvidenceError("CycloneDX dependencies must contain objects")
+        depends_on = dependency.get("dependsOn")
+        if isinstance(depends_on, list):
+            depends_on.sort(key=str)
+    dependencies.sort(key=lambda value: str(value.get("ref", "")))
+
+    return (
+        json.dumps(normalized, ensure_ascii=False, separators=(",", ":"), sort_keys=True) + "\n"
+    ).encode("utf-8")
+
+
+def verify_framework_wheel(
+    wheel_path: Path,
+    *,
+    required_contracts: Iterable[str] = REQUIRED_WHEEL_CONTRACTS,
+) -> frozenset[str]:
+    if wheel_path.is_symlink() or not wheel_path.is_file():
+        raise FrameworkEvidenceError(f"wheel must be a regular file: {wheel_path}")
+    try:
+        with zipfile.ZipFile(wheel_path) as wheel:
+            members = wheel.infolist()
+    except zipfile.BadZipFile as exc:
+        raise FrameworkEvidenceError(f"wheel is not a valid ZIP archive: {wheel_path}") from exc
+
+    names = [member.filename for member in members]
+    if len(names) != len(set(names)):
+        raise FrameworkEvidenceError("wheel contains duplicate member names")
+    for member in members:
+        _safe_relative_path(member.filename.rstrip("/"))
+        mode = member.external_attr >> 16
+        if stat.S_ISLNK(mode):
+            raise FrameworkEvidenceError(f"wheel contains a symlink: {member.filename}")
+
+    required = set(required_contracts)
+    missing = sorted(required.difference(names))
+    if missing:
+        raise FrameworkEvidenceError("wheel is missing runtime contracts: " + ", ".join(missing))
+    return frozenset(names)
+
+
+def _artifact_media_type(path: Path) -> str:
+    if path.name == FRAMEWORK_SBOM_NAME:
+        return SBOM_MEDIA_TYPE
+    if path.suffix == ".whl":
+        return "application/vnd.python.wheel+zip"
+    if path.name.endswith(".tar.gz"):
+        return "application/gzip"
+    raise FrameworkEvidenceError(f"unsupported framework artifact: {path.name}")
+
+
+def build_framework_evidence(
+    artifacts: Sequence[Path],
+    *,
+    artifact_root: Path,
+    package_version: str,
+    source_commit: str,
+    created_at: datetime,
+    python_version: str,
+    uv_version: str,
+    uv_lock_sha256: str,
+) -> FrameworkBuildEvidence:
+    if not _SOURCE_COMMIT.fullmatch(source_commit):
+        raise FrameworkEvidenceError("source_commit must be 7-64 lowercase hexadecimal characters")
+    if created_at.tzinfo is None or created_at.utcoffset() is None:
+        raise FrameworkEvidenceError("created_at must include a UTC offset")
+    if not _HEX_SHA256.fullmatch(uv_lock_sha256):
+        raise FrameworkEvidenceError("uv_lock_sha256 must be a lowercase SHA-256 digest")
+
+    resolved_root = artifact_root.resolve()
+    entries: list[FrameworkArtifact] = []
+    for artifact in artifacts:
+        if artifact.is_symlink() or not artifact.is_file():
+            raise FrameworkEvidenceError(f"artifact must be a regular file: {artifact}")
+        resolved = artifact.resolve()
+        try:
+            relative = resolved.relative_to(resolved_root).as_posix()
+        except ValueError as exc:
+            raise FrameworkEvidenceError(f"artifact is outside artifact_root: {artifact}") from exc
+        _safe_relative_path(relative)
+        content = resolved.read_bytes()
+        entries.append(
+            FrameworkArtifact(
+                path=relative,
+                size=len(content),
+                media_type=_artifact_media_type(resolved),
+                sha256=sha256_bytes(content),
+            )
+        )
+
+    return FrameworkBuildEvidence(
+        package_version=package_version,
+        source_commit=source_commit,
+        created_at=created_at,
+        python_version=python_version,
+        uv_version=uv_version,
+        uv_lock_sha256=uv_lock_sha256,
+        artifacts=sorted(entries, key=lambda entry: entry.path),
+    )
+
+
+def framework_evidence_bytes(evidence: FrameworkBuildEvidence) -> bytes:
+    payload = evidence.model_dump(mode="json")
+    return (
+        json.dumps(payload, ensure_ascii=False, separators=(",", ":"), sort_keys=True) + "\n"
+    ).encode("utf-8")

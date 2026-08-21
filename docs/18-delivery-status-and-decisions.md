@@ -9,12 +9,20 @@ authorization-before-retrieval, OpenAPI serving, telemetry, and evaluation.
 Local quality evidence on 21 August 2026:
 
 - Python 3.13 package resolves from `uv.lock` and builds source/wheel artifacts;
-- Ruff formatting/lint and strict mypy pass;
-- 127 tests pass with 86% branch-aware coverage;
+- Ruff formatting/security lint and strict mypy pass;
+- tracked-source secret scan has zero findings;
+- exact hash-checked runtime dependency audit reports no known vulnerabilities
+  at scan time;
+- two independent package builds produced byte-identical wheel, source archive,
+  normalized CycloneDX runtime SBOM, and canonical digest evidence;
+- the wheel contains the release-admission policy and all versioned JSON/OpenAPI contracts;
+- 135 tests pass with 86% branch-aware coverage;
 - OPA 1.17 release-admission policy has 21 passing Rego tests;
 - sample bundle validation and deterministic release build/verification pass;
 - no business-line-specific terminology is present in repository content; and
-- GitHub CI for commit `b7b4fad` passed every required workflow step.
+- GitHub CI for commit `8457949` passed every then-required workflow step; the
+  added security/SBOM/package gates must also pass remotely before being made a
+  protected required check.
 
 `main` is not protected according to the GitHub branch-protection API. The
 repository is also unlicensed. It must therefore not be treated as an approved
@@ -24,7 +32,8 @@ production release authority or represented as open-source software.
 
 | Stage | Local evidence | Current gate | Input/action to proceed |
 |---|---|---|---|
-| Foundation | Proposal, ADRs, locked build, CI, repository controls/templates | Blocked | License/distribution decision and protected branch rules |
+| Foundation | Proposal, ADRs, locked build, security gates, CI, repository controls/templates | Blocked | License/distribution decision and protected branch rules |
+| Framework package supply chain | Reproducible wheel/source/SBOM/digest evidence; embedded policy/schema contracts | In review | Platform Security approval; license/attribution and later signing/provenance trust |
 | Profile/validator | v0.1/v0.2 profiles, issue catalog, conformance corpus | In review | Knowledge Architecture/Quality approval |
 | Producer SDK | Stable identity/hash, renderer, retry/checkpoint/delete, certification | In review | Platform review; source-specific evidence |
 | Confluence producer | Discovery schema/checklist and generic certification | Blocked | DEC-003 approved sandbox scope/identity/evidence |

@@ -19,9 +19,12 @@ xyz-okf = "xyz_okf.cli:app"
 
 [dependency-groups]
 dev = [
+  "detect-secrets>=1.5,<2",
+  "hatchling>=1.27,<2",
   "httpx2>=2,<3",
   "mypy>=2.3,<3",
   "opentelemetry-sdk>=1.44,<2",
+  "pip-audit>=2.9,<3",
   "pytest>=9.0,<10",
   "pytest-cov>=7.0,<8",
   "ruff>=0.15,<1",
@@ -35,6 +38,10 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/xyz_okf"]
 
+[tool.hatch.build.targets.wheel.force-include]
+"policies/release_admission.rego" = "xyz_okf/assets/policies/release_admission.rego"
+"schemas" = "xyz_okf/assets/schemas"
+
 [tool.uv]
 required-version = ">=0.11.7,<0.13"
 
@@ -43,7 +50,10 @@ line-length = 100
 target-version = "py313"
 
 [tool.ruff.lint]
-select = ["B", "C4", "E", "F", "I", "RUF", "SIM", "UP"]
+select = ["B", "C4", "E", "F", "I", "RUF", "S", "SIM", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]
 
 [tool.pytest.ini_options]
 addopts = "-ra --strict-markers --cov=xyz_okf --cov-report=term-missing"

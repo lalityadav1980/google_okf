@@ -68,10 +68,10 @@ actions:
     status: BLOCKED
     blocker: GitHub CI passes on main, but the GitHub API reports that main is not protected; repository administrators must approve required checks, reviews, bypass roles, force-push/deletion controls, and administrator enforcement.
     depends_on: [OKF-002]
-    acceptance: Pinned CI runs format, lint, type, test, and sample-bundle validation as required checks.
+    acceptance: Pinned CI runs format, security lint, secret scan, locked runtime dependency audit, type, test, policy, sample-bundle, package/SBOM, and artifact-retention gates as required checks.
     partial_evidence:
       - .github/workflows/ci.yml
-      - https://github.com/lalityadav1980/google_okf/actions/runs/32465202199
+      - https://github.com/lalityadav1980/google_okf/actions/runs/32465507007
   - id: OKF-004
     epic: E00
     milestone: M0
@@ -79,9 +79,31 @@ actions:
     owner_role: Open Source Program Office
     priority: P0
     status: BLOCKED
-    blocker: Decision owner and approved repository license are not yet known.
+    blocker: Approved repository license, distribution boundary, attribution/license policy, and vulnerability patch SLO are not yet known; locked dependency, vulnerability, secret, SBOM, and digest controls are implemented locally.
     depends_on: [OKF-002]
     acceptance: Approved LICENSE file, dependency policy, and distribution boundary are committed.
+    partial_evidence:
+      - pyproject.toml
+      - uv.lock
+      - scripts/audit_runtime_dependencies.py
+      - scripts/check_secrets.py
+      - docs/19-framework-supply-chain-and-security.md
+  - id: OKF-005
+    epic: E00
+    milestone: M0
+    title: Produce reproducible framework supply-chain evidence
+    owner_role: Platform Security Engineering
+    priority: P0
+    status: IN_REVIEW
+    depends_on: [OKF-002]
+    acceptance: CI builds byte-reproducible wheel/source distributions, a normalized CycloneDX runtime SBOM bound to uv.lock, and a digest manifest while verifying packaged schemas and release-admission policy.
+    evidence:
+      - src/xyz_okf/framework_evidence.py
+      - schemas/framework-build-evidence-v1.schema.json
+      - scripts/build_framework_evidence.py
+      - tests/test_framework_evidence.py
+      - .github/workflows/ci.yml
+      - docs/19-framework-supply-chain-and-security.md
   - id: OKF-101
     epic: E10
     milestone: M1

@@ -45,6 +45,10 @@ Current evidence:
 - stable identity, canonical hashes, change events, retry, and durable local checkpoints;
 - sample bank bundle;
 - unit and CLI tests;
+- baseline-free secret and security lint gates;
+- hash-checked runtime advisory audit;
+- reproducible framework distributions, lock-bound CycloneDX SBOM, verified
+  packaged contracts, and canonical digest evidence;
 - strict lint/type checks; and
 - CI and issue templates.
 
@@ -147,19 +151,22 @@ backlog file.
 1. **OKF-003:** confirm the remote CI workflow and protected-branch required
    checks after each published reference stage.
 2. **OKF-004:** assign Legal/Open Source Office ownership and choose the
-   repository license; Apache-2.0 is the technical recommendation.
-3. **OKF-104/105, OKF-201/202/203, OKF-401/501/601 (in review):** obtain
+   repository license, attribution/license policy, patch SLO, and distribution
+   boundary; Apache-2.0 remains the technical recommendation subject to approval.
+3. **OKF-005 (in review):** approve the reproducible package/SBOM/digest
+   evidence design and choose the later signing/provenance retention boundary.
+4. **OKF-104/105, OKF-201/202/203, OKF-401/501/601 (in review):** obtain
    knowledge architecture, platform, security, and IAM review of the committed
    conformance, producer, release, admission, authorization, and OpenAPI evidence.
-4. **OKF-301 and OKF-311:** run Confluence and SharePoint API/ACL discovery with
+5. **OKF-301 and OKF-311:** run Confluence and SharePoint API/ACL discovery with
    source owners using the producer contract and discovery evidence checklist.
-5. **OKF-402/403:** supply the approved OCI registry, signing identity/trust,
+6. **OKF-402/403:** supply the approved OCI registry, signing identity/trust,
    protected channel, retention, withdrawal, and recovery decisions.
-6. **OKF-502:** bind the provider-neutral authorization port to the enterprise
+7. **OKF-502:** bind the provider-neutral authorization port to the enterprise
    principal resolver and PDP, then certify revocation and fail-closed behavior.
-7. **OKF-701 and OKF-702:** complete YODA and RACK capability maps and select
+8. **OKF-701 and OKF-702:** complete YODA and RACK capability maps and select
    the pilot consumer without assuming either product's current responsibilities.
-8. **OKF-801/901:** wire the approved telemetry backend and select the pilot
+9. **OKF-801/901:** wire the approved telemetry backend and select the pilot
    users, tasks, expected concepts, ownership, and baseline.
 
 ## 5. Blocked actions requiring XYZ Bank input

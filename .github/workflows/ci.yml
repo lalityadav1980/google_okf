@@ -15,7 +15,7 @@ concurrency:
 jobs:
   quality:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -37,10 +37,16 @@ jobs:
         run: uv sync --locked
 
       - name: Check formatting
-        run: uv run --locked ruff format --check src tests
+        run: uv run --locked ruff format --check src tests scripts
 
       - name: Lint
-        run: uv run --locked ruff check src tests
+        run: uv run --locked ruff check src tests scripts
+
+      - name: Scan tracked source for secrets
+        run: uv run --locked python scripts/check_secrets.py
+
+      - name: Audit locked runtime dependencies
+        run: uv run --locked python scripts/audit_runtime_dependencies.py
 
       - name: Type check
         run: uv run --locked mypy src
@@ -70,3 +76,20 @@ jobs:
             --created-at 2026-08-21T00:00:00Z \
             --output-dir dist/ci-release
           uv run --locked xyz-okf verify-release dist/ci-release/ci-sample.tar.gz
+
+      - name: Build framework distributions, SBOM, and digest evidence
+        run: |
+          uv build --no-build-isolation --out-dir dist/framework
+          uv run --locked python scripts/build_framework_evidence.py \
+            --dist-dir dist/framework \
+            --source-commit "${GITHUB_SHA}" \
+            --created-at "$(git show -s --format=%cI HEAD)"
+
+      - name: Retain framework supply-chain evidence
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: xyz-bank-okf-framework-${{ github.sha }}
+          path: dist/framework/*
+          if-no-files-found: error
+          retention-days: 14
+          include-hidden-files: false

@@ -76,6 +76,9 @@ indexing services.
     baseline, scoring, threat/misuse tests, evidence gate, and resilience exercises.
 24. [Delivery status and decisions](docs/18-delivery-status-and-decisions.md) —
     stage gates, verified evidence, bank-owned blockers, and restart sequence.
+25. [Framework supply-chain and security](docs/19-framework-supply-chain-and-security.md) —
+    locked dependency audit, secret/security scanning, reproducible SBOM,
+    package contracts, digest evidence, and residual control decisions.
 
 ## Framework quick start
 
@@ -102,13 +105,17 @@ uv run xyz-okf build-release examples/pilot-bundle \
 uv run xyz-okf inspect examples/pilot-bundle
 uv run xyz-okf validate examples/pilot-bundle \
   --profile profiles/xyz-bank-pilot.yaml
+uv run python scripts/check_secrets.py
+uv run python scripts/audit_runtime_dependencies.py
 ```
 
 Run all local quality gates:
 
 ```bash
-uv run ruff format --check src tests
-uv run ruff check src tests
+uv run ruff format --check src tests scripts
+uv run ruff check src tests scripts
+uv run python scripts/check_secrets.py
+uv run python scripts/audit_runtime_dependencies.py
 uv run mypy src
 uv run pytest
 ```
@@ -126,6 +133,9 @@ The first vertical slice includes:
 - an OpenID Connect-declared, release-aware FastAPI/OpenAPI serving contract;
 - OpenTelemetry API spans/metrics with hashed identifiers and no content fields;
 - a versioned pilot benchmark, deterministic scorer, and assurance evidence plan;
+- a reproducible framework wheel/source build, normalized CycloneDX runtime
+  SBOM, lock-bound digest manifest, packaged policy/schema contracts, secret
+  scan, and runtime dependency audit;
 - a conformant synthetic pilot bundle; and
 - automated CI, tests, issue forms, and pull-request controls.
 

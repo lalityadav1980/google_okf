@@ -39,6 +39,8 @@ Implemented now:
 - deterministic release archive, OCI/signing command, and OPA admission contracts;
 - authorization-before-retrieval, lifecycle catalog, and OpenAPI serving contract;
 - content-minimized OpenTelemetry API instrumentation;
+- framework package security gates, reproducible wheel/source distributions,
+  a normalized lock-bound CycloneDX runtime SBOM, and canonical build evidence;
 - sample bundle and automated tests; and
 - locked dependencies and CI-ready commands.
 
@@ -64,6 +66,7 @@ Planned:
 │   ├── connector_conformance.py # Reusable source sandbox certification
 │   ├── discovery.py            # Governed source discovery evidence model
 │   ├── evaluation.py           # Content-free benchmark scoring contract
+│   ├── framework_evidence.py   # SBOM normalization, wheel and digest evidence
 │   ├── identity.py             # Stable identity and canonical digest profiles
 │   ├── models.py               # Typed OKF/profile/report models
 │   ├── parser.py               # UTF-8, YAML frontmatter and Markdown parsing
@@ -77,6 +80,8 @@ Planned:
 │   ├── validator.py            # Bundle/profile validation engine
 │   └── connectors/base.py      # Portable source adapter contract
 ├── tests/                      # Unit, CLI and conformance tests
+├── scripts/                    # Schema export, security and evidence entry points
+├── schemas/                    # Versioned JSON/OpenAPI public contracts
 ├── tracking/                   # Machine-readable delivery backlog
 ├── pyproject.toml              # Package, dependencies and quality configuration
 └── uv.lock                     # Reproducible dependency resolution
@@ -269,6 +274,14 @@ catalog.
 The packager must not push an artifact when validation errors exist. Promotion
 uses the same digest across environments.
 
+The framework package has a separate supply-chain boundary. CI builds a
+byte-reproducible wheel and source distribution, normalizes uv's CycloneDX 1.5
+runtime export, binds it to the `uv.lock` SHA-256, verifies that the wheel
+contains the release-admission policy and versioned schemas, and writes a typed
+digest inventory. This evidence is not a signature or production provenance;
+the approved trust service must sign/retain it after `DEC-005`. See
+[framework supply-chain and repository security](19-framework-supply-chain-and-security.md).
+
 ## 9. Consumer contract
 
 The reference serving adapter now exposes:
@@ -302,7 +315,7 @@ decision. See [authorization and serving](14-authorization-and-serving.md).
 | Golden fixture | Known-valid and known-invalid OKF bundles with stable issue codes |
 | Contract | Every connector passes the same change, version, deletion, ACL, and retry suite |
 | Integration | Source sandbox, Git review, OCI registry, OPA and consumer API |
-| Security | Path traversal, malicious Markdown, secret leakage, source poisoning, authorization bypass |
+| Security | Path traversal, malicious Markdown, secret leakage, dependency advisories, artifact-contract tampering, source poisoning, authorization bypass |
 | Performance | Large bundle scan, incremental source sync, archive/index build and retrieval latency |
 | Resilience | Retry, partial failure, restart, source deletion, registry outage and rollback |
 | Evaluation | Benchmark questions, expected concepts, citation correctness, groundedness and refusal |
