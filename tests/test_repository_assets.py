@@ -51,3 +51,26 @@ def test_all_repository_yaml_files_parse() -> None:
 
     for path in yaml_files:
         assert _load_yaml(path), f"{path} should contain a YAML mapping"
+
+
+def test_every_blocked_action_has_an_open_decision_and_safe_default() -> None:
+    backlog = _load_yaml(PROJECT_ROOT / "tracking/backlog.yaml")
+    register = _load_yaml(PROJECT_ROOT / "tracking/decision-register.yaml")
+    action_ids = {action["id"] for action in backlog["actions"]}
+    blocked_actions = {
+        action["id"] for action in backlog["actions"] if action["status"] == "BLOCKED"
+    }
+    decisions = register["decisions"]
+    decision_ids = [decision["id"] for decision in decisions]
+
+    assert len(decision_ids) == len(set(decision_ids))
+    covered: set[str] = set()
+    for decision in decisions:
+        assert decision["status"] in register["statuses"]
+        assert set(decision["blocks"]) <= action_ids
+        assert decision["required_evidence"]
+        assert decision["safe_default_if_deferred"]
+        if decision["status"] == "OPEN":
+            covered.update(decision["blocks"])
+
+    assert blocked_actions <= covered

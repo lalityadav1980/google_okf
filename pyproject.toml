@@ -10,7 +10,7 @@ dependencies = [
   "opentelemetry-api>=1.44,<2",
   "pydantic>=2.12,<3",
   "pyyaml>=6.0,<7",
-  "rich>=14.0,<15",
+  "rich>=15.0,<16",
   "typer>=0.20,<1",
 ]
 
@@ -20,7 +20,7 @@ xyz-okf = "xyz_okf.cli:app"
 [dependency-groups]
 dev = [
   "httpx2>=2,<3",
-  "mypy>=1.18,<2",
+  "mypy>=2.3,<3",
   "opentelemetry-sdk>=1.44,<2",
   "pytest>=9.0,<10",
   "pytest-cov>=7.0,<8",

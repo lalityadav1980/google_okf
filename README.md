@@ -74,6 +74,8 @@ indexing services.
     content-minimized OpenTelemetry, SLI/SLO proposals, dashboards, and hosting gates.
 23. [Evaluation and assurance](docs/17-evaluation-and-assurance.md) — benchmark,
     baseline, scoring, threat/misuse tests, evidence gate, and resilience exercises.
+24. [Delivery status and decisions](docs/18-delivery-status-and-decisions.md) —
+    stage gates, verified evidence, bank-owned blockers, and restart sequence.
 
 ## Framework quick start
 

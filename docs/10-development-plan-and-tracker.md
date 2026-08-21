@@ -7,6 +7,10 @@ The machine-readable source for delivery actions is
 created from those IDs when work is assigned. Do not create a second ID or
 silently change acceptance criteria in a project board.
 
+Bank-owned choices and unblock evidence are tracked separately in
+[`tracking/decision-register.yaml`](../tracking/decision-register.yaml). Every
+blocked action must map to at least one open decision with a safe deferred default.
+
 Statuses:
 
 | Status | Meaning |

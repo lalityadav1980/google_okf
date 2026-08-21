@@ -1,0 +1,148 @@
+decision_register_version: "1.0"
+last_updated: 2026-08-21
+statuses: [OPEN, DECIDED, DEFERRED]
+
+decisions:
+  - id: DEC-001
+    status: OPEN
+    title: Approve repository license and distribution boundary
+    owner_role: Open Source Program Office and Legal
+    blocks: [OKF-004]
+    decision_needed: Select the repository license, internal/public distribution boundary, dependency policy, and approval reference.
+    required_evidence:
+      - Approved license identifier and LICENSE text source.
+      - Intended internal/public distribution and contribution model.
+      - Dependency, SBOM, attribution, vulnerability, and patch policy.
+    safe_default_if_deferred: Repository remains unlicensed and must not be represented as open-source software.
+
+  - id: DEC-002
+    status: OPEN
+    title: Configure protected main branch controls
+    owner_role: Repository Administrator and Platform Engineering
+    blocks: [OKF-003]
+    decision_needed: Approve required CI checks, pull-request reviews, force-push/deletion restrictions, bypass roles, CODEOWNERS, and administrator enforcement.
+    required_evidence:
+      - Named repository administrators and reviewer teams.
+      - Required check name and review/separation-of-duty rules.
+      - Emergency bypass authority, audit, and retrospective process.
+    safe_default_if_deferred: Main remains unprotected and the repository is not a production release authority.
+
+  - id: DEC-003
+    status: OPEN
+    title: Select Confluence pilot collection and identity
+    owner_role: Confluence Source Owner
+    blocks: [OKF-301, OKF-302]
+    decision_needed: Complete and approve the Confluence source-discovery profile for one bounded collection.
+    required_evidence:
+      - Product/deployment/version, source/content/IAM/records owners, and collection scope.
+      - API identity, stable ID/version/change/delete/attachment/rate-limit evidence.
+      - ACL inheritance, ACL-only change, classification, residency, and record behavior.
+    safe_default_if_deferred: No Confluence connector or source access is implemented.
+
+  - id: DEC-004
+    status: OPEN
+    title: Select SharePoint pilot collection and identity
+    owner_role: SharePoint Source Owner
+    blocks: [OKF-311, OKF-312]
+    decision_needed: Complete and approve the SharePoint source-discovery profile for one bounded site/library or list.
+    required_evidence:
+      - Product/deployment/API version, source/content/IAM/records owners, and collection scope.
+      - Workload identity, stable ID/version/delta/delete/attachment/throttling evidence.
+      - ACL/sharing, classification, retention/hold, residency, and record behavior.
+    safe_default_if_deferred: No SharePoint connector or source access is implemented.
+
+  - id: DEC-005
+    status: OPEN
+    title: Approve OCI repository and signature trust
+    owner_role: Platform Security Engineering
+    blocks: [OKF-402]
+    decision_needed: Select candidate/protected OCI repositories, publisher/verifier identities, and KMS or certificate identity/issuer trust.
+    required_evidence:
+      - Registry product/version, repository names, OCI 1.1/referrer and immutability behavior.
+      - Workload identities, TLS/CA/network route, credential helper, and least privilege.
+      - KMS/public-key or OIDC identity/issuer/trust root, rotation, revocation, and audit.
+    safe_default_if_deferred: No remote artifact is pushed, signed, promoted, or described as trusted.
+
+  - id: DEC-006
+    status: OPEN
+    title: Approve release lifecycle and catalog operating controls
+    owner_role: Platform Service Owner, Records, and Operational Resilience
+    blocks: [OKF-403]
+    decision_needed: Select catalog persistence, channel owners, retention/hold/deletion rules, withdrawal authority, environment topology, and rollback/withdrawal SLO.
+    required_evidence:
+      - Transactional catalog and regional/recovery design.
+      - Candidate/protected channel ownership and separation of duties.
+      - Retention, legal hold, withdrawal, rollback, cache/index invalidation, and exercise results.
+    safe_default_if_deferred: Only the in-memory reference lifecycle is used; no production channel exists.
+
+  - id: DEC-007
+    status: OPEN
+    title: Approve enterprise identity and authorization contract
+    owner_role: Identity and Access Management
+    blocks: [OKF-502, OKF-601]
+    decision_needed: Select OIDC issuer/audience/claim mapping, human/workload resolver, PDP request/decision contract, ACL reference ownership, cache/revocation rules, and fail-closed SLO.
+    required_evidence:
+      - Identity assurance and token validation contract.
+      - PDP/PEP endpoint or library, policy distribution/versioning, timeout, and availability.
+      - Source ACL mapping, nested/dynamic group responsibility, revocation, and negative tests.
+    safe_default_if_deferred: Reference API remains synthetic/local and is not deployed with bank content.
+
+  - id: DEC-008
+    status: OPEN
+    title: Complete YODA capability and integration decision
+    owner_role: YODA Product Owner and Enterprise Architecture
+    blocks: [OKF-701, OKF-703]
+    decision_needed: Complete the YODA capability map and choose producer, consumer, both with boundaries, or no pilot role.
+    required_evidence:
+      - Current authoring/catalog/index/retrieval/agent/UX/IAM/audit/hosting capabilities.
+      - Supported interfaces, roadmap, owner, SLO, controls, and exit strategy.
+      - Proposed OKF release pinning, authorization, citation, telemetry, and rollback path.
+    safe_default_if_deferred: The framework makes no YODA capability claim or integration.
+
+  - id: DEC-009
+    status: OPEN
+    title: Complete RACK capability and integration decision
+    owner_role: RACK Product Owner and Enterprise Architecture
+    blocks: [OKF-702, OKF-703]
+    decision_needed: Complete the RACK capability map and choose producer, consumer, both with boundaries, or no pilot role.
+    required_evidence:
+      - Current authoring/catalog/index/retrieval/agent/UX/IAM/audit/hosting capabilities.
+      - Supported interfaces, roadmap, owner, SLO, controls, and exit strategy.
+      - Proposed OKF release pinning, authorization, citation, telemetry, and rollback path.
+    safe_default_if_deferred: The framework makes no RACK capability claim or integration.
+
+  - id: DEC-010
+    status: OPEN
+    title: Approve telemetry backend and operations model
+    owner_role: Site Reliability Engineering, Security, and Privacy
+    blocks: [OKF-801]
+    decision_needed: Select OpenTelemetry collector/exporter/backend, identity/network, regions, attribute policy, sampling, retention, RBAC, service owners, SLOs, alerts, and aggregate cost model.
+    required_evidence:
+      - End-to-end canary proving content, identities, URLs, ACLs, and exception messages are absent.
+      - Load/backpressure/failure test, dashboards, alerts, on-call, retention, and support access.
+      - Hosted source/release/index/retrieval instrument integration and SLO calibration.
+    safe_default_if_deferred: API instrumentation remains no-op unless a hosting application supplies approved providers.
+
+  - id: DEC-011
+    status: OPEN
+    title: Approve pilot consumer, users, tasks, baseline, and thresholds
+    owner_role: Pilot Product Owner
+    blocks: [OKF-602, OKF-703, OKF-901]
+    decision_needed: Select one read-only consumer, representative users/tasks, approved sources, benchmark cases, current baseline, human reviewers, and success/cost thresholds.
+    required_evidence:
+      - Approved versioned benchmark with refusal and entitlement-boundary cases.
+      - Current workflow and selected consumer baseline under the same cases/snapshot.
+      - Outcome owner, reviewer roles, rubric, thresholds, sample design, and reporting plan.
+    safe_default_if_deferred: No OpenSearch adoption, consumer integration, or value claim is made.
+
+  - id: DEC-012
+    status: OPEN
+    title: Assign independent assurance and residual-risk authorities
+    owner_role: Enterprise Risk and Control Governance
+    blocks: [OKF-902]
+    decision_needed: Name the required architecture, security, IAM, privacy, records, AI-risk, resilience, accessibility, legal/OSPO, source, consumer, and service approvers and residual-risk route.
+    required_evidence:
+      - Applicable control obligations and evidence/retention locations.
+      - Independent test scope, finding severity/closure rules, and exception expiry.
+      - Named production go/no-go and residual-risk acceptance authorities.
+    safe_default_if_deferred: Pilot remains non-production and no assurance or compliance claim is made.

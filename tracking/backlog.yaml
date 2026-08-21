@@ -5,38 +5,38 @@ statuses: [BACKLOG, READY, IN_PROGRESS, BLOCKED, IN_REVIEW, DONE]
 milestones:
   - id: M0
     name: Repository and architecture foundation
-    status: IN_PROGRESS
+    status: BLOCKED
     exit_criteria:
       - Local quality gates pass.
       - Remote CI succeeds on the protected branch.
       - Repository license decision has a named owner.
   - id: M1
     name: Validator and producer SDK
-    status: IN_PROGRESS
+    status: IN_REVIEW
     exit_criteria:
       - Conformance fixture pack passes.
       - Deterministic source-to-concept rendering is demonstrated.
       - Connector contract tests cover version, deletion, entitlement, and retry behavior.
   - id: M2
     name: Controlled source producers
-    status: BACKLOG
+    status: BLOCKED
     exit_criteria:
       - One Confluence and one SharePoint collection produce reviewable concepts.
       - Source versions, classifications, deletions, and entitlements are preserved.
   - id: M3
     name: Immutable release supply chain
-    status: IN_PROGRESS
+    status: BLOCKED
     exit_criteria:
       - A validated bundle is packaged, signed, verified, promoted, and rolled back by digest.
   - id: M4
     name: Authorized consumer pilot
-    status: IN_PROGRESS
+    status: BLOCKED
     exit_criteria:
       - One YODA or RACK consumer retrieves cited concepts from a named release.
       - Negative entitlement tests return no unauthorized content.
   - id: M5
     name: Assurance and production decision
-    status: IN_PROGRESS
+    status: BLOCKED
     exit_criteria:
       - Quality, security, resilience, privacy, records, and operating evidence is approved.
 
@@ -65,9 +65,13 @@ actions:
     title: Enable CI quality gates and branch protection
     owner_role: Platform Engineering
     priority: P0
-    status: IN_PROGRESS
+    status: BLOCKED
+    blocker: GitHub CI passes on main, but the GitHub API reports that main is not protected; repository administrators must approve required checks, reviews, bypass roles, force-push/deletion controls, and administrator enforcement.
     depends_on: [OKF-002]
     acceptance: Pinned CI runs format, lint, type, test, and sample-bundle validation as required checks.
+    partial_evidence:
+      - .github/workflows/ci.yml
+      - https://github.com/lalityadav1980/google_okf/actions/runs/32465202199
   - id: OKF-004
     epic: E00
     milestone: M0
@@ -329,9 +333,15 @@ actions:
     title: Benchmark existing retrieval against OpenSearch hybrid index
     owner_role: Search Engineering
     priority: P1
-    status: BACKLOG
+    status: BLOCKED
+    blocker: The current YODA/RACK retrieval capability, selected pilot consumer/tasks, approved benchmark/baseline, scale workload, and OpenSearch operating/cost environment are not confirmed; deterministic lexical reference retrieval and the benchmark contract are complete.
     depends_on: [OKF-601, OKF-901]
     acceptance: Relevance, authorization, latency, rebuild, operations, and cost evidence supports a documented decision.
+    partial_evidence:
+      - src/xyz_okf/serving.py
+      - profiles/pilot-benchmark.example.yaml
+      - src/xyz_okf/evaluation.py
+      - docs/17-evaluation-and-assurance.md
   - id: OKF-701
     epic: E70
     milestone: M4
@@ -364,9 +374,15 @@ actions:
     title: Integrate one approved YODA or RACK pilot consumer
     owner_role: Consumer Platform Engineering
     priority: P0
-    status: BACKLOG
+    status: BLOCKED
+    blocker: YODA/RACK capability ownership, selected pilot consumer/interface, enterprise identity/PDP, and remotely admitted release are not available.
     depends_on: [OKF-601, OKF-701, OKF-702]
     acceptance: Consumer pins a release, retrieves only authorized concepts, preserves citations, and records trace evidence.
+    partial_evidence:
+      - schemas/serving-api-v1.openapi.json
+      - docs/discovery/YODA-capability-map.md
+      - docs/discovery/RACK-capability-map.md
+      - docs/14-authorization-and-serving.md
   - id: OKF-801
     epic: E80
     milestone: M5
