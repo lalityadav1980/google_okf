@@ -1,6 +1,6 @@
 version: 2
 updates:
-  - package-ecosystem: pip
+  - package-ecosystem: uv
     directory: /
     schedule:
       interval: monthly
@@ -14,4 +14,3 @@ updates:
     schedule:
       interval: monthly
     labels: [dependencies, github-actions]
-
