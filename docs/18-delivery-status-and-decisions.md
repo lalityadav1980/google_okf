@@ -20,9 +20,9 @@ Local quality evidence on 21 August 2026:
 - OPA 1.17 release-admission policy has 21 passing Rego tests;
 - sample bundle validation and deterministic release build/verification pass;
 - no business-line-specific terminology is present in repository content; and
-- GitHub CI for commit `8457949` passed every then-required workflow step; the
-  added security/SBOM/package gates must also pass remotely before being made a
-  protected required check.
+- [GitHub CI for commit `b616692`](https://github.com/lalityadav1980/google_okf/actions/runs/32466850671)
+  passed every expanded workflow step, including OPA, secret/dependency gates,
+  package/SBOM verification, and retention of the four framework artifacts.
 
 `main` is not protected according to the GitHub branch-protection API. The
 repository is also unlicensed. It must therefore not be treated as an approved
