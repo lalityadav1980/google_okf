@@ -58,6 +58,8 @@ indexing services.
     replay, deletion, retry, publication, and dry-run transaction semantics.
 15. [Validation and conformance](docs/11-validation-and-conformance.md) — stable
     issue catalog, profile boundaries, fixture suite, and rule governance.
+16. [ADR-0005](docs/adr/0005-release-manifest-and-reproducible-archive.md) —
+    release inventory, deterministic archive, validation, and digest boundary.
 
 ## Framework quick start
 
@@ -75,6 +77,12 @@ uv run xyz-okf allocate-identity \
   --type Runbook
 uv run xyz-okf hash-concept \
   examples/rendering/expected/runbooks/identity-service-degradation--178875d5e353.md
+uv run xyz-okf build-release examples/pilot-bundle \
+  --profile profiles/xyz-bank-pilot.yaml \
+  --bundle-id xyz-bank-pilot \
+  --release-id 2026.08.21.1 \
+  --source-commit aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa \
+  --created-at 2026-08-21T00:00:00Z
 uv run xyz-okf inspect examples/pilot-bundle
 uv run xyz-okf validate examples/pilot-bundle \
   --profile profiles/xyz-bank-pilot.yaml

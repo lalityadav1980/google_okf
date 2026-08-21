@@ -220,9 +220,15 @@ actions:
     title: Implement release manifest and deterministic archive
     owner_role: Platform Engineering
     priority: P0
-    status: READY
+    status: IN_REVIEW
     depends_on: [OKF-103, OKF-202]
     acceptance: Manifest schema, canonical file digests, prior release, profile, classification, and reproducible archive tests pass.
+    evidence:
+      - docs/adr/0005-release-manifest-and-reproducible-archive.md
+      - schemas/release-manifest-v1.schema.json
+      - src/xyz_okf/release.py
+      - tests/test_release.py
+      - .github/workflows/ci.yml
   - id: OKF-402
     epic: E40
     milestone: M3

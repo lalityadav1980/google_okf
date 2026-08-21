@@ -49,3 +49,13 @@ jobs:
           --profile profiles/xyz-bank-pilot.yaml
           --now 2026-08-21T00:00:00Z
 
+      - name: Build and verify reproducible sample release
+        run: |
+          uv run --locked xyz-okf build-release examples/pilot-bundle \
+            --profile profiles/xyz-bank-pilot.yaml \
+            --bundle-id xyz-bank-pilot \
+            --release-id ci-sample \
+            --source-commit 0000000000000000000000000000000000000000 \
+            --created-at 2026-08-21T00:00:00Z \
+            --output-dir dist/ci-release
+          uv run --locked xyz-okf verify-release dist/ci-release/ci-sample.tar.gz

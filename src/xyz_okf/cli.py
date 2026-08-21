@@ -23,6 +23,12 @@ from xyz_okf.identity import (
 from xyz_okf.models import ProfileDefinition, Severity
 from xyz_okf.parser import DocumentParseError, parse_concept
 from xyz_okf.profile import load_profile
+from xyz_okf.release import (
+    ReleaseBuildError,
+    ReleaseManifest,
+    build_release,
+    verify_release,
+)
 from xyz_okf.renderer import (
     RenderError,
     RenderMapping,
@@ -241,6 +247,117 @@ def hash_source_command(source_record_path: YamlArgument) -> None:
             sort_keys=True,
         )
     )
+
+
+@app.command("build-release")
+def build_release_command(
+    bundle: BundleArgument,
+    profile_path: ProfileOption = Path("profiles/xyz-bank-pilot.yaml"),
+    bundle_id: Annotated[str, typer.Option(help="Portable bundle identifier.")] = "",
+    release_id: Annotated[str, typer.Option(help="Portable immutable release identifier.")] = "",
+    source_commit: Annotated[
+        str,
+        typer.Option(help="Lowercase Git commit included in release provenance."),
+    ] = "",
+    created_at: Annotated[
+        str,
+        typer.Option(help="Explicit aware ISO 8601 build/validation timestamp."),
+    ] = "",
+    output_dir: Annotated[
+        Path,
+        typer.Option(
+            "--output-dir",
+            "-o",
+            file_okay=False,
+            dir_okay=True,
+            resolve_path=True,
+        ),
+    ] = Path("dist/releases"),
+    prior_release_digest: Annotated[
+        str | None,
+        typer.Option(help="Optional exact SHA-256 digest of the prior release archive."),
+    ] = None,
+    force: Annotated[bool, typer.Option(help="Replace different local output files.")] = False,
+) -> None:
+    """Validate and build a deterministic manifest-bearing release archive."""
+    profile = _load_profile_or_exit(profile_path)
+    try:
+        build_time = _parse_now(created_at)
+        if build_time is None:
+            raise ValueError("--created-at is required")
+        artifact = build_release(
+            bundle,
+            profile,
+            bundle_id=bundle_id,
+            release_id=release_id,
+            source_commit=source_commit,
+            created_at=build_time,
+            prior_release_digest=prior_release_digest,
+        )
+    except (ReleaseBuildError, ValueError) as exc:
+        console.print(f"[red]Release build error:[/red] {exc}")
+        raise typer.Exit(code=2) from exc
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    outputs = {
+        output_dir / f"{release_id}.manifest.json": artifact.manifest_bytes,
+        output_dir / f"{release_id}.tar.gz": artifact.archive_bytes,
+    }
+    changed = [
+        path for path, content in outputs.items() if path.exists() and path.read_bytes() != content
+    ]
+    if changed and not force:
+        console.print(
+            "[red]Refusing to replace changed release output:[/red] "
+            + ", ".join(path.name for path in changed)
+        )
+        raise typer.Exit(code=1)
+    for path, content in outputs.items():
+        if not path.exists() or path.read_bytes() != content:
+            path.write_bytes(content)
+    typer.echo(
+        json.dumps(
+            {
+                "archive": str(output_dir / f"{release_id}.tar.gz"),
+                "archive_sha256": artifact.archive_sha256,
+                "manifest": str(output_dir / f"{release_id}.manifest.json"),
+                "manifest_sha256": artifact.manifest_sha256,
+                "release_id": release_id,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+
+
+@app.command("verify-release")
+def verify_release_command(archive_path: YamlArgument) -> None:
+    """Verify a local release archive inventory and exact/canonical digests."""
+    try:
+        verified = verify_release(archive_path.read_bytes())
+    except (OSError, ReleaseBuildError) as exc:
+        console.print(f"[red]Release verification error:[/red] {exc}")
+        raise typer.Exit(code=1) from exc
+    typer.echo(
+        json.dumps(
+            {
+                "archive_sha256": verified.archive_sha256,
+                "bundle_id": verified.manifest.bundle_id,
+                "files": len(verified.manifest.files),
+                "manifest_sha256": verified.manifest_sha256,
+                "release_id": verified.manifest.release_id,
+                "valid": True,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+
+
+@app.command("release-manifest-schema")
+def release_manifest_schema_command() -> None:
+    """Print the JSON Schema for the release manifest contract."""
+    typer.echo(json.dumps(ReleaseManifest.model_json_schema(), indent=2, sort_keys=True))
 
 
 @app.command("validate")

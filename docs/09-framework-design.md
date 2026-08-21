@@ -63,6 +63,7 @@ Planned:
 │   ├── parser.py               # UTF-8, YAML frontmatter and Markdown parsing
 │   ├── profile.py              # Profile loader
 │   ├── producer.py             # Change planning, retry, publication and checkpoints
+│   ├── release.py              # Manifest, deterministic archive and verification
 │   ├── renderer.py             # Deterministic source-to-concept rendering
 │   ├── validator.py            # Bundle/profile validation engine
 │   └── connectors/base.py      # Portable source adapter contract
@@ -240,19 +241,21 @@ are implemented under `OKF-202`. Page checkpoints, deletion events, bounded
 retry, idempotent operation IDs, and read-only dry-run behavior are implemented
 under `OKF-203`.
 
-## 8. Planned release contract
+## 8. Release contract
 
-The release builder will:
+The release builder now:
 
 1. validate the bundle with a pinned profile and clock;
 2. create canonical per-file SHA-256 digests;
 3. generate a manifest containing source commit, profile, prior release, files,
    classifications, and authorization references;
-4. build a deterministic archive;
-5. publish it as a typed OCI artifact with ORAS;
-6. sign or attest it with Cosign using the approved bank trust model;
-7. verify the registry digest and signature before promotion; and
-8. write release metadata to the release catalog.
+4. builds and verifies a deterministic manifest-bearing `tar.gz` archive; and
+5. returns exact manifest/archive digests for the next transport stage.
+
+Planned follow-on stages publish the same bytes as a typed OCI artifact with
+ORAS, sign/attest the immutable digest with Cosign using the approved bank trust
+model, verify before promotion, and write release metadata to the release
+catalog.
 
 The packager must not push an artifact when validation errors exist. Promotion
 uses the same digest across environments.
