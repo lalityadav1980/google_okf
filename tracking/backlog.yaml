@@ -71,7 +71,7 @@ actions:
     acceptance: Pinned CI runs format, security lint, secret scan, locked runtime dependency audit, type, test with an 85% coverage floor, policy, sample-bundle, package/SBOM, reproducibility, and artifact-retention gates as required checks.
     partial_evidence:
       - .github/workflows/ci.yml
-      - https://github.com/lalityadav1980/google_okf/actions/runs/32467388372
+      - https://github.com/lalityadav1980/google_okf/actions/runs/32467648579
   - id: OKF-004
     epic: E00
     milestone: M0
@@ -106,7 +106,7 @@ actions:
       - tests/test_framework_evidence.py
       - .github/workflows/ci.yml
       - docs/19-framework-supply-chain-and-security.md
-      - https://github.com/lalityadav1980/google_okf/actions/runs/32467388372
+      - https://github.com/lalityadav1980/google_okf/actions/runs/32467648579
   - id: OKF-101
     epic: E10
     milestone: M1

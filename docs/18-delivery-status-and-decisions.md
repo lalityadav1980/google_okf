@@ -20,7 +20,7 @@ Local quality evidence on 21 August 2026:
 - OPA 1.17 release-admission policy has 21 passing Rego tests;
 - sample bundle validation and deterministic release build/verification pass;
 - no business-line-specific terminology is present in repository content; and
-- [GitHub CI for commit `f27816e`](https://github.com/lalityadav1980/google_okf/actions/runs/32467388372)
+- [GitHub CI for commit `15f4210`](https://github.com/lalityadav1980/google_okf/actions/runs/32467648579)
   passed every expanded workflow step, including OPA, secret/dependency gates,
   independent package/SBOM verification, a byte-identical second build, and
   retention of the four framework artifacts.
@@ -84,3 +84,19 @@ license + branch controls
 
 Real access, credentials, product-owner claims, legal choices, and control
 approvals are intentionally not inferred by the framework.
+
+## 5. Local completion boundary
+
+The final repository audit on 21 August 2026 found no action in `BACKLOG`,
+`READY`, or `IN_PROGRESS`: implemented reference stages are `DONE` or
+`IN_REVIEW`, and every remaining implementation is `BLOCKED` by an explicit
+open decision with a safe default. GitHub reported a public repository with no
+license, an unprotected `main`, zero open issues/pull requests, enabled secret
+scanning/push protection, enabled Dependabot alerts/security updates, and zero
+open Dependabot alerts.
+
+Further autonomous implementation would require inventing a bank capability,
+owner, policy, environment, credential, source scope, identity contract,
+benchmark, or approval. The next safe action is therefore receipt of the
+evidence requested in `DEC-001` through `DEC-012`; the execution sequence above
+identifies how work restarts when those inputs arrive.
