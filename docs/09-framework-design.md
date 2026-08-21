@@ -61,6 +61,7 @@ Planned:
 │   ├── models.py               # Typed OKF/profile/report models
 │   ├── parser.py               # UTF-8, YAML frontmatter and Markdown parsing
 │   ├── profile.py              # Profile loader
+│   ├── producer.py             # Change planning, retry, publication and checkpoints
 │   ├── renderer.py             # Deterministic source-to-concept rendering
 │   ├── validator.py            # Bundle/profile validation engine
 │   └── connectors/base.py      # Portable source adapter contract
@@ -153,7 +154,9 @@ class KnowledgeSource(Protocol):
     async def fetch_record(self, record_id: str) -> SourceRecord: ...
 ```
 
-`SourceRecord` is immutable and must contain:
+`ChangeBatch` carries ordered `SourceChange` events and an opaque next cursor.
+Each event is an `upsert` or `delete` with stable record ID, exact source
+version, and aware change timestamp. `SourceRecord` is immutable and must contain:
 
 - source system and stable record ID;
 - source version and canonical resource URI;
@@ -166,7 +169,7 @@ Connectors fetch facts. They do not decide the final concept type, silently
 merge conflicting authority, expand user permissions, or publish directly to
 the protected branch.
 
-## 7. Producer rendering contract
+## 7. Producer execution and rendering contract
 
 ```text
 discover change
@@ -192,6 +195,18 @@ Required design properties:
 - bounded retries and rate limiting;
 - attachment and embedded-content policy; and
 - dry-run/diff mode before any proposed change.
+
+`ProducerEngine` now implements the page-level execution boundary. It retries
+only explicitly retryable source/publication failures, validates fetched record
+identity and version, treats deletions as first-class events, and publishes a
+deterministic operation batch before atomically compare-and-setting its
+checkpoint. Every operation has a content-derived idempotency key. Partial
+planning/publication failures never advance the cursor, and dry run performs no
+publication or checkpoint write.
+
+`InMemoryCheckpointStore` is the contract reference. `SQLiteCheckpointStore`
+provides durable single-runner local state. Production stores must implement the
+same compare-and-set protocol using an approved transactional platform.
 
 The first deterministic stage is implemented. `RenderMapping` is a versioned,
 reviewable input containing classification-independent mapping decisions such
@@ -220,8 +235,9 @@ explicit, reviewed mapping field. The CLI also rejects syntactic path traversal
 and output paths that escape the bundle through a filesystem symlink.
 
 Stable identity/path allocation and versioned source/concept canonical hashes
-are implemented under `OKF-202`. Checkpoints, deletion, retry, and full dry-run
-behavior remain in `OKF-203`.
+are implemented under `OKF-202`. Page checkpoints, deletion events, bounded
+retry, idempotent operation IDs, and read-only dry-run behavior are implemented
+under `OKF-203`.
 
 ## 8. Planned release contract
 

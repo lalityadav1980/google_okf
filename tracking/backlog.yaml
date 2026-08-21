@@ -156,9 +156,14 @@ actions:
     title: Implement checkpoint, deletion, retry, and dry-run contracts
     owner_role: Platform Engineering
     priority: P0
-    status: READY
+    status: IN_REVIEW
     depends_on: [OKF-201]
     acceptance: Contract tests prove restart, partial failure, rate limit, tombstone, and no-op behavior.
+    evidence:
+      - docs/adr/0004-producer-transaction-boundary.md
+      - src/xyz_okf/producer.py
+      - src/xyz_okf/connectors/base.py
+      - tests/test_producer.py
   - id: OKF-301
     epic: E30
     milestone: M2

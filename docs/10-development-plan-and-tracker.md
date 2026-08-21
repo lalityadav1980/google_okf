@@ -38,6 +38,7 @@ Current evidence:
 - Python package and locked dependencies;
 - OKF/profile validator CLI;
 - deterministic source-to-concept renderer and golden output fixture;
+- stable identity, canonical hashes, change events, retry, and durable local checkpoints;
 - sample bank bundle;
 - unit and CLI tests;
 - strict lint/type checks; and
@@ -145,9 +146,9 @@ These are the next actions in execution order. IDs match the backlog file.
 4. **OKF-201 (in review):** deterministic `SourceRecord` rendering, fail-closed
    entitlement mapping, CLI, and byte-level golden evidence are implemented.
 5. **OKF-202:** define canonical source/output hashing and stable concept-path
-   allocation.
-6. **OKF-203:** implement checkpoint, deletion/tombstone, retry, and dry-run
-   contracts.
+   allocation. **Implementation is in review.**
+6. **OKF-203:** checkpoint, deletion, bounded retry, idempotent publication, and
+   dry-run contracts are implemented and in review.
 7. **OKF-301 and OKF-311:** run Confluence and SharePoint API/ACL discovery in
    parallel with source owners.
 8. **OKF-401:** specify and implement the release manifest and canonical archive.

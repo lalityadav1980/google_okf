@@ -54,6 +54,8 @@ indexing services.
     framework-language and open-platform-interface decision.
 13. [ADR-0003](docs/adr/0003-stable-identity-and-canonical-hashing.md) — stable
     source-anchored identity, path allocation, rename, and hashing rules.
+14. [ADR-0004](docs/adr/0004-producer-transaction-boundary.md) — checkpoint,
+    replay, deletion, retry, publication, and dry-run transaction semantics.
 
 ## Framework quick start
 

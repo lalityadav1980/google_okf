@@ -102,5 +102,5 @@ def test_extensions_cannot_replace_lineage_or_control_fields() -> None:
 
 
 def test_naive_source_timestamp_is_rejected() -> None:
-    with pytest.raises(RenderError, match="include a UTC offset"):
+    with pytest.raises(ValueError, match="modified_at must include a UTC offset"):
         render_concept(_record(modified_at=datetime(2026, 8, 20, 8, 0)), _mapping())
