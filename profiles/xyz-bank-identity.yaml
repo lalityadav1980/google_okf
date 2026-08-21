@@ -1,0 +1,25 @@
+policy_id: xyz-bank-concept-identity
+policy_version: "1.0"
+namespace_uuid: 98d593b2-a2ab-5b5d-8a70-a8f59ea04c3a
+uid_prefix: "urn:xyz-bank:okf:concept:"
+default_directory: concepts
+max_slug_length: 72
+type_directories:
+  Policy: policies
+  Standard: standards
+  Procedure: procedures
+  Control: controls
+  Business Term: business-terms
+  Business Capability: capabilities
+  Application: applications
+  Technology Service: services
+  API: apis
+  Event: events
+  Data Product: data-products
+  Dataset: datasets
+  Metric: metrics
+  Pipeline: pipelines
+  Runbook: runbooks
+  Architecture Decision: decisions
+  Reference: references
+

@@ -40,6 +40,7 @@ def test_delivery_backlog_is_internally_consistent() -> None:
 def test_all_repository_yaml_files_parse() -> None:
     yaml_files = [
         PROJECT_ROOT / "profiles/xyz-bank-pilot.yaml",
+        PROJECT_ROOT / "profiles/xyz-bank-identity.yaml",
         PROJECT_ROOT / "tracking/backlog.yaml",
         PROJECT_ROOT / "examples/rendering/source-record.yaml",
         PROJECT_ROOT / "examples/rendering/mapping.yaml",

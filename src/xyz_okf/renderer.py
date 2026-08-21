@@ -19,6 +19,12 @@ from pydantic import (
 )
 
 from xyz_okf.connectors import SourceRecord
+from xyz_okf.identity import (
+    CONCEPT_CANONICALIZATION_PROFILE,
+    SOURCE_CANONICALIZATION_PROFILE,
+    canonical_concept_sha256,
+    canonical_source_record_sha256,
+)
 from xyz_okf.models import ActorEvent
 
 _RENDERED_FIELDS = {
@@ -42,6 +48,8 @@ _RENDERED_FIELDS = {
     "source_system",
     "source_record_id",
     "source_version",
+    "source_hash",
+    "canonicalization_profile",
     "producer_mapping",
     "relationships",
 }
@@ -162,6 +170,8 @@ class RenderedConcept:
     relative_path: PurePosixPath
     content: bytes
     sha256: str
+    canonical_sha256: str
+    source_sha256: str
 
     @property
     def text(self) -> str:
@@ -245,6 +255,12 @@ def _frontmatter(record: SourceRecord, mapping: RenderMapping) -> dict[str, Any]
             "source_system": record.source_system,
             "source_record_id": record.record_id,
             "source_version": record.version,
+            "source_hash": {
+                "algorithm": "sha256",
+                "profile": SOURCE_CANONICALIZATION_PROFILE,
+                "digest": canonical_source_record_sha256(record),
+            },
+            "canonicalization_profile": CONCEPT_CANONICALIZATION_PROFILE,
             "producer_mapping": {
                 "id": mapping.mapping_id,
                 "version": mapping.mapping_version,
@@ -297,4 +313,6 @@ def render_concept(record: SourceRecord, mapping: RenderMapping) -> RenderedConc
         relative_path=PurePosixPath(mapping.output_path),
         content=content,
         sha256=hashlib.sha256(content).hexdigest(),
+        canonical_sha256=canonical_concept_sha256(text),
+        source_sha256=canonical_source_record_sha256(record),
     )

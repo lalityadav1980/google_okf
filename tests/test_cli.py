@@ -53,10 +53,10 @@ def test_render_command_matches_golden_output(tmp_path: Path) -> None:
     )
 
     assert result.exit_code == 0, result.output
-    rendered = tmp_path / "runbooks/identity-service-degradation-rendered.md"
+    rendered = tmp_path / "runbooks/identity-service-degradation--178875d5e353.md"
     expected = (
         PROJECT_ROOT
-        / "examples/rendering/expected/runbooks/identity-service-degradation-rendered.md"
+        / "examples/rendering/expected/runbooks/identity-service-degradation--178875d5e353.md"
     )
     assert rendered.read_bytes() == expected.read_bytes()
 
@@ -76,7 +76,7 @@ def test_render_command_matches_golden_output(tmp_path: Path) -> None:
 
 
 def test_render_command_refuses_to_replace_changed_file(tmp_path: Path) -> None:
-    target = tmp_path / "runbooks/identity-service-degradation-rendered.md"
+    target = tmp_path / "runbooks/identity-service-degradation--178875d5e353.md"
     target.parent.mkdir()
     target.write_text("user-owned change\n", encoding="utf-8")
 
@@ -115,4 +115,48 @@ def test_render_command_rejects_symlink_escape(tmp_path: Path) -> None:
 
     assert result.exit_code == 2
     assert "resolves outside" in result.output
-    assert not (outside / "identity-service-degradation-rendered.md").exists()
+    assert not (outside / "identity-service-degradation--178875d5e353.md").exists()
+
+
+def test_allocate_identity_command_returns_stable_vector() -> None:
+    result = RUNNER.invoke(
+        app,
+        [
+            "allocate-identity",
+            str(PROJECT_ROOT / "examples/rendering/source-record.yaml"),
+            str(PROJECT_ROOT / "profiles/xyz-bank-identity.yaml"),
+            "--type",
+            "Runbook",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["concept_uid"] == (
+        "urn:xyz-bank:okf:concept:178875d5-e353-5376-87a8-ec463b6a4913"
+    )
+    assert payload["output_path"] == ("runbooks/identity-service-degradation--178875d5e353.md")
+
+
+def test_hash_commands_return_named_canonical_profiles() -> None:
+    concept_path = (
+        PROJECT_ROOT
+        / "examples/rendering/expected/runbooks"
+        / "identity-service-degradation--178875d5e353.md"
+    )
+    source = RUNNER.invoke(
+        app,
+        ["hash-source", str(PROJECT_ROOT / "examples/rendering/source-record.yaml")],
+    )
+    concept = RUNNER.invoke(
+        app,
+        [
+            "hash-concept",
+            str(concept_path),
+        ],
+    )
+
+    assert source.exit_code == 0, source.output
+    assert concept.exit_code == 0, concept.output
+    assert json.loads(source.output)["canonical_profile"] == "xyz-okf-source-c14n-v1"
+    assert json.loads(concept.output)["canonical_profile"] == "xyz-okf-concept-c14n-v1"

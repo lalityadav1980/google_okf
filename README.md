@@ -52,6 +52,8 @@ indexing services.
     increments, epics, actions, blockers, acceptance, and delivery governance.
 12. [ADR-0002](docs/adr/0002-python-core-and-open-platform.md) — initial
     framework-language and open-platform-interface decision.
+13. [ADR-0003](docs/adr/0003-stable-identity-and-canonical-hashing.md) — stable
+    source-anchored identity, path allocation, rename, and hashing rules.
 
 ## Framework quick start
 
@@ -63,6 +65,12 @@ uv run xyz-okf render \
   examples/rendering/source-record.yaml \
   examples/rendering/mapping.yaml \
   --output-root /tmp/xyz-okf-render
+uv run xyz-okf allocate-identity \
+  examples/rendering/source-record.yaml \
+  profiles/xyz-bank-identity.yaml \
+  --type Runbook
+uv run xyz-okf hash-concept \
+  examples/rendering/expected/runbooks/identity-service-degradation--178875d5e353.md
 uv run xyz-okf inspect examples/pilot-bundle
 uv run xyz-okf validate examples/pilot-bundle \
   --profile profiles/xyz-bank-pilot.yaml

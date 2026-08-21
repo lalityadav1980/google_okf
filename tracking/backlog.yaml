@@ -142,9 +142,14 @@ actions:
     title: Define stable concept identity and canonical hashing
     owner_role: Knowledge Architecture
     priority: P0
-    status: READY
+    status: IN_REVIEW
     depends_on: [OKF-201]
     acceptance: UID, path, rename, source anchor, canonicalization, and SHA-256 rules have tests and an ADR.
+    evidence:
+      - docs/adr/0003-stable-identity-and-canonical-hashing.md
+      - profiles/xyz-bank-identity.yaml
+      - src/xyz_okf/identity.py
+      - tests/test_identity.py
   - id: OKF-203
     epic: E20
     milestone: M1

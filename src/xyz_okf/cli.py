@@ -12,6 +12,14 @@ from pydantic import BaseModel, ValidationError
 from rich.console import Console
 from rich.table import Table
 
+from xyz_okf.identity import (
+    IdentityPolicy,
+    SourceAnchor,
+    allocate_identity,
+    canonical_concept_sha256,
+    canonical_source_record_sha256,
+    sha256_bytes,
+)
 from xyz_okf.models import ProfileDefinition, Severity
 from xyz_okf.parser import DocumentParseError, parse_concept
 from xyz_okf.profile import load_profile
@@ -140,6 +148,99 @@ def render_command(
     else:
         state = "UNCHANGED"
     console.print(f"[green]{state}[/green] {rendered.relative_path} sha256:{rendered.sha256}")
+
+
+@app.command("allocate-identity")
+def allocate_identity_command(
+    source_record_path: YamlArgument,
+    identity_policy_path: YamlArgument,
+    concept_type: Annotated[str, typer.Option("--type", help="Profile concept type.")],
+    fragment: Annotated[
+        str,
+        typer.Option(help="Stable source fragment when one record produces multiple concepts."),
+    ] = "",
+    retained_path: Annotated[
+        str | None,
+        typer.Option(help="Previously approved path to retain across title/type changes."),
+    ] = None,
+) -> None:
+    """Allocate a stable bank concept UID and initial OKF path."""
+    source_document = _load_yaml_or_exit(source_record_path, SourceRecordDocument)
+    policy = _load_yaml_or_exit(identity_policy_path, IdentityPolicy)
+    anchor = SourceAnchor(
+        source_system=source_document.source_system,
+        record_id=source_document.record_id,
+        fragment=fragment,
+    )
+    try:
+        identity = allocate_identity(
+            anchor,
+            title=source_document.title,
+            concept_type=concept_type,
+            policy=policy,
+            retained_path=retained_path,
+        )
+    except (ValidationError, ValueError) as exc:
+        console.print(f"[red]Identity error:[/red] {exc}")
+        raise typer.Exit(code=2) from exc
+    typer.echo(
+        json.dumps(
+            {
+                "concept_id": identity.concept_id,
+                "concept_uid": identity.concept_uid,
+                "output_path": str(identity.output_path),
+                "policy_id": identity.policy_id,
+                "policy_version": identity.policy_version,
+                "source_anchor": identity.source_anchor.model_dump(),
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+
+
+@app.command("hash-concept")
+def hash_concept_command(concept_path: YamlArgument) -> None:
+    """Print exact-byte and canonical SHA-256 digests for one concept."""
+    try:
+        content = concept_path.read_bytes()
+        text_value = content.decode("utf-8")
+        canonical_digest = canonical_concept_sha256(text_value)
+    except (OSError, UnicodeDecodeError, DocumentParseError, ValueError) as exc:
+        console.print(f"[red]Hash error:[/red] {exc}")
+        raise typer.Exit(code=2) from exc
+    typer.echo(
+        json.dumps(
+            {
+                "canonical_profile": "xyz-okf-concept-c14n-v1",
+                "canonical_sha256": canonical_digest,
+                "exact_sha256": sha256_bytes(content),
+                "path": str(concept_path),
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+
+
+@app.command("hash-source")
+def hash_source_command(source_record_path: YamlArgument) -> None:
+    """Print the canonical SHA-256 digest for one source record."""
+    source_document = _load_yaml_or_exit(source_record_path, SourceRecordDocument)
+    typer.echo(
+        json.dumps(
+            {
+                "canonical_profile": "xyz-okf-source-c14n-v1",
+                "canonical_sha256": canonical_source_record_sha256(
+                    source_document.to_source_record()
+                ),
+                "source_record": source_document.record_id,
+                "source_system": source_document.source_system,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
 
 
 @app.command("validate")

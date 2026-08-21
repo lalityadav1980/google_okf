@@ -57,6 +57,7 @@ Planned:
 ├── profiles/                   # Versioned organizational profile definitions
 ├── src/xyz_okf/
 │   ├── cli.py                  # User and CI commands
+│   ├── identity.py             # Stable identity and canonical digest profiles
 │   ├── models.py               # Typed OKF/profile/report models
 │   ├── parser.py               # UTF-8, YAML frontmatter and Markdown parsing
 │   ├── profile.py              # Profile loader
@@ -218,9 +219,9 @@ not copied into frontmatter automatically; every published extension is an
 explicit, reviewed mapping field. The CLI also rejects syntactic path traversal
 and output paths that escape the bundle through a filesystem symlink.
 
-Stable identity/path allocation, the normative canonical hashing specification,
-checkpoints, deletion, retry, and full dry-run behavior remain in `OKF-202` and
-`OKF-203`.
+Stable identity/path allocation and versioned source/concept canonical hashes
+are implemented under `OKF-202`. Checkpoints, deletion, retry, and full dry-run
+behavior remain in `OKF-203`.
 
 ## 8. Planned release contract
 

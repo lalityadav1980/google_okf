@@ -22,7 +22,7 @@ verified:
 status: stable
 stale_after: '2027-08-20T02:35:00Z'
 xyz_profile_version: '0.1'
-concept_uid: kb:runbook:identity-service-degradation-rendered
+concept_uid: urn:xyz-bank:okf:concept:178875d5-e353-5376-87a8-ec463b6a4913
 domain: enterprise-platforms
 owner: team:identity-platform
 classification: INTERNAL
@@ -31,6 +31,11 @@ criticality: high
 source_system: confluence
 source_record_id: confluence:pilot:identity-service-degradation
 source_version: '29'
+source_hash:
+  algorithm: sha256
+  profile: xyz-okf-source-c14n-v1
+  digest: f13e157253664fccdd21543d33aa28a60e31d79daa85876d67fc748ca16071e0
+canonicalization_profile: xyz-okf-concept-c14n-v1
 producer_mapping:
   id: confluence-runbook-v1
   version: 1.0.0
