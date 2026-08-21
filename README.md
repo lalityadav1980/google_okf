@@ -56,6 +56,8 @@ indexing services.
     source-anchored identity, path allocation, rename, and hashing rules.
 14. [ADR-0004](docs/adr/0004-producer-transaction-boundary.md) — checkpoint,
     replay, deletion, retry, publication, and dry-run transaction semantics.
+15. [Validation and conformance](docs/11-validation-and-conformance.md) — stable
+    issue catalog, profile boundaries, fixture suite, and rule governance.
 
 ## Framework quick start
 

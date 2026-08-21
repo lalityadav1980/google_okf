@@ -8,6 +8,7 @@ from urllib.parse import unquote, urlsplit
 
 from pydantic import ValidationError
 
+from xyz_okf.issues import IssueCode
 from xyz_okf.models import (
     ConceptFrontmatter,
     ProfileDefinition,
@@ -28,7 +29,7 @@ _RESERVED = {"index.md", "log.md"}
 def _add_issue(
     report: ValidationReport,
     severity: Severity,
-    code: str,
+    code: IssueCode,
     message: str,
     path: Path,
     bundle_root: Path,
@@ -66,7 +67,7 @@ def _validate_profile_fields(
             _add_issue(
                 report,
                 Severity.ERROR,
-                "PROFILE_REQUIRED_FIELD",
+                IssueCode.PROFILE_REQUIRED_FIELD,
                 f"required profile field '{field}' is missing or empty",
                 document.path,
                 bundle_root,
@@ -83,7 +84,7 @@ def _validate_profile_fields(
         _add_issue(
             report,
             profile.policy.unknown_types,
-            "PROFILE_UNKNOWN_TYPE",
+            IssueCode.PROFILE_UNKNOWN_TYPE,
             f"type '{type_name}' is not in the controlled profile vocabulary",
             document.path,
             bundle_root,
@@ -97,7 +98,7 @@ def _validate_profile_fields(
             _add_issue(
                 report,
                 Severity.ERROR,
-                "PROFILE_ENUM_VALUE",
+                IssueCode.PROFILE_ENUM_VALUE,
                 f"field '{field}' value '{value}' is not one of {allowed}",
                 document.path,
                 bundle_root,
@@ -112,7 +113,7 @@ def _validate_profile_fields(
         _add_issue(
             report,
             Severity.ERROR,
-            "PROFILE_VERIFICATION_REQUIRED",
+            IssueCode.PROFILE_VERIFICATION_REQUIRED,
             f"criticality '{criticality}' requires independent verification",
             document.path,
             bundle_root,
@@ -126,7 +127,7 @@ def _validate_profile_fields(
         _add_issue(
             report,
             Severity.ERROR,
-            "PROFILE_RELATIONSHIPS_LIST",
+            IssueCode.PROFILE_RELATIONSHIPS_LIST,
             "relationships must be a YAML list",
             document.path,
             bundle_root,
@@ -139,7 +140,7 @@ def _validate_profile_fields(
                 _add_issue(
                     report,
                     Severity.ERROR,
-                    "PROFILE_RELATIONSHIP_MAPPING",
+                    IssueCode.PROFILE_RELATIONSHIP_MAPPING,
                     f"relationship at index {index} must be a mapping",
                     document.path,
                     bundle_root,
@@ -153,7 +154,7 @@ def _validate_profile_fields(
                 _add_issue(
                     report,
                     Severity.ERROR,
-                    "PROFILE_RELATIONSHIP_TYPE",
+                    IssueCode.PROFILE_RELATIONSHIP_TYPE,
                     f"relationship type '{relationship_type}' is not approved",
                     document.path,
                     bundle_root,
@@ -164,7 +165,7 @@ def _validate_profile_fields(
                 _add_issue(
                     report,
                     Severity.ERROR,
-                    "PROFILE_RELATIONSHIP_TARGET",
+                    IssueCode.PROFILE_RELATIONSHIP_TARGET,
                     "relationship target must be a non-empty path or URI",
                     document.path,
                     bundle_root,
@@ -204,7 +205,7 @@ def _validate_link(
         _add_issue(
             report,
             profile.policy.escaped_bundle_links,
-            "OKF_LINK_ESCAPES_BUNDLE",
+            IssueCode.OKF_LINK_ESCAPES_BUNDLE,
             f"link target '{href}' resolves outside the bundle",
             source_path,
             bundle_root,
@@ -216,7 +217,7 @@ def _validate_link(
         _add_issue(
             report,
             profile.policy.broken_internal_links,
-            "OKF_LINK_BROKEN",
+            IssueCode.OKF_LINK_BROKEN,
             f"internal link target '{href}' does not exist",
             source_path,
             bundle_root,
@@ -252,7 +253,7 @@ def validate_bundle(
         report.issues.append(
             ValidationIssue(
                 severity=Severity.ERROR,
-                code="OKF_ROOT_INDEX_MISSING",
+                code=IssueCode.OKF_ROOT_INDEX_MISSING,
                 message="bundle root index.md is required by the profile",
                 path="index.md",
             )
@@ -282,7 +283,7 @@ def validate_bundle(
                     _add_issue(
                         report,
                         Severity.ERROR,
-                        "OKF_VERSION_MISSING",
+                        IssueCode.OKF_VERSION_MISSING,
                         "root index.md must declare okf_version",
                         path,
                         bundle_root,
@@ -293,7 +294,7 @@ def validate_bundle(
                         _add_issue(
                             report,
                             Severity.ERROR,
-                            "OKF_INDEX_FRONTMATTER_KEYS",
+                            IssueCode.OKF_INDEX_FRONTMATTER_KEYS,
                             f"root index.md has unsupported frontmatter keys: {sorted(extra_keys)}",
                             path,
                             bundle_root,
@@ -302,7 +303,7 @@ def validate_bundle(
                         _add_issue(
                             report,
                             Severity.ERROR,
-                            "OKF_VERSION_MISMATCH",
+                            IssueCode.OKF_VERSION_MISMATCH,
                             f"expected okf_version '{profile.okf_version}'",
                             path,
                             bundle_root,
@@ -312,7 +313,7 @@ def validate_bundle(
                 _add_issue(
                     report,
                     Severity.ERROR,
-                    "OKF_RESERVED_FRONTMATTER",
+                    IssueCode.OKF_RESERVED_FRONTMATTER,
                     "frontmatter is not permitted in this reserved file",
                     path,
                     bundle_root,
@@ -342,7 +343,7 @@ def validate_bundle(
                 _add_issue(
                     report,
                     Severity.ERROR,
-                    "OKF_FRONTMATTER_INVALID",
+                    IssueCode.OKF_FRONTMATTER_INVALID,
                     error["msg"],
                     path,
                     bundle_root,
@@ -364,7 +365,7 @@ def validate_bundle(
             _add_issue(
                 report,
                 profile.policy.stale_concepts,
-                "OKF_CONCEPT_STALE",
+                IssueCode.OKF_CONCEPT_STALE,
                 f"concept became stale at {concept.stale_after.isoformat()}",
                 path,
                 bundle_root,
@@ -382,7 +383,7 @@ def validate_bundle(
             _add_issue(
                 report,
                 Severity.ERROR,
-                "PROFILE_DUPLICATE_CONCEPT_UID",
+                IssueCode.PROFILE_DUPLICATE_CONCEPT_UID,
                 f"concept_uid '{concept_uid}' occurs in {len(paths)} documents",
                 path,
                 bundle_root,

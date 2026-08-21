@@ -7,6 +7,8 @@ from typing import Any, Literal
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, field_validator
 
+from xyz_okf.issues import IssueCode
+
 _TOOL_ACTOR = re.compile(r"^[^\s/:]+(?:[-_.][^\s/:]+)*/[^\s/]+$")
 
 
@@ -94,7 +96,7 @@ class ValidationIssue(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     severity: Severity
-    code: str
+    code: IssueCode
     message: str
     path: str
     concept_id: str | None = None
@@ -126,3 +128,23 @@ class ValidationReport(BaseModel):
     @property
     def is_valid(self) -> bool:
         return self.error_count == 0
+
+
+class IssueCatalogEntry(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    code: IssueCode
+    default_severity: Severity
+    severity_source: Literal["fixed", "profile"]
+    scope: Literal["okf", "xyz-profile"]
+    rationale: str = Field(min_length=1)
+    remediation: str = Field(min_length=1)
+    test_references: list[str] = Field(min_length=1)
+
+
+class IssueCatalog(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    catalog_id: str = Field(min_length=1)
+    catalog_version: str = Field(min_length=1)
+    entries: list[IssueCatalogEntry]

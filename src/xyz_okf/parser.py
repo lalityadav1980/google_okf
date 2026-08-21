@@ -9,11 +9,13 @@ import yaml
 from markdown_it import MarkdownIt
 from markdown_it.token import Token
 
+from xyz_okf.issues import IssueCode
+
 _MARKDOWN = MarkdownIt("commonmark")
 
 
 class DocumentParseError(ValueError):
-    def __init__(self, code: str, message: str) -> None:
+    def __init__(self, code: IssueCode, message: str) -> None:
         super().__init__(message)
         self.code = code
 
@@ -31,28 +33,34 @@ def read_utf8(path: Path) -> str:
     try:
         return path.read_text(encoding="utf-8")
     except UnicodeDecodeError as exc:
-        raise DocumentParseError("OKF_UTF8", "document is not valid UTF-8") from exc
+        raise DocumentParseError(IssueCode.OKF_UTF8, "document is not valid UTF-8") from exc
 
 
 def split_frontmatter(text: str) -> tuple[dict[str, Any], str]:
     lines = text.splitlines(keepends=True)
     if not lines or lines[0].strip() != "---":
-        raise DocumentParseError("OKF_FRONTMATTER_MISSING", "frontmatter must start on line 1")
+        raise DocumentParseError(
+            IssueCode.OKF_FRONTMATTER_MISSING, "frontmatter must start on line 1"
+        )
 
     closing = next(
         (index for index, line in enumerate(lines[1:], start=1) if line.strip() == "---"), None
     )
     if closing is None:
-        raise DocumentParseError("OKF_FRONTMATTER_UNCLOSED", "frontmatter has no closing delimiter")
+        raise DocumentParseError(
+            IssueCode.OKF_FRONTMATTER_UNCLOSED, "frontmatter has no closing delimiter"
+        )
 
     raw_frontmatter = "".join(lines[1:closing])
     try:
         loaded = yaml.safe_load(raw_frontmatter)
     except yaml.YAMLError as exc:
-        raise DocumentParseError("OKF_YAML_INVALID", f"invalid YAML frontmatter: {exc}") from exc
+        raise DocumentParseError(
+            IssueCode.OKF_YAML_INVALID, f"invalid YAML frontmatter: {exc}"
+        ) from exc
 
     if not isinstance(loaded, dict):
-        raise DocumentParseError("OKF_YAML_MAPPING", "frontmatter must be a YAML mapping")
+        raise DocumentParseError(IssueCode.OKF_YAML_MAPPING, "frontmatter must be a YAML mapping")
 
     return loaded, "".join(lines[closing + 1 :])
 

@@ -38,16 +38,16 @@ def test_delivery_backlog_is_internally_consistent() -> None:
 
 
 def test_all_repository_yaml_files_parse() -> None:
-    yaml_files = [
-        PROJECT_ROOT / "profiles/xyz-bank-pilot.yaml",
-        PROJECT_ROOT / "profiles/xyz-bank-identity.yaml",
-        PROJECT_ROOT / "tracking/backlog.yaml",
-        PROJECT_ROOT / "examples/rendering/source-record.yaml",
-        PROJECT_ROOT / "examples/rendering/mapping.yaml",
-        PROJECT_ROOT / ".github/dependabot.yml",
-        PROJECT_ROOT / ".github/workflows/ci.yml",
-        *sorted((PROJECT_ROOT / ".github/ISSUE_TEMPLATE").glob("*.yml")),
-    ]
+    yaml_files = sorted(
+        {
+            *PROJECT_ROOT.joinpath("profiles").glob("*.yaml"),
+            *PROJECT_ROOT.joinpath("tracking").rglob("*.yaml"),
+            *PROJECT_ROOT.joinpath("examples").rglob("*.yaml"),
+            *PROJECT_ROOT.joinpath("tests/fixtures").rglob("*.yaml"),
+            *PROJECT_ROOT.joinpath(".github").rglob("*.yml"),
+            *PROJECT_ROOT.joinpath(".github").rglob("*.yaml"),
+        }
+    )
 
     for path in yaml_files:
         assert _load_yaml(path), f"{path} should contain a YAML mapping"

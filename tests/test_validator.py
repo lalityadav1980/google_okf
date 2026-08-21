@@ -4,6 +4,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+import pytest
 import yaml
 
 from xyz_okf.models import Severity
@@ -143,3 +144,48 @@ def test_stale_concept_is_a_warning(tmp_path: Path) -> None:
     issue = next(issue for issue in report.issues if issue.code == "OKF_CONCEPT_STALE")
     assert issue.severity == Severity.WARNING
     assert report.is_valid
+
+
+def test_required_root_index_is_enforced(tmp_path: Path) -> None:
+    bundle = _write_bundle(
+        tmp_path,
+        [("standards/example.md", _frontmatter(), "# Example")],
+    )
+    (bundle / "index.md").unlink()
+
+    report = validate_bundle(bundle, PROFILE)
+
+    assert any(issue.code == "OKF_ROOT_INDEX_MISSING" for issue in report.issues)
+
+
+@pytest.mark.parametrize(
+    ("overrides", "expected_code"),
+    [
+        ({"type": "Unknown Type"}, "PROFILE_UNKNOWN_TYPE"),
+        ({"classification": "UNCONTROLLED"}, "PROFILE_ENUM_VALUE"),
+        ({"criticality": "high", "verified": []}, "PROFILE_VERIFICATION_REQUIRED"),
+        ({"relationships": {"type": "applies-to"}}, "PROFILE_RELATIONSHIPS_LIST"),
+        ({"relationships": ["invalid"]}, "PROFILE_RELATIONSHIP_MAPPING"),
+        (
+            {"relationships": [{"type": "uncontrolled", "target": "https://example.invalid"}]},
+            "PROFILE_RELATIONSHIP_TYPE",
+        ),
+        (
+            {"relationships": [{"type": "applies-to", "target": ""}]},
+            "PROFILE_RELATIONSHIP_TARGET",
+        ),
+    ],
+)
+def test_profile_rule_catalog_cases(
+    tmp_path: Path,
+    overrides: dict[str, Any],
+    expected_code: str,
+) -> None:
+    bundle = _write_bundle(
+        tmp_path,
+        [("standards/example.md", _frontmatter(**overrides), "# Example")],
+    )
+
+    report = validate_bundle(bundle, PROFILE)
+
+    assert any(issue.code == expected_code for issue in report.issues)

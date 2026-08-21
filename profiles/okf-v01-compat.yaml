@@ -1,0 +1,15 @@
+profile_id: okf-v01-compat
+profile_version: "1.0"
+okf_version: "0.1"
+required_fields: []
+allowed_types: []
+enum_fields: {}
+allowed_relationship_types: []
+policy:
+  require_root_index: false
+  broken_internal_links: error
+  escaped_bundle_links: error
+  stale_concepts: warning
+  unknown_types: error
+  verified_required_for_criticality: []
+

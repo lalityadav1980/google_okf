@@ -111,18 +111,28 @@ actions:
     title: Define stable validation issue catalog
     owner_role: Knowledge Architecture
     priority: P1
-    status: READY
+    status: IN_REVIEW
     depends_on: [OKF-103]
     acceptance: Every rule has documented code, severity, rationale, remediation, and golden test.
+    evidence:
+      - profiles/validation-issues.yaml
+      - src/xyz_okf/issues.py
+      - docs/11-validation-and-conformance.md
+      - tests/test_conformance.py::test_issue_catalog_is_complete_unique_and_has_test_evidence
   - id: OKF-105
     epic: E10
     milestone: M1
     title: Build OKF conformance fixture pack
     owner_role: Quality Engineering
     priority: P0
-    status: READY
+    status: IN_REVIEW
     depends_on: [OKF-103]
     acceptance: Valid and invalid v0.1/v0.2, reserved-file, link, extension, and attested-computation fixtures run in CI.
+    evidence:
+      - profiles/okf-v01-compat.yaml
+      - profiles/okf-v02-base.yaml
+      - tests/fixtures/conformance/cases.yaml
+      - tests/test_conformance.py
   - id: OKF-201
     epic: E20
     milestone: M1

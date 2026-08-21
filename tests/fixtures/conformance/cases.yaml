@@ -1,0 +1,83 @@
+suite_id: xyz-okf-conformance
+suite_version: "1.0"
+cases:
+  - id: minimal-v02
+    bundle: valid/minimal-v02
+    profile: okf-v02-base.yaml
+    expected_valid: true
+    expected_codes: []
+  - id: extensions-v02
+    bundle: valid/extensions-v02
+    profile: okf-v02-base.yaml
+    expected_valid: true
+    expected_codes: []
+  - id: trust-v02
+    bundle: valid/trust-v02
+    profile: okf-v02-base.yaml
+    expected_valid: true
+    expected_codes: []
+  - id: attested-v02
+    bundle: valid/attested-v02
+    profile: okf-v02-base.yaml
+    expected_valid: true
+    expected_codes: []
+  - id: legacy-v01
+    bundle: valid/legacy-v01
+    profile: okf-v01-compat.yaml
+    expected_valid: true
+    expected_codes: []
+  - id: missing-frontmatter-v02
+    bundle: invalid/missing-frontmatter-v02
+    profile: okf-v02-base.yaml
+    expected_valid: false
+    expected_codes: [OKF_FRONTMATTER_MISSING]
+  - id: unclosed-frontmatter-v02
+    bundle: invalid/unclosed-frontmatter-v02
+    profile: okf-v02-base.yaml
+    expected_valid: false
+    expected_codes: [OKF_FRONTMATTER_UNCLOSED]
+  - id: invalid-yaml-v02
+    bundle: invalid/invalid-yaml-v02
+    profile: okf-v02-base.yaml
+    expected_valid: false
+    expected_codes: [OKF_YAML_INVALID]
+  - id: non-mapping-yaml-v02
+    bundle: invalid/non-mapping-yaml-v02
+    profile: okf-v02-base.yaml
+    expected_valid: false
+    expected_codes: [OKF_YAML_MAPPING]
+  - id: missing-type-v02
+    bundle: invalid/missing-type-v02
+    profile: okf-v02-base.yaml
+    expected_valid: false
+    expected_codes: [OKF_FRONTMATTER_INVALID]
+  - id: nested-reserved-frontmatter-v02
+    bundle: invalid/nested-reserved-frontmatter-v02
+    profile: okf-v02-base.yaml
+    expected_valid: false
+    expected_codes: [OKF_RESERVED_FRONTMATTER]
+  - id: version-missing-v02
+    bundle: invalid/version-missing-v02
+    profile: okf-v02-base.yaml
+    expected_valid: false
+    expected_codes: [OKF_VERSION_MISSING]
+  - id: index-extra-key-v02
+    bundle: invalid/index-extra-key-v02
+    profile: okf-v02-base.yaml
+    expected_valid: false
+    expected_codes: [OKF_INDEX_FRONTMATTER_KEYS]
+  - id: version-mismatch-v02
+    bundle: invalid/version-mismatch-v02
+    profile: okf-v02-base.yaml
+    expected_valid: false
+    expected_codes: [OKF_VERSION_MISMATCH]
+  - id: broken-link-v02
+    bundle: valid/broken-link-v02
+    profile: okf-v02-base.yaml
+    expected_valid: true
+    expected_codes: [OKF_LINK_BROKEN]
+  - id: escaped-link-v02
+    bundle: invalid/escaped-link-v02
+    profile: okf-v02-base.yaml
+    expected_valid: false
+    expected_codes: [OKF_LINK_ESCAPES_BUNDLE]

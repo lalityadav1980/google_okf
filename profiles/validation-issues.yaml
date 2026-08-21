@@ -1,0 +1,165 @@
+catalog_id: xyz-bank-okf-validation-issues
+catalog_version: "1.0"
+entries:
+  - code: OKF_UTF8
+    default_severity: error
+    severity_source: fixed
+    scope: okf
+    rationale: Concept documents must be portable UTF-8 text.
+    remediation: Re-encode the document as valid UTF-8 without lossy replacement.
+    test_references: [unit:utf8-invalid]
+  - code: OKF_FRONTMATTER_MISSING
+    default_severity: error
+    severity_source: fixed
+    scope: okf
+    rationale: Every concept requires YAML frontmatter beginning on line one.
+    remediation: Add opening and closing frontmatter delimiters and a non-empty type.
+    test_references: [conformance:missing-frontmatter-v02]
+  - code: OKF_FRONTMATTER_UNCLOSED
+    default_severity: error
+    severity_source: fixed
+    scope: okf
+    rationale: An unclosed metadata block cannot be parsed unambiguously.
+    remediation: Add a closing delimiter on its own line before the Markdown body.
+    test_references: [conformance:unclosed-frontmatter-v02]
+  - code: OKF_YAML_INVALID
+    default_severity: error
+    severity_source: fixed
+    scope: okf
+    rationale: Invalid YAML prevents interoperable metadata consumption.
+    remediation: Correct YAML syntax and validate the document again.
+    test_references: [conformance:invalid-yaml-v02]
+  - code: OKF_YAML_MAPPING
+    default_severity: error
+    severity_source: fixed
+    scope: okf
+    rationale: OKF frontmatter is a key-value mapping, not a scalar or sequence.
+    remediation: Replace the frontmatter root with a YAML mapping.
+    test_references: [conformance:non-mapping-yaml-v02]
+  - code: OKF_ROOT_INDEX_MISSING
+    default_severity: error
+    severity_source: fixed
+    scope: xyz-profile
+    rationale: The XYZ profile uses a root index as the bundle entry point and version declaration.
+    remediation: Add a root index.md with the approved okf_version.
+    test_references: [unit:root-index-missing]
+  - code: OKF_VERSION_MISSING
+    default_severity: error
+    severity_source: fixed
+    scope: okf
+    rationale: When a root index exists, the XYZ validator requires its target OKF version.
+    remediation: Add only the approved okf_version key to root index frontmatter.
+    test_references: [conformance:version-missing-v02]
+  - code: OKF_INDEX_FRONTMATTER_KEYS
+    default_severity: error
+    severity_source: fixed
+    scope: okf
+    rationale: OKF permits only okf_version in root index frontmatter.
+    remediation: Remove other root index frontmatter keys.
+    test_references: [conformance:index-extra-key-v02]
+  - code: OKF_VERSION_MISMATCH
+    default_severity: error
+    severity_source: fixed
+    scope: okf
+    rationale: The declared bundle version must match the selected validation profile.
+    remediation: Select the matching profile or deliberately migrate the bundle version.
+    test_references: [conformance:version-mismatch-v02]
+  - code: OKF_RESERVED_FRONTMATTER
+    default_severity: error
+    severity_source: fixed
+    scope: okf
+    rationale: Nested index.md and all log.md files cannot carry concept frontmatter.
+    remediation: Remove frontmatter from the reserved file.
+    test_references: [conformance:nested-reserved-frontmatter-v02]
+  - code: OKF_FRONTMATTER_INVALID
+    default_severity: error
+    severity_source: fixed
+    scope: okf
+    rationale: Typed OKF fields must follow their declared structure and timestamp conventions.
+    remediation: Correct the field reported by the validation message.
+    test_references: [conformance:missing-type-v02]
+  - code: OKF_LINK_ESCAPES_BUNDLE
+    default_severity: error
+    severity_source: profile
+    scope: xyz-profile
+    rationale: Escaped local paths can expose unintended files to consumers.
+    remediation: Use a contained bundle-relative path or an explicit authorized URI.
+    test_references: [conformance:escaped-link-v02]
+  - code: OKF_LINK_BROKEN
+    default_severity: error
+    severity_source: profile
+    scope: xyz-profile
+    rationale: The bank release profile requires internally resolvable citations.
+    remediation: Add the target, correct the path, or remove the link before release.
+    test_references: [conformance:broken-link-v02]
+  - code: OKF_CONCEPT_STALE
+    default_severity: warning
+    severity_source: profile
+    scope: xyz-profile
+    rationale: Consumers must be warned when the approved freshness boundary has passed.
+    remediation: Reconcile with the source and publish a new generated or verified timestamp.
+    test_references: [unit:stale-concept]
+  - code: PROFILE_REQUIRED_FIELD
+    default_severity: error
+    severity_source: fixed
+    scope: xyz-profile
+    rationale: Bank governance and retrieval controls depend on the organizational metadata set.
+    remediation: Populate the named field from an authoritative mapping.
+    test_references: [unit:profile-required-field]
+  - code: PROFILE_UNKNOWN_TYPE
+    default_severity: error
+    severity_source: profile
+    scope: xyz-profile
+    rationale: Controlled types enable consistent ownership, policy, and retrieval behavior.
+    remediation: Map to an approved type or submit a profile vocabulary change.
+    test_references: [unit:profile-unknown-type]
+  - code: PROFILE_ENUM_VALUE
+    default_severity: error
+    severity_source: fixed
+    scope: xyz-profile
+    rationale: Controlled field values prevent ambiguous policy interpretation.
+    remediation: Use an approved value from the active profile version.
+    test_references: [unit:profile-enum-value]
+  - code: PROFILE_VERIFICATION_REQUIRED
+    default_severity: error
+    severity_source: fixed
+    scope: xyz-profile
+    rationale: High-criticality knowledge requires independent verification evidence.
+    remediation: Add an approved verification event or lower criticality with owner approval.
+    test_references: [unit:profile-verification-required]
+  - code: PROFILE_RELATIONSHIPS_LIST
+    default_severity: error
+    severity_source: fixed
+    scope: xyz-profile
+    rationale: Relationship traversal requires a predictable collection structure.
+    remediation: Encode relationships as a YAML list of mappings.
+    test_references: [unit:profile-relationships-list]
+  - code: PROFILE_RELATIONSHIP_MAPPING
+    default_severity: error
+    severity_source: fixed
+    scope: xyz-profile
+    rationale: Each relationship needs explicit type and target fields.
+    remediation: Replace the entry with a relationship mapping.
+    test_references: [unit:profile-relationship-mapping]
+  - code: PROFILE_RELATIONSHIP_TYPE
+    default_severity: error
+    severity_source: fixed
+    scope: xyz-profile
+    rationale: Controlled relationship semantics make graph expansion predictable.
+    remediation: Use an approved relationship type or propose a profile update.
+    test_references: [unit:profile-relationship-type]
+  - code: PROFILE_RELATIONSHIP_TARGET
+    default_severity: error
+    severity_source: fixed
+    scope: xyz-profile
+    rationale: A relationship without a target cannot be resolved or audited.
+    remediation: Add a non-empty bundle path or URI target.
+    test_references: [unit:profile-relationship-target]
+  - code: PROFILE_DUPLICATE_CONCEPT_UID
+    default_severity: error
+    severity_source: fixed
+    scope: xyz-profile
+    rationale: A stable concept UID must identify exactly one current concept.
+    remediation: Correct the source-anchor allocation and never reuse an issued UID.
+    test_references: [unit:duplicate-concept-uid]
+

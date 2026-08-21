@@ -34,6 +34,7 @@ Implemented now:
 - link, relationship, identity, freshness, and verification checks;
 - connector protocol and immutable source-record contract;
 - deterministic source-to-concept renderer and versioned mapping contract;
+- governed issue-code catalog and OKF v0.1/v0.2 conformance fixtures;
 - sample bundle and automated tests; and
 - locked dependencies and CI-ready commands.
 
