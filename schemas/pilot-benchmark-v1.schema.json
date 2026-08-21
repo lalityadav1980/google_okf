@@ -1,0 +1,138 @@
+{
+  "$defs": {
+    "BenchmarkCase": {
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "pattern": "^EVAL-[0-9]{3}$",
+          "title": "Case Id",
+          "type": "string"
+        },
+        "category": {
+          "$ref": "#/$defs/TaskCategory"
+        },
+        "expected_behavior": {
+          "$ref": "#/$defs/ExpectedBehavior"
+        },
+        "expected_concept_uids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Expected Concept Uids",
+          "type": "array"
+        },
+        "forbidden_concept_uids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Forbidden Concept Uids",
+          "type": "array"
+        },
+        "human_review_required": {
+          "default": true,
+          "title": "Human Review Required",
+          "type": "boolean"
+        },
+        "maximum_latency_ms": {
+          "exclusiveMinimum": 0,
+          "title": "Maximum Latency Ms",
+          "type": "integer"
+        },
+        "principal_fixture": {
+          "minLength": 1,
+          "title": "Principal Fixture",
+          "type": "string"
+        },
+        "task": {
+          "minLength": 1,
+          "title": "Task",
+          "type": "string"
+        }
+      },
+      "required": [
+        "case_id",
+        "category",
+        "task",
+        "principal_fixture",
+        "expected_behavior",
+        "maximum_latency_ms"
+      ],
+      "title": "BenchmarkCase",
+      "type": "object"
+    },
+    "ExpectedBehavior": {
+      "enum": [
+        "answer",
+        "refuse"
+      ],
+      "title": "ExpectedBehavior",
+      "type": "string"
+    },
+    "TaskCategory": {
+      "enum": [
+        "knowledge-discovery",
+        "policy-lookup",
+        "procedure-navigation",
+        "service-context",
+        "architecture-context",
+        "insufficient-knowledge",
+        "entitlement-boundary"
+      ],
+      "title": "TaskCategory",
+      "type": "string"
+    }
+  },
+  "$id": "https://schemas.xyz-bank.example.invalid/okf/pilot-benchmark-v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "benchmark_id": {
+      "minLength": 1,
+      "title": "Benchmark Id",
+      "type": "string"
+    },
+    "benchmark_version": {
+      "minLength": 1,
+      "title": "Benchmark Version",
+      "type": "string"
+    },
+    "cases": {
+      "items": {
+        "$ref": "#/$defs/BenchmarkCase"
+      },
+      "minItems": 1,
+      "title": "Cases",
+      "type": "array"
+    },
+    "outcome_owner_role": {
+      "minLength": 1,
+      "title": "Outcome Owner Role",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "approved"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "benchmark_id",
+    "benchmark_version",
+    "status",
+    "outcome_owner_role",
+    "cases"
+  ],
+  "title": "EvaluationBenchmark",
+  "type": "object"
+}

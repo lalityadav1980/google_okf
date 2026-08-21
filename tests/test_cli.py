@@ -172,3 +172,20 @@ def test_discovery_and_connector_report_schema_commands_match_models() -> None:
     assert connector_report.exit_code == 0, connector_report.output
     assert json.loads(discovery.output) == SourceDiscoveryProfile.model_json_schema()
     assert json.loads(connector_report.output) == ConnectorCertificationReport.model_json_schema()
+
+
+def test_score_benchmark_command_produces_deterministic_report() -> None:
+    result = RUNNER.invoke(
+        app,
+        [
+            "score-benchmark",
+            str(PROJECT_ROOT / "profiles/pilot-benchmark.example.yaml"),
+            str(PROJECT_ROOT / "examples/evaluation/synthetic-run.yaml"),
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    report = json.loads(result.output)
+    assert report["entitlement_pass_rate"] == 1
+    assert report["behavior_pass_rate"] == 1
+    assert report["mean_citation_recall"] == 1

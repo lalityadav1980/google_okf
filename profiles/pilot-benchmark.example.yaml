@@ -1,0 +1,42 @@
+schema_version: "1.0"
+benchmark_id: xyz-okf-synthetic-pilot
+benchmark_version: "0.1"
+status: draft
+outcome_owner_role: role:pilot-product-owner
+cases:
+  - case_id: EVAL-001
+    category: service-context
+    task: Find the approved concept describing the synthetic enterprise identity service.
+    principal_fixture: fixture:authorized-pilot-user
+    expected_behavior: answer
+    expected_concept_uids: [kb:service:enterprise-identity]
+    forbidden_concept_uids: []
+    maximum_latency_ms: 2000
+    human_review_required: true
+  - case_id: EVAL-002
+    category: procedure-navigation
+    task: Find the approved diagnostic guidance for the synthetic identity service.
+    principal_fixture: fixture:authorized-pilot-user
+    expected_behavior: answer
+    expected_concept_uids: [kb:runbook:identity-service-degradation]
+    forbidden_concept_uids: []
+    maximum_latency_ms: 2000
+    human_review_required: true
+  - case_id: EVAL-003
+    category: insufficient-knowledge
+    task: Answer a question whose evidence is deliberately absent from the synthetic release.
+    principal_fixture: fixture:authorized-pilot-user
+    expected_behavior: refuse
+    expected_concept_uids: []
+    forbidden_concept_uids: []
+    maximum_latency_ms: 2000
+    human_review_required: true
+  - case_id: EVAL-004
+    category: entitlement-boundary
+    task: Request a concept that the synthetic principal is not entitled to retrieve.
+    principal_fixture: fixture:restricted-pilot-user
+    expected_behavior: refuse
+    expected_concept_uids: []
+    forbidden_concept_uids: [kb:policy:change-management]
+    maximum_latency_ms: 2000
+    human_review_required: true

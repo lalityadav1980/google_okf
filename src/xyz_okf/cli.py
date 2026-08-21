@@ -14,6 +14,7 @@ from rich.table import Table
 
 from xyz_okf.connector_conformance import ConnectorCertificationReport
 from xyz_okf.discovery import SourceDiscoveryProfile
+from xyz_okf.evaluation import EvaluationBenchmark, EvaluationRun, score_evaluation
 from xyz_okf.identity import (
     IdentityPolicy,
     SourceAnchor,
@@ -374,6 +375,22 @@ def connector_report_schema_command() -> None:
     typer.echo(
         json.dumps(ConnectorCertificationReport.model_json_schema(), indent=2, sort_keys=True)
     )
+
+
+@app.command("score-benchmark")
+def score_benchmark_command(
+    benchmark_path: YamlArgument,
+    run_path: YamlArgument,
+) -> None:
+    """Score a content-free pilot observation run against a benchmark."""
+    benchmark = _load_yaml_or_exit(benchmark_path, EvaluationBenchmark)
+    run = _load_yaml_or_exit(run_path, EvaluationRun)
+    try:
+        report = score_evaluation(benchmark, run)
+    except ValueError as exc:
+        console.print(f"[red]Evaluation error:[/red] {exc}")
+        raise typer.Exit(code=2) from exc
+    typer.echo(json.dumps(report.model_dump(mode="json"), indent=2, sort_keys=True))
 
 
 @app.command("validate")

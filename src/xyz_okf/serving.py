@@ -3,11 +3,12 @@ from __future__ import annotations
 import posixpath
 import re
 from collections import Counter
-from collections.abc import Iterable, Mapping
+from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 from datetime import datetime
 from enum import StrEnum
 from pathlib import PurePosixPath
+from time import perf_counter
 from typing import Literal, cast
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
@@ -27,6 +28,7 @@ from xyz_okf.release import (
     VerifiedRelease,
     verify_release,
 )
+from xyz_okf.telemetry import OkfTelemetry, TelemetryOperation, TelemetryOutcome
 
 _DIGEST = re.compile(r"^sha256:[0-9a-f]{64}$")
 _CHANNEL = re.compile(r"^[a-z][a-z0-9._-]{0,63}$")
@@ -390,11 +392,26 @@ class ReleaseCatalog:
 
 
 class ServingService:
-    def __init__(self, catalog: ReleaseCatalog, pdp: PolicyDecisionPoint) -> None:
+    def __init__(
+        self,
+        catalog: ReleaseCatalog,
+        pdp: PolicyDecisionPoint,
+        telemetry: OkfTelemetry | None = None,
+    ) -> None:
         self._catalog = catalog
         self._pdp = pdp
+        self._telemetry = telemetry or OkfTelemetry()
 
     def list_releases(
+        self, principal: PrincipalContext, *, now: datetime
+    ) -> tuple[AuthorizedReleaseSummary, ...]:
+        return self._observe_retrieval(
+            action="list_releases",
+            release_ref=None,
+            operation=lambda: self._list_releases(principal, now=now),
+        )
+
+    def _list_releases(
         self, principal: PrincipalContext, *, now: datetime
     ) -> tuple[AuthorizedReleaseSummary, ...]:
         summaries: list[AuthorizedReleaseSummary] = []
@@ -425,6 +442,29 @@ class ServingService:
         return tuple(summaries)
 
     def fetch_concept(
+        self,
+        principal: PrincipalContext,
+        *,
+        digest_or_channel: str,
+        concept_uid: str,
+        now: datetime,
+        include_deprecated: bool = False,
+        include_stale: bool = False,
+    ) -> ConceptEnvelope:
+        return self._observe_retrieval(
+            action="fetch_concept",
+            release_ref=digest_or_channel,
+            operation=lambda: self._fetch_concept(
+                principal,
+                digest_or_channel=digest_or_channel,
+                concept_uid=concept_uid,
+                now=now,
+                include_deprecated=include_deprecated,
+                include_stale=include_stale,
+            ),
+        )
+
+    def _fetch_concept(
         self,
         principal: PrincipalContext,
         *,
@@ -485,6 +525,31 @@ class ServingService:
         )
 
     def search(
+        self,
+        principal: PrincipalContext,
+        *,
+        digest_or_channel: str,
+        query: str,
+        now: datetime,
+        limit: int = 10,
+        include_deprecated: bool = False,
+        include_stale: bool = False,
+    ) -> SearchResponse:
+        return self._observe_retrieval(
+            action="search",
+            release_ref=digest_or_channel,
+            operation=lambda: self._search(
+                principal,
+                digest_or_channel=digest_or_channel,
+                query=query,
+                now=now,
+                limit=limit,
+                include_deprecated=include_deprecated,
+                include_stale=include_stale,
+            ),
+        )
+
+    def _search(
         self,
         principal: PrincipalContext,
         *,
@@ -579,7 +644,7 @@ class ServingService:
         action: RetrievalAction,
     ) -> AuthorizationDecision:
         file = concept.manifest_file
-        return self._pdp.authorize(
+        decision = self._pdp.authorize(
             AuthorizationRequest(
                 principal=principal,
                 resource=ResourceContext(
@@ -593,6 +658,51 @@ class ServingService:
                 ),
             )
         )
+        self._telemetry.record_authorization(
+            action=action,
+            allowed=decision.allowed,
+            classification=str(file.classification),
+            reason_codes=(reason.value for reason in decision.reason_codes),
+        )
+        return decision
+
+    def _observe_retrieval[ResultT](
+        self,
+        *,
+        action: str,
+        release_ref: str | None,
+        operation: Callable[[], ResultT],
+    ) -> ResultT:
+        started = perf_counter()
+        outcome = TelemetryOutcome.SUCCEEDED
+        with self._telemetry.span(
+            TelemetryOperation.RETRIEVAL,
+            action=action,
+            release_ref=release_ref,
+        ):
+            try:
+                return operation()
+            except RetrievalDenied:
+                outcome = TelemetryOutcome.DENIED
+                raise
+            except LifecycleFiltered:
+                outcome = TelemetryOutcome.FILTERED
+                raise
+            except ReleaseWithdrawn:
+                outcome = TelemetryOutcome.WITHDRAWN
+                raise
+            except (ConceptNotFound, ReleaseNotFound):
+                outcome = TelemetryOutcome.NOT_FOUND
+                raise
+            except Exception:
+                outcome = TelemetryOutcome.FAILED
+                raise
+            finally:
+                self._telemetry.record_retrieval(
+                    action=action,
+                    outcome=outcome,
+                    duration_seconds=perf_counter() - started,
+                )
 
     def _read_document(
         self, record: _CatalogRecord, concept: _ConceptIndexEntry

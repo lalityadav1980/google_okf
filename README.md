@@ -70,6 +70,10 @@ indexing services.
     authorization, immutable routing, withdrawal, and public error decisions.
 21. [Source and platform discovery](docs/15-source-and-platform-discovery.md) —
     Confluence/SharePoint evidence gates, YODA/RACK maps, and connector certification.
+22. [Observability and operations](docs/16-observability-and-operations.md) —
+    content-minimized OpenTelemetry, SLI/SLO proposals, dashboards, and hosting gates.
+23. [Evaluation and assurance](docs/17-evaluation-and-assurance.md) — benchmark,
+    baseline, scoring, threat/misuse tests, evidence gate, and resilience exercises.
 
 ## Framework quick start
 
@@ -118,6 +122,8 @@ The first vertical slice includes:
 - a verified-release catalog with promotion, rollback, and withdrawal behavior;
 - a provider-neutral authorization port and deny-by-default reference evaluator;
 - an OpenID Connect-declared, release-aware FastAPI/OpenAPI serving contract;
+- OpenTelemetry API spans/metrics with hashed identifiers and no content fields;
+- a versioned pilot benchmark, deterministic scorer, and assurance evidence plan;
 - a conformant synthetic pilot bundle; and
 - automated CI, tests, issue forms, and pull-request controls.
 

@@ -36,7 +36,7 @@ milestones:
       - Negative entitlement tests return no unauthorized content.
   - id: M5
     name: Assurance and production decision
-    status: BACKLOG
+    status: IN_PROGRESS
     exit_criteria:
       - Quality, security, resilience, privacy, records, and operating evidence is approved.
 
@@ -373,9 +373,15 @@ actions:
     title: Instrument publication and serving with OpenTelemetry
     owner_role: Site Reliability Engineering
     priority: P1
-    status: BACKLOG
+    status: BLOCKED
+    blocker: Approved OpenTelemetry collector/backend, data-handling controls, hosted source/publication/index integrations, service owners, SLOs, alert routes, and aggregate cost model are not confirmed; the content-minimized API instrumentation and serving integration are complete.
     depends_on: [OKF-402, OKF-601]
     acceptance: Traces and metrics cover source lag, validation, release, policy, indexing, retrieval, errors, and cost without content leakage.
+    partial_evidence:
+      - docs/16-observability-and-operations.md
+      - src/xyz_okf/telemetry.py
+      - src/xyz_okf/serving.py
+      - tests/test_telemetry.py
   - id: OKF-901
     epic: E90
     milestone: M5
@@ -386,12 +392,23 @@ actions:
     blocker: Pilot users, tasks, expected sources, and outcome owner are not selected.
     depends_on: []
     acceptance: Approved benchmark covers answer quality, citations, refusal, entitlement, freshness, task time, and current baseline.
+    partial_evidence:
+      - docs/17-evaluation-and-assurance.md
+      - profiles/pilot-benchmark.example.yaml
+      - schemas/pilot-benchmark-v1.schema.json
+      - src/xyz_okf/evaluation.py
+      - tests/test_evaluation.py
   - id: OKF-902
     epic: E90
     milestone: M5
     title: Execute security, resilience, privacy, records, and AI-risk assurance
     owner_role: Independent Assurance
     priority: P0
-    status: BACKLOG
+    status: BLOCKED
+    blocker: Independent security, resilience, privacy, records, AI-risk, accessibility, legal/open-source, source, IAM, consumer, and service owners have not executed or approved the evidence plan; prerequisite live integrations and pilot benchmark remain blocked.
     depends_on: [OKF-302, OKF-312, OKF-403, OKF-703, OKF-801, OKF-901]
     acceptance: Required evidence is approved and every residual risk has a named acceptance authority.
+    partial_evidence:
+      - docs/17-evaluation-and-assurance.md
+      - docs/runbooks/incident-playbooks.md
+      - docs/04-security-risk-governance.md

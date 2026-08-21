@@ -35,18 +35,21 @@ Implemented now:
 - connector protocol and immutable source-record contract;
 - deterministic source-to-concept renderer and versioned mapping contract;
 - governed issue-code catalog and OKF v0.1/v0.2 conformance fixtures;
+- checkpoint, retry, deletion, dry-run, and source certification contracts;
+- deterministic release archive, OCI/signing command, and OPA admission contracts;
+- authorization-before-retrieval, lifecycle catalog, and OpenAPI serving contract;
+- content-minimized OpenTelemetry API instrumentation;
 - sample bundle and automated tests; and
 - locked dependencies and CI-ready commands.
 
 Planned:
 
-- source checkpoint store;
 - Confluence and SharePoint adapters;
-- release manifest, canonical hashing, archive, OCI, and Cosign integration;
+- approved remote OCI/Cosign and enterprise OPA/PDP integrations;
 - production enterprise entitlement adapter;
 - production catalog and hybrid index adapter;
 - YODA and RACK adapters; and
-- OpenTelemetry instrumentation and operational dashboards.
+- approved OpenTelemetry SDK/exporter, dashboards, alerts, and operational SLOs.
 
 ## 3. Repository structure
 
@@ -60,14 +63,17 @@ Planned:
 │   ├── cli.py                  # User and CI commands
 │   ├── connector_conformance.py # Reusable source sandbox certification
 │   ├── discovery.py            # Governed source discovery evidence model
+│   ├── evaluation.py           # Content-free benchmark scoring contract
 │   ├── identity.py             # Stable identity and canonical digest profiles
 │   ├── models.py               # Typed OKF/profile/report models
 │   ├── parser.py               # UTF-8, YAML frontmatter and Markdown parsing
 │   ├── profile.py              # Profile loader
 │   ├── producer.py             # Change planning, retry, publication and checkpoints
 │   ├── release.py              # Manifest, deterministic archive and verification
-│   ├── supply_chain.py         # Safe ORAS/Cosign digest command contracts
 │   ├── renderer.py             # Deterministic source-to-concept rendering
+│   ├── serving.py              # Authorized release catalog and retrieval
+│   ├── supply_chain.py         # Safe ORAS/Cosign digest command contracts
+│   ├── telemetry.py            # Content-minimized OpenTelemetry API contract
 │   ├── validator.py            # Bundle/profile validation engine
 │   └── connectors/base.py      # Portable source adapter contract
 ├── tests/                      # Unit, CLI and conformance tests

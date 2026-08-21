@@ -7,6 +7,7 @@ requires-python = ">=3.13,<3.15"
 dependencies = [
   "fastapi>=0.141,<0.142",
   "markdown-it-py>=4.0,<5",
+  "opentelemetry-api>=1.44,<2",
   "pydantic>=2.12,<3",
   "pyyaml>=6.0,<7",
   "rich>=14.0,<15",
@@ -20,6 +21,7 @@ xyz-okf = "xyz_okf.cli:app"
 dev = [
   "httpx2>=2,<3",
   "mypy>=1.18,<2",
+  "opentelemetry-sdk>=1.44,<2",
   "pytest>=9.0,<10",
   "pytest-cov>=7.0,<8",
   "ruff>=0.15,<1",

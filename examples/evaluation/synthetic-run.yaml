@@ -1,0 +1,40 @@
+schema_version: "1.0"
+run_id: synthetic-reference-run
+consumer_id: reference-serving
+observations:
+  - case_id: EVAL-001
+    release_digest: sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+    retrieved_concept_uids: [kb:service:enterprise-identity]
+    cited_concept_uids: [kb:service:enterprise-identity]
+    refused: false
+    latency_ms: 500
+    human_correctness: 5
+    human_completeness: 5
+    reviewer_role: role:synthetic-reviewer
+  - case_id: EVAL-002
+    release_digest: sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+    retrieved_concept_uids: [kb:runbook:identity-service-degradation]
+    cited_concept_uids: [kb:runbook:identity-service-degradation]
+    refused: false
+    latency_ms: 600
+    human_correctness: 5
+    human_completeness: 4
+    reviewer_role: role:synthetic-reviewer
+  - case_id: EVAL-003
+    release_digest: sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+    retrieved_concept_uids: []
+    cited_concept_uids: []
+    refused: true
+    latency_ms: 300
+    human_correctness: 5
+    human_completeness: 5
+    reviewer_role: role:synthetic-reviewer
+  - case_id: EVAL-004
+    release_digest: sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+    retrieved_concept_uids: []
+    cited_concept_uids: []
+    refused: true
+    latency_ms: 250
+    human_correctness: 5
+    human_completeness: 5
+    reviewer_role: role:synthetic-reviewer
