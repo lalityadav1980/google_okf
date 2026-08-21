@@ -56,7 +56,7 @@ select = ["B", "C4", "E", "F", "I", "RUF", "S", "SIM", "UP"]
 "tests/**" = ["S101"]
 
 [tool.pytest.ini_options]
-addopts = "-ra --strict-markers --cov=xyz_okf --cov-report=term-missing"
+addopts = "-ra --strict-markers --cov=xyz_okf --cov-report=term-missing --cov-fail-under=85"
 testpaths = ["tests"]
 
 [tool.coverage.run]

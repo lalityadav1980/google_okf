@@ -16,13 +16,17 @@ Local quality evidence on 21 August 2026:
 - two independent package builds produced byte-identical wheel, source archive,
   normalized CycloneDX runtime SBOM, and canonical digest evidence;
 - the wheel contains the release-admission policy and all versioned JSON/OpenAPI contracts;
-- 139 tests pass with 86% branch-aware coverage;
+- 141 tests pass with 86% branch-aware coverage against an enforced 85% floor;
 - OPA 1.17 release-admission policy has 21 passing Rego tests;
 - sample bundle validation and deterministic release build/verification pass;
 - no business-line-specific terminology is present in repository content; and
-- [GitHub CI for commit `b616692`](https://github.com/lalityadav1980/google_okf/actions/runs/32466850671)
+- [GitHub CI for commit `f27816e`](https://github.com/lalityadav1980/google_okf/actions/runs/32467388372)
   passed every expanded workflow step, including OPA, secret/dependency gates,
-  package/SBOM verification, and retention of the four framework artifacts.
+  independent package/SBOM verification, a byte-identical second build, and
+  retention of the four framework artifacts.
+- GitHub secret scanning and push protection are enabled. Dependabot
+  vulnerability alerts and automatic security-update pull requests were
+  enabled on 21 August 2026; the Dependabot API then reported zero open alerts.
 
 `main` is not protected according to the GitHub branch-protection API. The
 repository is also unlicensed. It must therefore not be treated as an approved

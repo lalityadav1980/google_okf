@@ -4,8 +4,12 @@ import re
 import tomllib
 from pathlib import Path
 from typing import Any
+from urllib.parse import unquote
 
 import yaml
+from markdown_it import MarkdownIt
+
+from xyz_okf import __version__
 
 PROJECT_ROOT = Path(__file__).parents[1]
 
@@ -84,6 +88,7 @@ def test_security_dependencies_and_ci_supply_chain_gates_are_locked() -> None:
     dev_dependencies = project["dependency-groups"]["dev"]
     assert any(dependency.startswith("detect-secrets") for dependency in dev_dependencies)
     assert any(dependency.startswith("pip-audit") for dependency in dev_dependencies)
+    assert "--cov-fail-under=85" in project["tool"]["pytest"]["ini_options"]["addopts"]
 
     workflow = (PROJECT_ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
     required_commands = {
@@ -99,3 +104,38 @@ def test_security_dependencies_and_ci_supply_chain_gates_are_locked() -> None:
     action_references = re.findall(r"uses:\s+[^@\s]+@([^\s#]+)", workflow)
     assert action_references
     assert all(re.fullmatch(r"[0-9a-f]{40}", reference) for reference in action_references)
+
+
+def test_package_version_matches_project_metadata() -> None:
+    with (PROJECT_ROOT / "pyproject.toml").open("rb") as handle:
+        project = tomllib.load(handle)
+    assert __version__ == project["project"]["version"]
+
+
+def test_local_markdown_links_resolve() -> None:
+    documents = sorted(
+        {
+            PROJECT_ROOT / "README.md",
+            PROJECT_ROOT / "CONTRIBUTING.md",
+            PROJECT_ROOT / "SECURITY.md",
+            *PROJECT_ROOT.joinpath("docs").rglob("*.md"),
+        }
+    )
+    parser = MarkdownIt("commonmark")
+    for document in documents:
+        tokens = parser.parse(document.read_text(encoding="utf-8"))
+        for token in tokens:
+            for child in token.children or []:
+                if child.type != "link_open":
+                    continue
+                target = child.attrGet("href") or ""
+                relative_target = unquote(target.split("#", maxsplit=1)[0])
+                if (
+                    not relative_target
+                    or "://" in relative_target
+                    or relative_target.startswith("mailto:")
+                ):
+                    continue
+                assert (document.parent / relative_target).resolve().exists(), (
+                    f"broken local link in {document.relative_to(PROJECT_ROOT)}: {target}"
+                )

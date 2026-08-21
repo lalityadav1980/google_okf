@@ -33,7 +33,9 @@ the bank trust decisions in `DEC-005`.
 | Reproducible resolution | `uv.lock`; every CI command uses `--locked` where supported; package build uses the locked Hatchling from the synced environment with isolation disabled | Dependency drift or an out-of-date lock fails installation/export | `pyproject.toml`, `uv.lock` |
 | Security static analysis | Ruff `S` rules in addition to correctness/style rules | Finding fails CI; test assertions alone have the narrow `S101` exception | `pyproject.toml`, CI lint step |
 | Source secret detection | `detect-secrets` scans Git-visible files without a baseline and without network verification | Any non-allowlisted finding fails; output shows path/type/line but never the value | `scripts/check_secrets.py` |
+| Test quality floor | pytest measures branch-aware package coverage with a repository floor of 85% | A regression below the floor fails the full suite and CI | `pyproject.toml`, 141 deterministic tests |
 | Runtime vulnerability audit | uv exports exact, hashed, non-development runtime requirements; `pip-audit` checks them without invoking pip | Export, collection, or known-vulnerability finding fails | `scripts/audit_runtime_dependencies.py` |
+| Repository-host detection | GitHub secret scanning/push protection plus Dependabot vulnerability alerts and automatic security-update pull requests | Host detects pushed/provider patterns and opens eligible security fixes; local gates remain authoritative for CI | Repository security settings and `.github/dependabot.yml` |
 | Runtime SBOM | uv exports CycloneDX 1.5 for locked runtime dependencies | Wrong format/root or invalid lock digest fails | `scripts/build_framework_evidence.py` |
 | Reproducible build | Volatile SBOM timestamp/UUID are normalized; build time is explicit; CI performs an isolated second package/evidence build and byte-compares all four retained files | Any byte difference fails | `normalize_cyclonedx_sbom` and directory-comparison tests; `scripts/check_framework_reproducibility.py` |
 | Contract-bearing wheel | Hatch includes the OPA admission policy and all committed JSON/OpenAPI schemas | Missing, duplicate, unsafe, or symlinked wheel members fail | `verify_framework_wheel` tests |
@@ -135,6 +137,11 @@ a fix/upgrade or documented time-bounded exception, an owner, and a patch SLO.
 Secret scanning intentionally uses syntactic/entropy detection without online
 credential verification. A clean scan does not replace repository-host secret
 protection, push protection, credential rotation, or incident response.
+GitHub host controls were checked on 21 August 2026: secret scanning, push
+protection, vulnerability alerts, and Dependabot security updates were enabled,
+and the Dependabot API reported zero open alerts. Enhanced non-provider pattern
+and validity-check modes remain disabled pending repository/security-owner
+review of false positives and external verification behavior.
 
 ## 6. Remaining bank-owned controls
 

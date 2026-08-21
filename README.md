@@ -117,7 +117,7 @@ uv run ruff check src tests scripts
 uv run python scripts/check_secrets.py
 uv run python scripts/audit_runtime_dependencies.py
 uv run mypy src
-uv run pytest
+uv run pytest  # enforces at least 85% branch-aware coverage
 ```
 
 The first vertical slice includes:

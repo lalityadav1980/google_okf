@@ -68,10 +68,10 @@ actions:
     status: BLOCKED
     blocker: GitHub CI passes on main, but the GitHub API reports that main is not protected; repository administrators must approve required checks, reviews, bypass roles, force-push/deletion controls, and administrator enforcement.
     depends_on: [OKF-002]
-    acceptance: Pinned CI runs format, security lint, secret scan, locked runtime dependency audit, type, test, policy, sample-bundle, package/SBOM, and artifact-retention gates as required checks.
+    acceptance: Pinned CI runs format, security lint, secret scan, locked runtime dependency audit, type, test with an 85% coverage floor, policy, sample-bundle, package/SBOM, reproducibility, and artifact-retention gates as required checks.
     partial_evidence:
       - .github/workflows/ci.yml
-      - https://github.com/lalityadav1980/google_okf/actions/runs/32466850671
+      - https://github.com/lalityadav1980/google_okf/actions/runs/32467388372
   - id: OKF-004
     epic: E00
     milestone: M0
@@ -106,7 +106,7 @@ actions:
       - tests/test_framework_evidence.py
       - .github/workflows/ci.yml
       - docs/19-framework-supply-chain-and-security.md
-      - https://github.com/lalityadav1980/google_okf/actions/runs/32466850671
+      - https://github.com/lalityadav1980/google_okf/actions/runs/32467388372
   - id: OKF-101
     epic: E10
     milestone: M1
