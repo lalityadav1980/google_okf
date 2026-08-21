@@ -2,12 +2,12 @@
 
 - **Status:** Proposed
 - **Date:** 2026-08-21
-- **Decision owners:** To be assigned by XYZ Bank
+- **Decision owners:** To be assigned by the adopting organisation
 - **Scope:** Enterprise agent-ready knowledge architecture
 
 ## Context
 
-XYZ Bank knowledge is distributed across Confluence, SharePoint, YODA, RACK,
+The adopting organisation's knowledge is distributed across Confluence, SharePoint, YODA, RACK,
 code repositories, catalogs, records systems, and other domain platforms.
 Agentic consumers need consistent context, but direct source-specific
 integrations create duplicated parsing, metadata, indexing, and governance.
@@ -22,7 +22,7 @@ retrieval, or execution infrastructure.
 
 ## Decision
 
-XYZ Bank will pilot OKF v0.2 as the canonical **interchange and controlled
+The adopting organisation will pilot OKF v0.2 as the canonical **interchange and controlled
 release format** for agent-ready knowledge.
 
 The decision includes these constraints:
@@ -31,7 +31,7 @@ The decision includes these constraints:
    and records policy.
 2. OKF is not designated as the universal authoring platform or legal system of
    record.
-3. XYZ Bank will define a stricter organizational profile for production.
+3. The adopting organisation will define the stricter VerityKF Enterprise Profile for production.
 4. Bundles will be aligned to enforceable authorization boundaries.
 5. Production knowledge will be reviewed and published as immutable releases.
 6. Search, vector, and relationship indexes will be reproducible derived views.
@@ -54,10 +54,10 @@ The decision includes these constraints:
 
 ### Negative and costs
 
-- The bank must build or select producer, validation, release, serving, and
+- The adopting organisation must build or select producer, validation, release, serving, and
   authorization-aware retrieval capabilities.
 - Domain owners must accept ongoing curation and freshness responsibilities.
-- The permissive base format requires a bank profile and compatibility process.
+- The permissive base format requires an enterprise profile and compatibility process.
 - Path-based concept identity and untyped links need organizational conventions.
 - Existing platforms may require new APIs, change feeds, and entitlement mapping.
 - A new controlled representation creates retention, privacy, and operational

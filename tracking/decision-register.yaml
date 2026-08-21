@@ -1,22 +1,24 @@
 decision_register_version: "1.0"
-last_updated: 2026-08-21
+last_updated: 2026-08-22
 statuses: [OPEN, DECIDED, DEFERRED]
 
 decisions:
   - id: DEC-001
     status: OPEN
-    title: Approve repository license and distribution boundary
+    title: Approve project name, repository license, and distribution boundary
     owner_role: Open Source Program Office and Legal
     blocks: [OKF-004]
-    decision_needed: Select the repository license, internal/public distribution boundary, dependency policy, and approval reference.
+    decision_needed: Approve the Verity Knowledge Fabric name, repository license, internal/public distribution boundary, dependency policy, and approval reference.
     required_evidence:
       - Approved license identifier and LICENSE text source.
+      - Legal or trademark clearance for the Verity Knowledge Fabric name.
       - Intended internal/public distribution and contribution model.
       - Dependency, SBOM, attribution, vulnerability, and patch policy.
-    safe_default_if_deferred: Repository remains unlicensed and must not be represented as open-source software.
+    safe_default_if_deferred: Verity Knowledge Fabric remains a working internal name; the repository stays unlicensed and must not be represented as approved open-source software.
     observed_state:
       - GitHub reports repository visibility as public and license as null on 2026-08-21.
       - Vulnerability alerts and automatic security updates are enabled; the Dependabot API reports zero open alerts.
+      - A preliminary GitHub and PyPI collision scan found no exact technical match on 2026-08-22; this is not legal or trademark clearance.
 
   - id: DEC-002
     status: OPEN
@@ -91,7 +93,7 @@ decisions:
       - Identity assurance and token validation contract.
       - PDP/PEP endpoint or library, policy distribution/versioning, timeout, and availability.
       - Source ACL mapping, nested/dynamic group responsibility, revocation, and negative tests.
-    safe_default_if_deferred: Reference API remains synthetic/local and is not deployed with bank content.
+    safe_default_if_deferred: Reference API remains synthetic/local and is not deployed with enterprise content.
 
   - id: DEC-008
     status: OPEN

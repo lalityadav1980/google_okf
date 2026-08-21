@@ -1,5 +1,5 @@
-profile_id: xyz-bank-okf
-profile_version: "0.1"
+profile_id: verity-kf
+profile_version: "0.2"
 okf_version: "0.2"
 
 required_fields:
@@ -11,7 +11,7 @@ required_fields:
   - generated
   - status
   - stale_after
-  - xyz_profile_version
+  - verity_profile_version
   - concept_uid
   - domain
   - owner
@@ -66,4 +66,3 @@ policy:
   stale_concepts: warning
   unknown_types: error
   verified_required_for_criticality: [high]
-

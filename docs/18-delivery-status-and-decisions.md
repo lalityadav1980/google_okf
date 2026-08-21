@@ -20,7 +20,7 @@ Local quality evidence on 21 August 2026:
 - OPA 1.17 release-admission policy has 21 passing Rego tests;
 - sample bundle validation and deterministic release build/verification pass;
 - no business-line-specific terminology is present in repository content; and
-- [GitHub CI for commit `15f4210`](https://github.com/lalityadav1980/google_okf/actions/runs/32467648579)
+- [GitHub CI for commit `15f4210`](https://github.com/lalityadav1980/verity-knowledge-fabric/actions/runs/32467648579)
   passed every expanded workflow step, including OPA, secret/dependency gates,
   independent package/SBOM verification, a byte-identical second build, and
   retention of the four framework artifacts.
@@ -49,7 +49,7 @@ production release authority or represented as open-source software.
 | Observability | Content-minimized OTel API and serving integration | Blocked | DEC-010 approved SDK/export/backend/operations |
 | Evaluation/assurance | Deterministic scorer, synthetic pack, threats, playbooks, evidence gate | Blocked | DEC-011 benchmark and DEC-012 independent execution/approval |
 
-## 3. Decisions needed from XYZ Bank
+## 3. Decisions needed from the adopting organisation
 
 The machine-readable source is
 [`decision-register.yaml`](../tracking/decision-register.yaml). The first inputs
@@ -95,7 +95,7 @@ license, an unprotected `main`, zero open issues/pull requests, enabled secret
 scanning/push protection, enabled Dependabot alerts/security updates, and zero
 open Dependabot alerts.
 
-Further autonomous implementation would require inventing a bank capability,
+Further autonomous implementation would require inventing an organisation capability,
 owner, policy, environment, credential, source scope, identity contract,
 benchmark, or approval. The next safe action is therefore receipt of the
 evidence requested in `DEC-001` through `DEC-012`; the execution sequence above

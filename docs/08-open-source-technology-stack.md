@@ -37,7 +37,7 @@ Components are assessed for:
 - operational maturity at large scale; and
 - ability to obtain commercial support without changing the core contract.
 
-All licenses in this document are indicative. XYZ Bank open-source governance
+All licenses in this document are indicative. The adopting organisation's open-source governance
 and Legal must verify the exact version, transitive dependencies, distribution
 model, and intended use before production approval.
 
@@ -83,14 +83,14 @@ Official project references:
 | Policy-as-code | Open Policy Agent (OPA/Rego) | General-purpose, open policy decision engine for CI and runtime authorization decisions | Pilot policy gates; production retrieval |
 | Release packaging | OCI artifact with ORAS | Content-addressed, registry-portable distribution of arbitrary artifacts | Pilot release milestone |
 | Artifact integrity | Sigstore Cosign | Signs/verifies OCI artifacts or blobs; supports identity/KMS-based models | Pilot release milestone |
-| Release registry | Existing OCI-compatible registry; Harbor or Zot are open-source options | Avoids introducing a separate proprietary knowledge artifact store | Reuse existing bank platform first |
+| Release registry | Existing OCI-compatible registry; Harbor or Zot are open-source options | Avoids introducing a separate proprietary knowledge artifact store | Reuse existing enterprise platform first |
 | Release catalog | PostgreSQL | Durable metadata, transactions, mature operations, portable SQL | Production hardening |
 | Serving API | FastAPI `>=0.141,<0.142` | Implemented OpenAPI/JSON Schema boundary from the same Pydantic contracts; enterprise identity/PDP integration remains external | Consumer contract implemented; production wiring after IAM approval |
 | Hybrid retrieval | OpenSearch | One Apache-2.0 engine for lexical and vector/hybrid retrieval | Consumer pilot, if current YODA/RACK search is unsuitable |
 | Workflow orchestration | CI for pilot; Argo Workflows on Kubernetes at scale | Keeps pilot small; Argo supports container DAGs, retries, schedules, artifacts, and audit history | Add only after connector count/volume justifies it |
 | Telemetry | OpenTelemetry | Vendor-neutral traces, metrics, and logs | Instrument from first hosted service |
 | Metrics | Prometheus | Open monitoring model and broad platform support | Production service |
-| Dashboards | Existing approved backend; Grafana OSS is an option | Avoids forcing a new dashboard platform | Reuse bank standard first |
+| Dashboards | Existing approved backend; Grafana OSS is an option | Avoids forcing a new dashboard platform | Reuse enterprise standard first |
 | Runtime | OCI containers on Kubernetes with Helm/Kustomize | Portable deployment and policy integration | Production hardening, not local CLI |
 
 Primary references:
@@ -142,15 +142,15 @@ need; do not create a second authoritative graph.
 
 Build only the OKF-specific intellectual property:
 
-- the XYZ Bank profile and validation policy;
+- the VerityKF Enterprise Profile and validation policy;
 - stable concept and source identity rules;
-- source adapters that preserve bank metadata and entitlements;
+- source adapters that preserve enterprise metadata and entitlements;
 - deterministic source-to-concept transformation;
 - release manifest and knowledge quality controls;
 - YODA/RACK consumer adapters; and
 - benchmark/evaluation packs.
 
-Integrate established open-source or bank-standard services for identity,
+Integrate established open-source or enterprise-standard services for identity,
 authorization, Git, artifacts, search, workflow execution, telemetry, secrets,
 and databases.
 
@@ -170,7 +170,7 @@ Before the first approved distributable release:
 
 1. Select and approve a license for this repository. It is currently unlicensed;
    public visibility alone does not make the code open source.
-2. Approve dependency licenses/attribution and run the bank-approved license
+2. Approve dependency licenses/attribution and run the organisation-approved license
    policy gate; the generated SBOM does not constitute legal approval.
 3. Add container, operating-system, workflow, and infrastructure SBOM/scans
    when those artifact types enter scope.

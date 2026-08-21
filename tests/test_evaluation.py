@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from xyz_okf.evaluation import (
+from verity_kf.evaluation import (
     CaseObservation,
     EvaluationBenchmark,
     EvaluationRun,

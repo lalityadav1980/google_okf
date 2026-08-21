@@ -205,7 +205,7 @@ attester.
 **Value:** Separation of approved definition, execution evidence, and displayed
 result.
 
-**Guardrail:** Treat as a later-stage use case. The bank must define and assure
+**Guardrail:** Treat as a later-stage use case. The adopting organisation must define and assure
 the execution sandbox, parameter binding, receipt integrity, attester ABI,
 authorization, segregation of duties, and record retention.
 

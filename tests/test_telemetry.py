@@ -7,7 +7,7 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 
-from xyz_okf.telemetry import (
+from verity_kf.telemetry import (
     OkfTelemetry,
     TelemetryOperation,
     TelemetryOutcome,
@@ -54,12 +54,12 @@ def test_span_hashes_identifiers_and_never_records_exception_message_or_content(
 
     span = exporter.get_finished_spans()[0]
     serialized = str(span.attributes)
-    assert span.attributes["xyz.okf.release.ref_hash"] == fingerprint(secret_values["release"])
-    assert span.attributes["xyz.okf.bundle.id_hash"] == fingerprint(secret_values["bundle"])
-    assert span.attributes["xyz.okf.source.collection_hash"] == fingerprint(
+    assert span.attributes["verity.kf.release.ref_hash"] == fingerprint(secret_values["release"])
+    assert span.attributes["verity.kf.bundle.id_hash"] == fingerprint(secret_values["bundle"])
+    assert span.attributes["verity.kf.source.collection_hash"] == fingerprint(
         secret_values["collection"]
     )
-    assert span.attributes["xyz.okf.concept.uid_hash"] == fingerprint(secret_values["concept"])
+    assert span.attributes["verity.kf.concept.uid_hash"] == fingerprint(secret_values["concept"])
     assert all(value not in serialized for value in secret_values.values())
     assert span.attributes["error.type"] == "builtins.ValueError"
     assert span.events == ()
@@ -80,7 +80,7 @@ def test_metrics_use_bounded_content_free_attribute_sets() -> None:
         duration_seconds=0.015,
     )
     telemetry.record_source_lag(source_system="sharepoint", lag_seconds=12.5)
-    telemetry.record_validation_issue(code="XYZ-ACL-REF", severity="error")
+    telemetry.record_validation_issue(code="VKF-ACL-REF", severity="error")
     telemetry.record_release_outcome(action="admission", outcome=TelemetryOutcome.SUCCEEDED)
 
     metrics_data = reader.get_metrics_data()
@@ -91,12 +91,12 @@ def test_metrics_use_bounded_content_free_attribute_sets() -> None:
         for metric in scope_metric.metrics
     ]
     assert {metric.name for metric in metrics} == {
-        "xyz.okf.authorization.decisions",
-        "xyz.okf.release.outcomes",
-        "xyz.okf.retrieval.duration",
-        "xyz.okf.retrieval.requests",
-        "xyz.okf.source.lag",
-        "xyz.okf.validation.issues",
+        "verity.kf.authorization.decisions",
+        "verity.kf.release.outcomes",
+        "verity.kf.retrieval.duration",
+        "verity.kf.retrieval.requests",
+        "verity.kf.source.lag",
+        "verity.kf.validation.issues",
     }
     serialized = str(metrics_data)
     assert "query" not in serialized

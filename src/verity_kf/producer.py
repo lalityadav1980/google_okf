@@ -12,8 +12,8 @@ from enum import StrEnum
 from pathlib import Path, PurePosixPath
 from typing import Protocol
 
-from xyz_okf.connectors import ChangeKind, KnowledgeSource, SourceChange, SourceRecord
-from xyz_okf.identity import sha256_bytes, validate_concept_path
+from verity_kf.connectors import ChangeKind, KnowledgeSource, SourceChange, SourceRecord
+from verity_kf.identity import sha256_bytes, validate_concept_path
 
 
 class ProducerContractError(RuntimeError):

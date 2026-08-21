@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from xyz_okf.authorization import (
+from verity_kf.authorization import (
     AclBinding,
     AuthorizationReason,
     AuthorizationRequest,

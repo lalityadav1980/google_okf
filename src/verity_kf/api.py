@@ -6,8 +6,8 @@ from fastapi import Depends, FastAPI, HTTPException, Request, Response, Security
 from fastapi.security import OpenIdConnect
 from pydantic import BaseModel, ConfigDict, Field
 
-from xyz_okf.authorization import PrincipalContext
-from xyz_okf.serving import (
+from verity_kf.authorization import PrincipalContext
+from verity_kf.serving import (
     AuthorizedReleaseSummary,
     ConceptEnvelope,
     ConceptNotFound,
@@ -55,7 +55,7 @@ def create_app(
         description="Enterprise-issued human or workload bearer token",
     )
     app = FastAPI(
-        title="XYZ Bank OKF Serving API",
+        title="VerityKF Serving API",
         version="1.0.0",
         description=(
             "Release-pinned, deny-by-default retrieval contract. The application must be "

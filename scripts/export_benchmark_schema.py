@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from xyz_okf.evaluation import EvaluationBenchmark
+from verity_kf.evaluation import EvaluationBenchmark
 
 PROJECT_ROOT = Path(__file__).parents[1]
 target = PROJECT_ROOT / "schemas/pilot-benchmark-v1.schema.json"

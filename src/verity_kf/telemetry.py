@@ -42,38 +42,38 @@ class OkfTelemetry:
     approved OpenTelemetry providers and applies environment filtering/export.
     """
 
-    instrumentation_name = "xyz_okf"
+    instrumentation_name = "verity_kf"
 
     def __init__(self, *, tracer: Tracer | None = None, meter: Meter | None = None) -> None:
         self._tracer = tracer or trace.get_tracer(self.instrumentation_name)
         self._meter = meter or metrics.get_meter(self.instrumentation_name)
         self._authorization_decisions = self._meter.create_counter(
-            "xyz.okf.authorization.decisions",
+            "verity.kf.authorization.decisions",
             unit="{decision}",
             description="Concept-level authorization decisions by controlled outcome",
         )
         self._retrieval_requests = self._meter.create_counter(
-            "xyz.okf.retrieval.requests",
+            "verity.kf.retrieval.requests",
             unit="{request}",
             description="Release-aware retrieval requests without content attributes",
         )
         self._retrieval_duration = self._meter.create_histogram(
-            "xyz.okf.retrieval.duration",
+            "verity.kf.retrieval.duration",
             unit="s",
             description="End-to-end authorized retrieval duration",
         )
         self._source_lag = self._meter.create_histogram(
-            "xyz.okf.source.lag",
+            "verity.kf.source.lag",
             unit="s",
             description="Elapsed time between source modification and producer observation",
         )
         self._validation_issues = self._meter.create_counter(
-            "xyz.okf.validation.issues",
+            "verity.kf.validation.issues",
             unit="{issue}",
             description="Validation issues by stable code and severity",
         )
         self._release_outcomes = self._meter.create_counter(
-            "xyz.okf.release.outcomes",
+            "verity.kf.release.outcomes",
             unit="{release}",
             description="Release build, admission, promotion, rollback, or withdrawal outcomes",
         )
@@ -91,21 +91,21 @@ class OkfTelemetry:
         concept_uid: str | None = None,
     ) -> Iterator[Span]:
         attributes: dict[str, str] = {
-            "xyz.okf.operation": operation,
-            "xyz.okf.action": action,
+            "verity.kf.operation": operation,
+            "verity.kf.action": action,
         }
         if release_ref is not None:
-            attributes["xyz.okf.release.ref_hash"] = fingerprint(release_ref)
+            attributes["verity.kf.release.ref_hash"] = fingerprint(release_ref)
         if bundle_id is not None:
-            attributes["xyz.okf.bundle.id_hash"] = fingerprint(bundle_id)
+            attributes["verity.kf.bundle.id_hash"] = fingerprint(bundle_id)
         if source_system is not None:
-            attributes["xyz.okf.source.system"] = source_system
+            attributes["verity.kf.source.system"] = source_system
         if collection is not None:
-            attributes["xyz.okf.source.collection_hash"] = fingerprint(collection)
+            attributes["verity.kf.source.collection_hash"] = fingerprint(collection)
         if concept_uid is not None:
-            attributes["xyz.okf.concept.uid_hash"] = fingerprint(concept_uid)
+            attributes["verity.kf.concept.uid_hash"] = fingerprint(concept_uid)
         with self._tracer.start_as_current_span(
-            f"xyz.okf.{operation}",
+            f"verity.kf.{operation}",
             attributes=attributes,
             record_exception=False,
             set_status_on_exception=False,
@@ -135,10 +135,10 @@ class OkfTelemetry:
         self._authorization_decisions.add(
             1,
             {
-                "xyz.okf.action": action,
-                "xyz.okf.authorization.allowed": allowed,
-                "xyz.okf.authorization.reason": reason,
-                "xyz.okf.classification": classification,
+                "verity.kf.action": action,
+                "verity.kf.authorization.allowed": allowed,
+                "verity.kf.authorization.reason": reason,
+                "verity.kf.classification": classification,
             },
         )
 
@@ -151,7 +151,7 @@ class OkfTelemetry:
     ) -> None:
         if duration_seconds < 0:
             raise ValueError("duration_seconds must not be negative")
-        attributes = {"xyz.okf.action": action, "xyz.okf.outcome": outcome}
+        attributes = {"verity.kf.action": action, "verity.kf.outcome": outcome}
         self._retrieval_requests.add(1, attributes)
         self._retrieval_duration.record(duration_seconds, attributes)
 
@@ -160,17 +160,17 @@ class OkfTelemetry:
             raise ValueError("lag_seconds must not be negative")
         self._source_lag.record(
             lag_seconds,
-            {"xyz.okf.source.system": source_system},
+            {"verity.kf.source.system": source_system},
         )
 
     def record_validation_issue(self, *, code: str, severity: str) -> None:
         self._validation_issues.add(
             1,
-            {"xyz.okf.validation.code": code, "xyz.okf.validation.severity": severity},
+            {"verity.kf.validation.code": code, "verity.kf.validation.severity": severity},
         )
 
     def record_release_outcome(self, *, action: str, outcome: TelemetryOutcome) -> None:
         self._release_outcomes.add(
             1,
-            {"xyz.okf.action": action, "xyz.okf.outcome": outcome},
+            {"verity.kf.action": action, "verity.kf.outcome": outcome},
         )

@@ -43,9 +43,9 @@ defined at every boundary.
 
 ### 3.2 Classification and handling
 
-Every production concept must carry a bank-approved classification. The initial
+Every production concept must carry an organisation-approved classification. The initial
 profile proposes `PUBLIC`, `INTERNAL`, `CONFIDENTIAL`, and `RESTRICTED` as
-placeholder values; the bank's authoritative classification policy prevails.
+placeholder values; the adopting organisation's authoritative classification policy prevails.
 
 Classification determines, at minimum:
 
@@ -98,7 +98,7 @@ the serving policy within an approved service-level objective.
 
 ### 3.5 Prompt-injection and content-safety controls
 
-Source documents are untrusted input even when they originate inside the bank.
+Source documents are untrusted input even when they originate inside the adopting organisation.
 They may contain obsolete instructions, malicious content, copied third-party
 text, or language that an agent incorrectly treats as system direction.
 
@@ -138,7 +138,7 @@ Recommended conflict outcomes are:
 
 ### 4.2 Generation and verification
 
-OKF v0.2 separates `generated` from `verified`. XYZ Bank should use that
+OKF v0.2 separates `generated` from `verified`. The adopting organisation should use that
 separation as follows:
 
 - `generated.by` records the human, process, tool, and version that last made a
@@ -156,7 +156,7 @@ separation as follows:
 ### 4.3 Lifecycle and freshness
 
 Use `status: draft | stable | deprecated` according to the OKF specification.
-Use an absolute `stale_after` timestamp. Bank-profile extensions may add
+Use an absolute `stale_after` timestamp. VerityKF profile extensions may add
 `effective_from`, `effective_to`, and `supersedes` where business validity is
 different from knowledge freshness.
 
@@ -223,7 +223,7 @@ be traceable for material interactions, subject to privacy and retention policy.
 
 A production release must not be created unless:
 
-- OKF syntax and XYZ Bank profile validation pass;
+- OKF syntax and VerityKF Enterprise Profile validation pass;
 - classification, owner, source, lifecycle, and authorization references exist;
 - required verification is present and current;
 - secret, sensitive-data, malware, and link scans pass;

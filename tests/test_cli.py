@@ -5,9 +5,9 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
-from xyz_okf.cli import app
-from xyz_okf.connector_conformance import ConnectorCertificationReport
-from xyz_okf.discovery import SourceDiscoveryProfile
+from verity_kf.cli import app
+from verity_kf.connector_conformance import ConnectorCertificationReport
+from verity_kf.discovery import SourceDiscoveryProfile
 
 PROJECT_ROOT = Path(__file__).parents[1]
 RUNNER = CliRunner()
@@ -20,7 +20,7 @@ def test_validate_command_returns_json_report() -> None:
             "validate",
             str(PROJECT_ROOT / "examples/pilot-bundle"),
             "--profile",
-            str(PROJECT_ROOT / "profiles/xyz-bank-pilot.yaml"),
+            str(PROJECT_ROOT / "profiles/verity-kf-pilot.yaml"),
             "--format",
             "json",
             "--now",
@@ -126,7 +126,7 @@ def test_allocate_identity_command_returns_stable_vector() -> None:
         [
             "allocate-identity",
             str(PROJECT_ROOT / "examples/rendering/source-record.yaml"),
-            str(PROJECT_ROOT / "profiles/xyz-bank-identity.yaml"),
+            str(PROJECT_ROOT / "profiles/verity-kf-identity.yaml"),
             "--type",
             "Runbook",
         ],
@@ -134,9 +134,7 @@ def test_allocate_identity_command_returns_stable_vector() -> None:
 
     assert result.exit_code == 0, result.output
     payload = json.loads(result.output)
-    assert payload["concept_uid"] == (
-        "urn:xyz-bank:okf:concept:178875d5-e353-5376-87a8-ec463b6a4913"
-    )
+    assert payload["concept_uid"] == ("urn:verity-kf:concept:178875d5-e353-5376-87a8-ec463b6a4913")
     assert payload["output_path"] == ("runbooks/identity-service-degradation--178875d5e353.md")
 
 
@@ -160,8 +158,8 @@ def test_hash_commands_return_named_canonical_profiles() -> None:
 
     assert source.exit_code == 0, source.output
     assert concept.exit_code == 0, concept.output
-    assert json.loads(source.output)["canonical_profile"] == "xyz-okf-source-c14n-v1"
-    assert json.loads(concept.output)["canonical_profile"] == "xyz-okf-concept-c14n-v1"
+    assert json.loads(source.output)["canonical_profile"] == "verity-kf-source-c14n-v1"
+    assert json.loads(concept.output)["canonical_profile"] == "verity-kf-concept-c14n-v1"
 
 
 def test_discovery_and_connector_report_schema_commands_match_models() -> None:

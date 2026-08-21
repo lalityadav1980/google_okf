@@ -7,7 +7,7 @@ release catalog, lifecycle controls, lexical reference retrieval, and OpenAPI
 consumer contract are implemented and tested locally.
 
 The local ACL evaluator exists only to prove ordering and negative behavior. A
-production deployment must replace it with XYZ Bank's approved policy decision
+production deployment must replace it with the adopting organisation's approved policy decision
 point (PDP) and must construct the API with a resolver that validates an
 enterprise-issued human or workload identity. Raw caller headers are not an
 identity source.
@@ -46,7 +46,7 @@ unavailable while its manifest, admission, and withdrawal evidence is retained.
   classification, ACL reference, and requested action;
 - `AuthorizationDecision`: allow/deny, stable decision ID, policy version, and
   machine-readable reason codes; and
-- `PolicyDecisionPoint`: the adapter protocol implemented by the enterprise PDP.
+- `PolicyDecisionPoint`: the adapter protocol implemented by the adopting organisation's PDP.
 
 Supported actions are `discover`, `search`, `read`, and `follow_link`. Exact
 subject/group matching, action allowlists, principal-type constraints, and the
@@ -57,7 +57,7 @@ principals deny by default.
 synthetic demonstrations. It must not become an embedded production
 authorization database. Production policy ownership, identity-to-attribute
 mapping, decision caching, revocation, availability, and fail-closed behavior
-belong to the bank's IAM and security architecture.
+belong to the adopting organisation's IAM and security architecture.
 
 ## 4. Release catalog and lifecycle
 

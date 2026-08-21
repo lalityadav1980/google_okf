@@ -14,14 +14,14 @@ from typing import Literal, cast
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, model_validator
 
-from xyz_okf.identity import canonical_concept_sha256, sha256_bytes
-from xyz_okf.models import ProfileDefinition
-from xyz_okf.parser import parse_concept
-from xyz_okf.validator import validate_bundle
+from verity_kf.identity import canonical_concept_sha256, sha256_bytes
+from verity_kf.models import ProfileDefinition
+from verity_kf.parser import parse_concept
+from verity_kf.validator import validate_bundle
 
-MANIFEST_PATH = "META-INF/xyz-okf-release-manifest.json"
-RELEASE_MEDIA_TYPE = "application/vnd.xyz-bank.okf.release.v1+tar+gzip"
-MANIFEST_MEDIA_TYPE = "application/vnd.xyz-bank.okf.manifest.v1+json"
+MANIFEST_PATH = "META-INF/verity-kf-release-manifest.json"
+RELEASE_MEDIA_TYPE = "application/vnd.verity.kf.release.v1+tar+gzip"
+MANIFEST_MEDIA_TYPE = "application/vnd.verity.kf.manifest.v1+json"
 MAX_RELEASE_UNCOMPRESSED_BYTES = 512 * 1024 * 1024
 _HEX_SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _SOURCE_COMMIT = re.compile(r"^[0-9a-f]{7,64}$")
@@ -72,14 +72,14 @@ class ReleaseManifest(BaseModel):
         extra="forbid",
         frozen=True,
         json_schema_extra={
-            "$id": "https://schemas.xyz-bank.example.invalid/okf/release-manifest-v1.schema.json",
+            "$id": "https://schemas.verity-kf.example.invalid/okf/release-manifest-v1.schema.json",
             "$schema": "https://json-schema.org/draft/2020-12/schema",
         },
     )
 
     schema_version: Literal["1.0"] = "1.0"
-    media_type: Literal["application/vnd.xyz-bank.okf.manifest.v1+json"] = (
-        "application/vnd.xyz-bank.okf.manifest.v1+json"
+    media_type: Literal["application/vnd.verity.kf.manifest.v1+json"] = (
+        "application/vnd.verity.kf.manifest.v1+json"
     )
     bundle_id: str = Field(pattern=r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
     release_id: str = Field(pattern=r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")

@@ -18,14 +18,14 @@ from pydantic import (
     model_validator,
 )
 
-from xyz_okf.connectors import SourceRecord
-from xyz_okf.identity import (
+from verity_kf.connectors import SourceRecord
+from verity_kf.identity import (
     CONCEPT_CANONICALIZATION_PROFILE,
     SOURCE_CANONICALIZATION_PROFILE,
     canonical_concept_sha256,
     canonical_source_record_sha256,
 )
-from xyz_okf.models import ActorEvent
+from verity_kf.models import ActorEvent
 
 _RENDERED_FIELDS = {
     "type",
@@ -38,7 +38,7 @@ _RENDERED_FIELDS = {
     "verified",
     "status",
     "stale_after",
-    "xyz_profile_version",
+    "verity_profile_version",
     "concept_uid",
     "domain",
     "owner",
@@ -245,7 +245,7 @@ def _frontmatter(record: SourceRecord, mapping: RenderMapping) -> dict[str, Any]
         {
             "status": mapping.status,
             "stale_after": stale_after,
-            "xyz_profile_version": mapping.profile_version,
+            "verity_profile_version": mapping.profile_version,
             "concept_uid": mapping.concept_uid,
             "domain": mapping.domain,
             "owner": mapping.owner,

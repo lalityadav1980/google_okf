@@ -1,18 +1,18 @@
-package xyz.okf.release_admission_test
+package verity.kf.release_admission_test
 
-import data.xyz.okf.release_admission
+import data.verity.kf.release_admission
 
 base_input := {
 	"manifest": {
-		"bundle_id": "xyz-bank-pilot",
+		"bundle_id": "verity-kf-pilot",
 		"release_id": "2026.08.21.1",
 		"consumer_contract_version": "1.0",
 		"prior_release_digest": sprintf("%064d", [0]),
-		"profile": {"profile_id": "xyz-bank-okf", "profile_version": "0.1"},
+		"profile": {"profile_id": "verity-kf", "profile_version": "0.2"},
 		"bundle_classification": "INTERNAL",
 		"files": [{
 			"path": "runbooks/synthetic.md",
-			"concept_uid": "urn:xyz-bank:okf:concept:synthetic",
+			"concept_uid": "urn:verity-kf:concept:synthetic",
 			"classification": "INTERNAL",
 			"acl_ref": "authz-policy:synthetic-readers",
 			"criticality": "high",
@@ -24,17 +24,17 @@ base_input := {
 		}],
 	},
 	"artifact": {
-		"artifact_type": "application/vnd.xyz-bank.okf.release.v1+tar+gzip",
+		"artifact_type": "application/vnd.verity.kf.release.v1+tar+gzip",
 		"archive_verified": true,
 		"registry_digest": sprintf("sha256:%064d", [2]),
 		"signature_verified": true,
 		"signature_identity": "kms:okf-release",
-		"signature_issuer": "xyz-bank-kms",
+		"signature_issuer": "verity-kf-kms",
 	},
 	"policy": {
-		"allowed_profiles": [{"profile_id": "xyz-bank-okf", "profile_version": "0.1"}],
+		"allowed_profiles": [{"profile_id": "verity-kf", "profile_version": "0.2"}],
 		"allowed_classifications": ["PUBLIC", "INTERNAL"],
-		"allowed_signers": [{"identity": "kms:okf-release", "issuer": "xyz-bank-kms"}],
+		"allowed_signers": [{"identity": "kms:okf-release", "issuer": "verity-kf-kms"}],
 		"allowed_statuses": ["stable"],
 		"supported_consumer_contract_versions": ["1.0"],
 		"require_prior_release": true,

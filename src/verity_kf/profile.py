@@ -2,7 +2,7 @@ from pathlib import Path
 
 import yaml
 
-from xyz_okf.models import ProfileDefinition
+from verity_kf.models import ProfileDefinition
 
 
 def load_profile(path: Path) -> ProfileDefinition:

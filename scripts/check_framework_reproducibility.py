@@ -8,8 +8,8 @@ import tempfile
 from datetime import datetime
 from pathlib import Path
 
-from xyz_okf.framework_evidence import compare_framework_evidence_directories
-from xyz_okf.identity import sha256_bytes
+from verity_kf.framework_evidence import compare_framework_evidence_directories
+from verity_kf.identity import sha256_bytes
 
 
 def _aware_datetime(value: str) -> datetime:
@@ -42,7 +42,7 @@ def main() -> int:
     lock_file = arguments.lock_file.resolve()
     lock_sha256 = sha256_bytes(lock_file.read_bytes())
     builder = Path(__file__).with_name("build_framework_evidence.py").resolve()
-    with tempfile.TemporaryDirectory(prefix="xyz-okf-repro-") as temporary_directory:
+    with tempfile.TemporaryDirectory(prefix="verity-kf-repro-") as temporary_directory:
         candidate = Path(temporary_directory)
         _run(
             [

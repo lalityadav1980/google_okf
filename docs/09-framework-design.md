@@ -3,7 +3,7 @@
 ## 1. Purpose
 
 The framework provides reusable, deterministic building blocks for producing,
-validating, releasing, and consuming XYZ Bank OKF bundles. It is not an agent
+validating, releasing, and consuming VerityKF bundles. It is not an agent
 runtime, content-management system, search engine, or workflow platform.
 
 The first implementation milestone is a working validator and connector
@@ -16,7 +16,7 @@ contract is stable.
 flowchart LR
     S[Source API] --> C[Connector contract]
     C --> N[Normalizer and concept renderer]
-    N --> V[OKF and bank-profile validator]
+    N --> V[OKF and VerityKF profile validator]
     V --> G[Git review]
     G --> M[Manifest and OCI packager]
     M --> P[Policy and signature gates]
@@ -28,9 +28,9 @@ flowchart LR
 Implemented now:
 
 - Python package and CLI;
-- Pydantic models for OKF v0.2 and the XYZ Bank profile;
+- Pydantic models for OKF v0.2 and the VerityKF Enterprise Profile;
 - Markdown/YAML parsing;
-- base and bank-profile validation;
+- base and VerityKF profile validation;
 - link, relationship, identity, freshness, and verification checks;
 - connector protocol and immutable source-record contract;
 - deterministic source-to-concept renderer and versioned mapping contract;
@@ -60,8 +60,8 @@ Planned:
 ├── .github/                    # CI, issue forms and PR controls
 ├── docs/                       # Proposal, architecture and development guidance
 ├── examples/pilot-bundle/      # Conformant illustrative OKF bundle
-├── profiles/                   # Versioned organizational profile definitions
-├── src/xyz_okf/
+├── profiles/                   # Versioned enterprise profile definitions
+├── src/verity_kf/
 │   ├── cli.py                  # User and CI commands
 │   ├── connector_conformance.py # Reusable source sandbox certification
 │   ├── discovery.py            # Governed source discovery evidence model
@@ -92,17 +92,17 @@ Planned:
 ### Validate a bundle
 
 ```bash
-uv run xyz-okf validate examples/pilot-bundle \
-  --profile profiles/xyz-bank-pilot.yaml
+uv run verity-kf validate examples/pilot-bundle \
+  --profile profiles/verity-kf-pilot.yaml
 ```
 
 ### Render a source record
 
 ```bash
-uv run xyz-okf render \
+uv run verity-kf render \
   examples/rendering/source-record.yaml \
   examples/rendering/mapping.yaml \
-  --output-root /tmp/xyz-okf-render
+  --output-root /tmp/verity-kf-render
 ```
 
 The mapping owns the stable concept UID and output path until `OKF-202` defines
@@ -119,21 +119,21 @@ Exit codes:
 JSON for CI or API integration:
 
 ```bash
-uv run xyz-okf validate examples/pilot-bundle \
-  --profile profiles/xyz-bank-pilot.yaml \
+uv run verity-kf validate examples/pilot-bundle \
+  --profile profiles/verity-kf-pilot.yaml \
   --format json
 ```
 
 ### Inspect a bundle
 
 ```bash
-uv run xyz-okf inspect examples/pilot-bundle
+uv run verity-kf inspect examples/pilot-bundle
 ```
 
 ### Export the profile-definition schema
 
 ```bash
-uv run xyz-okf profile-schema
+uv run verity-kf profile-schema
 ```
 
 ## 5. Validation architecture
@@ -145,7 +145,7 @@ Validation runs in layers:
    reserved `index.md`/`log.md`, and root OKF version.
 3. **Typed OKF metadata:** timestamps, actor identity, sources, tags, lifecycle,
    and single-or-list verification compatibility.
-4. **XYZ Bank profile:** required fields, controlled types/enums, criticality
+4. **VerityKF Enterprise Profile:** required fields, controlled types/enums, criticality
    verification, relationship vocabulary, and stable concept UID.
 5. **Bundle integrity:** duplicate UIDs, link containment, and missing targets.
 6. **Time-dependent policy:** staleness evaluated against an explicit clock.
@@ -267,7 +267,7 @@ The release builder now:
 5. returns exact manifest/archive digests for the next transport stage.
 
 Planned follow-on stages publish the same bytes as a typed OCI artifact with
-ORAS, sign/attest the immutable digest with Cosign using the approved bank trust
+ORAS, sign/attest the immutable digest with Cosign using the approved organisational trust
 model, verify before promotion, and write release metadata to the release
 catalog.
 
@@ -335,5 +335,5 @@ evaluation or integration test. The core validator remains deterministic.
 - Add a stable issue code and tests for every validation rule.
 - Keep network calls outside parsing and base validation.
 - Keep model/AI enrichment behind an interface and feature flag.
-- Do not include credentials or real bank content in fixtures.
+- Do not include credentials or real enterprise content in fixtures.
 - Record an ADR for a new platform dependency or public contract.

@@ -1,5 +1,5 @@
 schema_version: "1.0"
-benchmark_id: xyz-okf-synthetic-pilot
+benchmark_id: verity-kf-synthetic-pilot
 benchmark_version: "0.1"
 status: draft
 outcome_owner_role: role:pilot-product-owner

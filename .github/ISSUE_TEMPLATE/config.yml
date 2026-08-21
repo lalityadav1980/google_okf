@@ -1,6 +1,5 @@
 blank_issues_enabled: false
 contact_links:
   - name: Security vulnerability
-    url: https://github.com/lalityadav1980/google_okf/security/advisories/new
+    url: https://github.com/lalityadav1980/verity-knowledge-fabric/security/advisories/new
     about: Report security vulnerabilities privately. Do not include sensitive information in a public issue.
-

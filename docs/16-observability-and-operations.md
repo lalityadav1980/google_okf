@@ -5,7 +5,7 @@
 The framework now exposes OpenTelemetry API instrumentation and instruments the
 reference serving/authorization path. It intentionally installs no global SDK,
 exporter, endpoint, credential, sampler, or vendor agent. The hosting
-application owns those decisions and must use the approved XYZ Bank telemetry
+application owns those decisions and must use telemetry standards approved by the adopting organisation
 platform.
 
 Production completion remains blocked on the telemetry backend, data-handling
@@ -46,7 +46,7 @@ redacted rather than guessed safe:
 
 ## 3. Trace contract
 
-Low-cardinality span names use `xyz.okf.<operation>` for:
+Low-cardinality span names use `verity.kf.<operation>` for:
 
 - `source_sync`;
 - `validation`;
@@ -61,18 +61,18 @@ identity, and error type. The exact immutable registry/archive/manifest
 digests, profile version, authorization decision ID/policy version, operation
 ID, and consumer trace ID belong in the protected audit record. The telemetry
 trace links to that record using an approved opaque audit correlation ID once
-the bank defines it; it must not duplicate the complete audit payload.
+the adopting organisation defines it; it must not duplicate the complete audit payload.
 
 ## 4. Metric contract
 
 | Instrument | Type/unit | Allowed dimensions | Intended SLI |
 |---|---|---|---|
-| `xyz.okf.source.lag` | Histogram, seconds | source system | Change-to-observation freshness |
-| `xyz.okf.validation.issues` | Counter, issues | stable code, severity | Bundle/profile quality |
-| `xyz.okf.release.outcomes` | Counter, releases | controlled action/outcome | Build/admit/promote/withdraw reliability |
-| `xyz.okf.authorization.decisions` | Counter, decisions | action, allowed, controlled first reason, classification | Denial/error behavior without identity leakage |
-| `xyz.okf.retrieval.requests` | Counter, requests | action, controlled outcome | Availability/error/denial rate |
-| `xyz.okf.retrieval.duration` | Histogram, seconds | action, controlled outcome | Retrieval latency |
+| `verity.kf.source.lag` | Histogram, seconds | source system | Change-to-observation freshness |
+| `verity.kf.validation.issues` | Counter, issues | stable code, severity | Bundle/profile quality |
+| `verity.kf.release.outcomes` | Counter, releases | controlled action/outcome | Build/admit/promote/withdraw reliability |
+| `verity.kf.authorization.decisions` | Counter, decisions | action, allowed, controlled first reason, classification | Denial/error behavior without identity leakage |
+| `verity.kf.retrieval.requests` | Counter, requests | action, controlled outcome | Availability/error/denial rate |
+| `verity.kf.retrieval.duration` | Histogram, seconds | action, controlled outcome | Retrieval latency |
 
 Index build duration/lag, citation coverage, connector retry/exhaustion,
 checkpoint conflicts, archive/registry verification, cache behavior, and

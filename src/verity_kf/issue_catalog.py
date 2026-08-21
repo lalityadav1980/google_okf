@@ -2,7 +2,7 @@ from pathlib import Path
 
 import yaml
 
-from xyz_okf.models import IssueCatalog
+from verity_kf.models import IssueCatalog
 
 
 def load_issue_catalog(path: Path) -> IssueCatalog:

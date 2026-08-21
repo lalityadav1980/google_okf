@@ -7,10 +7,10 @@ from typing import Any
 import pytest
 import yaml
 
-from xyz_okf.issue_catalog import load_issue_catalog
-from xyz_okf.issues import IssueCode
-from xyz_okf.profile import load_profile
-from xyz_okf.validator import validate_bundle
+from verity_kf.issue_catalog import load_issue_catalog
+from verity_kf.issues import IssueCode
+from verity_kf.profile import load_profile
+from verity_kf.validator import validate_bundle
 
 PROJECT_ROOT = Path(__file__).parents[1]
 FIXTURE_ROOT = PROJECT_ROOT / "tests/fixtures/conformance"

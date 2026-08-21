@@ -2,7 +2,7 @@
 
 ## 1. Operating-model principle
 
-XYZ Bank should operate OKF as a federated knowledge product:
+The adopting organisation should operate OKF as a federated knowledge product:
 
 - domain teams own meaning, source authority, classification, verification, and
   freshness;
@@ -12,7 +12,7 @@ XYZ Bank should operate OKF as a federated knowledge product:
   risk define and assure common policy.
 
 This avoids both uncontrolled local formats and a central team becoming the
-editor of all bank knowledge.
+editor of all enterprise knowledge.
 
 ## 2. Roles
 
@@ -38,7 +38,7 @@ Legend: A = accountable, R = responsible, C = consulted, I = informed.
 
 | Activity | Platform | Domain owner | Source owner | YODA/RACK consumer | Security/risk | Architecture |
 |---|---|---|---|---|---|---|
-| Define OKF organizational profile | R | C | C | C | C | A |
+| Define VerityKF Enterprise Profile | R | C | C | C | C | A |
 | Define concept content and authority | C | A/R | C | I | C | I |
 | Build source connector | R | C | A/R | I | C | C |
 | Classify and map entitlements | R | A | R | C | C | I |
@@ -48,9 +48,9 @@ Legend: A = accountable, R = responsible, C = consulted, I = informed.
 | Index and serve release | A/R | I | I | R | C | C |
 | Approve consumer use case | C | C | I | A/R | C | C |
 | Respond to knowledge incident | R | A/R | R | R | C | I |
-| Accept residual risk | C | C | I | C | R/A per bank policy | C |
+| Accept residual risk | C | C | I | C | R/A per enterprise policy | C |
 
-The bank's existing governance may assign accountability differently. The final
+The adopting organisation's existing governance may assign accountability differently. The final
 RACI must use named organizational roles rather than platform names.
 
 ## 4. Delivery phases
@@ -77,7 +77,7 @@ Exit criteria:
 
 Deliverables:
 
-- XYZ Bank OKF profile v0.1;
+- VerityKF profile v0.2;
 - concept taxonomy and relationship conventions;
 - source/owner/classification/entitlement metadata contract;
 - threat model and control design;
@@ -132,11 +132,11 @@ Deliverables:
 
 - self-service domain onboarding with certification gates;
 - reusable connectors and mappings;
-- organization-wide release catalog;
+- organisation-wide release catalog;
 - quality scorecards and remediation workflow;
 - cost and reuse telemetry;
 - additional consumer integrations; and
-- periodic OKF/specification and bank-profile compatibility reviews.
+- periodic OKF/specification and VerityKF profile compatibility reviews.
 
 ## 5. Pilot backlog
 
@@ -212,7 +212,7 @@ Deliverables:
 Proceed to production hardening only when:
 
 - OKF demonstrates measurable value over direct source-specific retrieval;
-- the profile expresses the required bank controls without breaking baseline OKF
+- the profile expresses the required enterprise controls without breaking baseline OKF
   interoperability;
 - entitlement preservation passes independent negative testing;
 - source change, deletion, and revocation propagate within agreed objectives;

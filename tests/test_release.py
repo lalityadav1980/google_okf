@@ -11,9 +11,9 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-from xyz_okf.cli import app
-from xyz_okf.profile import load_profile
-from xyz_okf.release import (
+from verity_kf.cli import app
+from verity_kf.profile import load_profile
+from verity_kf.release import (
     MANIFEST_PATH,
     ReleaseBuildError,
     ReleaseManifest,
@@ -22,7 +22,7 @@ from xyz_okf.release import (
 )
 
 PROJECT_ROOT = Path(__file__).parents[1]
-PROFILE = load_profile(PROJECT_ROOT / "profiles/xyz-bank-pilot.yaml")
+PROFILE = load_profile(PROJECT_ROOT / "profiles/verity-kf-pilot.yaml")
 BUNDLE = PROJECT_ROOT / "examples/pilot-bundle"
 CREATED_AT = datetime(2026, 8, 21, tzinfo=UTC)
 SOURCE_COMMIT = "a" * 40
@@ -31,7 +31,7 @@ RUNNER = CliRunner()
 
 def _build(**overrides: object):
     values: dict[str, object] = {
-        "bundle_id": "xyz-bank-pilot",
+        "bundle_id": "verity-kf-pilot",
         "release_id": "2026.08.21.1",
         "source_commit": SOURCE_COMMIT,
         "created_at": CREATED_AT,
@@ -58,7 +58,7 @@ def test_manifest_captures_profile_identity_acl_classification_and_prior_release
     concepts = [entry for entry in artifact.manifest.files if entry.concept_uid is not None]
 
     assert artifact.manifest.prior_release_digest == prior_digest
-    assert artifact.manifest.profile.profile_id == "xyz-bank-okf"
+    assert artifact.manifest.profile.profile_id == "verity-kf"
     assert artifact.manifest.bundle_classification == "INTERNAL"
     assert len(artifact.manifest.files) == 4
     assert len(concepts) == 3
@@ -151,9 +151,9 @@ def test_release_cli_builds_and_verifies(tmp_path: Path) -> None:
             "build-release",
             str(BUNDLE),
             "--profile",
-            str(PROJECT_ROOT / "profiles/xyz-bank-pilot.yaml"),
+            str(PROJECT_ROOT / "profiles/verity-kf-pilot.yaml"),
             "--bundle-id",
-            "xyz-bank-pilot",
+            "verity-kf-pilot",
             "--release-id",
             "2026.08.21.1",
             "--source-commit",

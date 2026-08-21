@@ -7,7 +7,7 @@ signed release evidence. It is not a replacement for bundle validation,
 signature verification, registry authorization, or retrieval authorization.
 
 The Rego package is
-`data.xyz.okf.release_admission`. Its stable outputs are:
+`data.verity.kf.release_admission`. Its stable outputs are:
 
 - `allow`: true only when no denial exists; and
 - `deny`: a set of `{code, message}` objects suitable for evidence and operator

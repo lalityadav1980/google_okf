@@ -13,7 +13,7 @@ from typing import Literal, cast
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
 
-from xyz_okf.authorization import (
+from verity_kf.authorization import (
     AuthorizationDecision,
     AuthorizationRequest,
     PolicyDecisionPoint,
@@ -21,14 +21,14 @@ from xyz_okf.authorization import (
     ResourceContext,
     RetrievalAction,
 )
-from xyz_okf.parser import markdown_links, split_frontmatter
-from xyz_okf.release import (
+from verity_kf.parser import markdown_links, split_frontmatter
+from verity_kf.release import (
     RELEASE_MEDIA_TYPE,
     ReleaseFile,
     VerifiedRelease,
     verify_release,
 )
-from xyz_okf.telemetry import OkfTelemetry, TelemetryOperation, TelemetryOutcome
+from verity_kf.telemetry import OkfTelemetry, TelemetryOperation, TelemetryOutcome
 
 _DIGEST = re.compile(r"^sha256:[0-9a-f]{64}$")
 _CHANNEL = re.compile(r"^[a-z][a-z0-9._-]{0,63}$")
@@ -68,8 +68,8 @@ class ReleaseState(StrEnum):
 class AdmissionEvidence(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
-    artifact_type: Literal["application/vnd.xyz-bank.okf.release.v1+tar+gzip"] = (
-        "application/vnd.xyz-bank.okf.release.v1+tar+gzip"
+    artifact_type: Literal["application/vnd.verity.kf.release.v1+tar+gzip"] = (
+        "application/vnd.verity.kf.release.v1+tar+gzip"
     )
     signature_verified: bool
     archive_verified: bool

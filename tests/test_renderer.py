@@ -6,8 +6,8 @@ from pathlib import PurePosixPath
 import pytest
 from pydantic import ValidationError
 
-from xyz_okf.connectors import SourceRecord
-from xyz_okf.renderer import RenderError, RenderMapping, render_concept
+from verity_kf.connectors import SourceRecord
+from verity_kf.renderer import RenderError, RenderMapping, render_concept
 
 
 def _record(**overrides: object) -> SourceRecord:
@@ -37,8 +37,8 @@ def _mapping(**overrides: object) -> RenderMapping:
         "domain": "technology-governance",
         "owner": "team:technology-governance",
         "criticality": "moderate",
-        "profile_version": "0.1",
-        "generated_by": "xyz-okf-sharepoint-producer/0.1.0",
+        "profile_version": "0.2",
+        "generated_by": "verity-kf-sharepoint-producer/0.2.0",
         "stale_after_days": 365,
         "tags": ["standard", "governance", "standard"],
         "relationships": [

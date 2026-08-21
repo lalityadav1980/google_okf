@@ -10,12 +10,12 @@ The framework separates:
 
 - **OKF structural compatibility:** UTF-8, frontmatter, YAML mapping, required
   `type`, reserved-file behavior, and declared OKF version; and
-- **XYZ Bank release profile:** mandatory governance metadata, controlled
+- **VerityKF Enterprise Profile:** mandatory governance metadata, controlled
   vocabulary, verification, freshness, link containment, authorization, and
   bundle integrity.
 
-The bank profile can be stricter than baseline OKF consumption. For example,
-OKF consumers tolerate broken links, while the bank release profile can reject
+The VerityKF Enterprise Profile can be stricter than baseline OKF consumption. For example,
+OKF consumers tolerate broken links, while the adopting organisation release profile can reject
 them. The baseline v0.2 fixture profile reports a broken link as a warning and
 still accepts the bundle.
 
@@ -58,10 +58,10 @@ The current pack covers:
 - missing required OKF type;
 - root/nested reserved-file rules and version declarations;
 - broken and bundle-escaping links; and
-- all XYZ Bank profile rules through deterministic unit fixtures.
+- all VerityKF Enterprise Profile rules through deterministic unit fixtures.
 
 All content and endpoints are synthetic. Live source systems, credentials, or
-bank knowledge are prohibited in fixtures.
+enterprise knowledge are prohibited in fixtures.
 
 ## 4. Running the evidence
 
@@ -72,7 +72,7 @@ uv run pytest tests/test_conformance.py tests/test_validator.py
 Run a baseline compatibility fixture directly:
 
 ```bash
-uv run xyz-okf validate \
+uv run verity-kf validate \
   tests/fixtures/conformance/valid/minimal-v02 \
   --profile profiles/okf-v02-base.yaml \
   --now 2026-08-21T00:00:00Z
@@ -89,6 +89,5 @@ green.
 - A breaking interpretation, removed code, or changed canonical expectation
   increments the major version.
 - Profiles pin the OKF version they validate.
-- Compatibility fixtures do not claim that XYZ Bank will publish new v0.1
+- Compatibility fixtures do not claim that the adopting organisation will publish new v0.1
   bundles; they prove that migration tooling can parse a legacy shape.
-

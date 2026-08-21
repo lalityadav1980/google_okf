@@ -7,12 +7,12 @@ from typing import Any
 import pytest
 import yaml
 
-from xyz_okf.models import Severity
-from xyz_okf.profile import load_profile
-from xyz_okf.validator import validate_bundle
+from verity_kf.models import Severity
+from verity_kf.profile import load_profile
+from verity_kf.validator import validate_bundle
 
 PROJECT_ROOT = Path(__file__).parents[1]
-PROFILE = load_profile(PROJECT_ROOT / "profiles/xyz-bank-pilot.yaml")
+PROFILE = load_profile(PROJECT_ROOT / "profiles/verity-kf-pilot.yaml")
 
 
 def _frontmatter(**overrides: Any) -> dict[str, Any]:
@@ -28,12 +28,12 @@ def _frontmatter(**overrides: Any) -> dict[str, Any]:
             }
         ],
         "generated": {
-            "by": "xyz-okf-test-producer/0.1.0",
+            "by": "verity-kf-test-producer/0.2.0",
             "at": "2026-08-20T10:00:00Z",
         },
         "status": "stable",
         "stale_after": "2030-08-20T00:00:00Z",
-        "xyz_profile_version": "0.1",
+        "verity_profile_version": "0.2",
         "concept_uid": "kb:standard:example",
         "domain": "test-domain",
         "owner": "team:test-owner",

@@ -7,7 +7,7 @@ scorer are implemented. They provide a repeatable comparison boundary without
 storing generated answer text in machine scoring evidence.
 
 The pilot benchmark and assurance are not approved or executed. Completion
-requires XYZ Bank to select users, tasks, sources, YODA/RACK or other consumer,
+requires the adopting organisation to select users, tasks, sources, YODA/RACK or other consumer,
 current baseline, outcome owner, reviewers, thresholds, and independent control
 owners.
 
@@ -39,7 +39,7 @@ does not retain the answer, prompt trace, user identity, or source content.
 Run the deterministic scorer:
 
 ```bash
-uv run xyz-okf score-benchmark \
+uv run verity-kf score-benchmark \
   profiles/pilot-benchmark.example.yaml \
   examples/evaluation/synthetic-run.yaml
 ```

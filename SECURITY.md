@@ -7,7 +7,7 @@ The framework is pre-release. Only the latest commit on `main` is maintained.
 ## Reporting a vulnerability
 
 Do not open a public issue containing a vulnerability, credential, internal URL,
-customer information, or confidential bank detail. Contact the repository owner
+customer information, or confidential organisational information. Contact the repository owner
 through an approved private channel or use GitHub's private security-advisory
 mechanism if it is enabled.
 
@@ -20,7 +20,7 @@ Include:
 - known workaround; and
 - whether any credential or real data may have been exposed.
 
-Do not test against production systems, source platforms, YODA, RACK, or bank
+Do not test against production systems, source platforms, YODA, RACK, or enterprise
 identities without explicit authorization.
 
 ## Sensitive content rules
@@ -32,4 +32,3 @@ identities without explicit authorization.
 - Treat bundle paths, links, archives, and attachments as path-traversal inputs.
 - Enforce authorization before retrieval, snippets, embeddings, links, or graph
   expansion.
-

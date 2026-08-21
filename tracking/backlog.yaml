@@ -1,5 +1,5 @@
 tracker_version: "1.0"
-last_updated: 2026-08-21
+last_updated: 2026-08-22
 statuses: [BACKLOG, READY, IN_PROGRESS, BLOCKED, IN_REVIEW, DONE]
 
 milestones:
@@ -49,7 +49,11 @@ actions:
     priority: P0
     status: DONE
     depends_on: []
-    acceptance: Proposal, architecture, governance, roadmap, profile, and ADR are versioned in Git.
+    acceptance: Proposal, architecture, governance, roadmap, profile, project identity, and ADRs are versioned in Git.
+    evidence:
+      - README.md
+      - docs/adr/0001-okf-as-knowledge-interchange.md
+      - docs/adr/0007-verity-knowledge-fabric-project-identity.md
   - id: OKF-002
     epic: E00
     milestone: M0
@@ -71,7 +75,7 @@ actions:
     acceptance: Pinned CI runs format, security lint, secret scan, locked runtime dependency audit, type, test with an 85% coverage floor, policy, sample-bundle, package/SBOM, reproducibility, and artifact-retention gates as required checks.
     partial_evidence:
       - .github/workflows/ci.yml
-      - https://github.com/lalityadav1980/google_okf/actions/runs/32467648579
+      - https://github.com/lalityadav1980/verity-knowledge-fabric/actions/runs/32467648579
   - id: OKF-004
     epic: E00
     milestone: M0
@@ -98,7 +102,7 @@ actions:
     depends_on: [OKF-002]
     acceptance: CI builds byte-reproducible wheel/source distributions, a normalized CycloneDX runtime SBOM bound to uv.lock, and a digest manifest; an independent fail-closed verifier proves exact inventory, expected commit/lock, hashes, canonical SBOM/evidence, and packaged schemas/policy.
     evidence:
-      - src/xyz_okf/framework_evidence.py
+      - src/verity_kf/framework_evidence.py
       - schemas/framework-build-evidence-v1.schema.json
       - scripts/build_framework_evidence.py
       - scripts/check_framework_reproducibility.py
@@ -106,7 +110,7 @@ actions:
       - tests/test_framework_evidence.py
       - .github/workflows/ci.yml
       - docs/19-framework-supply-chain-and-security.md
-      - https://github.com/lalityadav1980/google_okf/actions/runs/32467648579
+      - https://github.com/lalityadav1980/verity-knowledge-fabric/actions/runs/32467648579
   - id: OKF-101
     epic: E10
     milestone: M1
@@ -119,7 +123,7 @@ actions:
   - id: OKF-102
     epic: E10
     milestone: M1
-    title: Implement XYZ Bank pilot profile validation
+    title: Implement VerityKF Enterprise Profile validation
     owner_role: Knowledge Architecture
     priority: P0
     status: DONE
@@ -145,7 +149,7 @@ actions:
     acceptance: Every rule has documented code, severity, rationale, remediation, and golden test.
     evidence:
       - profiles/validation-issues.yaml
-      - src/xyz_okf/issues.py
+      - src/verity_kf/issues.py
       - docs/11-validation-and-conformance.md
       - tests/test_conformance.py::test_issue_catalog_is_complete_unique_and_has_test_evidence
   - id: OKF-105
@@ -186,8 +190,8 @@ actions:
     acceptance: UID, path, rename, source anchor, canonicalization, and SHA-256 rules have tests and an ADR.
     evidence:
       - docs/adr/0003-stable-identity-and-canonical-hashing.md
-      - profiles/xyz-bank-identity.yaml
-      - src/xyz_okf/identity.py
+      - profiles/verity-kf-identity.yaml
+      - src/verity_kf/identity.py
       - tests/test_identity.py
   - id: OKF-203
     epic: E20
@@ -200,8 +204,8 @@ actions:
     acceptance: Contract tests prove restart, partial failure, rate limit, tombstone, and no-op behavior.
     evidence:
       - docs/adr/0004-producer-transaction-boundary.md
-      - src/xyz_okf/producer.py
-      - src/xyz_okf/connectors/base.py
+      - src/verity_kf/producer.py
+      - src/verity_kf/connectors/base.py
       - tests/test_producer.py
   - id: OKF-301
     epic: E30
@@ -229,7 +233,7 @@ actions:
     depends_on: [OKF-301]
     acceptance: Connector contract, sandbox integration, entitlement, deletion, idempotency, and load tests pass.
     partial_evidence:
-      - src/xyz_okf/connector_conformance.py
+      - src/verity_kf/connector_conformance.py
       - tests/test_connector_conformance.py
   - id: OKF-311
     epic: E31
@@ -257,7 +261,7 @@ actions:
     depends_on: [OKF-311]
     acceptance: Connector contract, sandbox integration, entitlement, deletion, idempotency, and load tests pass.
     partial_evidence:
-      - src/xyz_okf/connector_conformance.py
+      - src/verity_kf/connector_conformance.py
       - tests/test_connector_conformance.py
   - id: OKF-401
     epic: E40
@@ -271,7 +275,7 @@ actions:
     evidence:
       - docs/adr/0005-release-manifest-and-reproducible-archive.md
       - schemas/release-manifest-v1.schema.json
-      - src/xyz_okf/release.py
+      - src/verity_kf/release.py
       - tests/test_release.py
       - .github/workflows/ci.yml
   - id: OKF-402
@@ -287,7 +291,7 @@ actions:
     partial_evidence:
       - docs/12-oci-signing-and-promotion.md
       - profiles/supply-chain.example.yaml
-      - src/xyz_okf/supply_chain.py
+      - src/verity_kf/supply_chain.py
       - tests/test_supply_chain.py
   - id: OKF-403
     epic: E40
@@ -302,7 +306,7 @@ actions:
     partial_evidence:
       - docs/14-authorization-and-serving.md
       - docs/adr/0006-authorization-before-retrieval.md
-      - src/xyz_okf/serving.py
+      - src/verity_kf/serving.py
       - tests/test_serving.py::test_catalog_promotes_same_digest_rolls_back_and_withdraws_immediately
   - id: OKF-501
     epic: E50
@@ -331,7 +335,7 @@ actions:
     partial_evidence:
       - docs/14-authorization-and-serving.md
       - docs/adr/0006-authorization-before-retrieval.md
-      - src/xyz_okf/authorization.py
+      - src/verity_kf/authorization.py
       - tests/test_authorization.py
       - tests/test_serving.py::test_unauthorized_search_never_reads_concept_bodies
       - tests/test_serving.py::test_unauthorized_fetch_is_indistinguishable_from_missing_and_does_not_read_body
@@ -348,8 +352,8 @@ actions:
       - docs/14-authorization-and-serving.md
       - docs/adr/0006-authorization-before-retrieval.md
       - schemas/serving-api-v1.openapi.json
-      - src/xyz_okf/api.py
-      - src/xyz_okf/serving.py
+      - src/verity_kf/api.py
+      - src/verity_kf/serving.py
       - tests/test_api.py
       - tests/test_serving.py
   - id: OKF-602
@@ -363,9 +367,9 @@ actions:
     depends_on: [OKF-601, OKF-901]
     acceptance: Relevance, authorization, latency, rebuild, operations, and cost evidence supports a documented decision.
     partial_evidence:
-      - src/xyz_okf/serving.py
+      - src/verity_kf/serving.py
       - profiles/pilot-benchmark.example.yaml
-      - src/xyz_okf/evaluation.py
+      - src/verity_kf/evaluation.py
       - docs/17-evaluation-and-assurance.md
   - id: OKF-701
     epic: E70
@@ -420,8 +424,8 @@ actions:
     acceptance: Traces and metrics cover source lag, validation, release, policy, indexing, retrieval, errors, and cost without content leakage.
     partial_evidence:
       - docs/16-observability-and-operations.md
-      - src/xyz_okf/telemetry.py
-      - src/xyz_okf/serving.py
+      - src/verity_kf/telemetry.py
+      - src/verity_kf/serving.py
       - tests/test_telemetry.py
   - id: OKF-901
     epic: E90
@@ -437,7 +441,7 @@ actions:
       - docs/17-evaluation-and-assurance.md
       - profiles/pilot-benchmark.example.yaml
       - schemas/pilot-benchmark-v1.schema.json
-      - src/xyz_okf/evaluation.py
+      - src/verity_kf/evaluation.py
       - tests/test_evaluation.py
   - id: OKF-902
     epic: E90

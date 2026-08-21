@@ -1,6 +1,6 @@
 """Source connector contracts for OKF producers."""
 
-from xyz_okf.connectors.base import (
+from verity_kf.connectors.base import (
     ChangeBatch,
     ChangeKind,
     KnowledgeSource,

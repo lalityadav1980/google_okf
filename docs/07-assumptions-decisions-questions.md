@@ -2,7 +2,7 @@
 
 ## 1. Working assumptions
 
-These assumptions prevent the proposal from inventing facts about XYZ Bank.
+These assumptions prevent the proposal from inventing facts about the adopting organisation.
 They must be validated during discovery.
 
 | ID | Assumption | Design consequence if true | Consequence if false |
@@ -22,7 +22,7 @@ They must be validated during discovery.
 |---|---|---|---|
 | D-01 | Use OKF as interchange and controlled release format, not the universal authoring system | Proposed | Complements existing platforms and reduces lock-in |
 | D-02 | Keep source systems authoritative for records and operational facts | Proposed | Avoids ambiguous authority and uncontrolled migration |
-| D-03 | Add a stricter XYZ Bank organizational profile | Proposed | Base OKF conformance is insufficient for regulated production use |
+| D-03 | Add the stricter VerityKF Enterprise Profile | Proposed | Base OKF conformance is insufficient for regulated production use |
 | D-04 | Partition bundles by authorization boundary before domain convenience | Proposed | Prevents entitlement widening and unsafe aggregation |
 | D-05 | Publish immutable releases; treat indexes as reproducible derivatives | Proposed | Enables audit, rollback, and consumer reproducibility |
 | D-06 | Require governed pull requests for production knowledge changes | Proposed | Provides accountable review and separation of duties |
@@ -30,9 +30,12 @@ They must be validated during discovery.
 | D-08 | Use authorization-aware hybrid retrieval outside OKF | Proposed | OKF is a representation, not a retrieval or ACL system |
 | D-09 | Defer autonomous write-back and material actions | Proposed | Establish evidence and controls before increasing autonomy |
 | D-10 | Defer production attested computations | Proposed | OKF v0.2 does not provide the complete runtime assurance model |
+| D-11 | Use Verity Knowledge Fabric (VerityKF) as the organisation-neutral project identity | Accepted | Creates one coherent brand and namespace across packages, profiles, artifacts, and documentation |
 
 Formal rationale for D-01 is recorded in
 [ADR-0001](adr/0001-okf-as-knowledge-interchange.md).
+The project identity and namespace decision is recorded in
+[ADR-0007](adr/0007-verity-knowledge-fabric-project-identity.md).
 
 ## 3. Discovery questions
 
@@ -86,7 +89,7 @@ Formal rationale for D-01 is recorded in
 - Approved read-only consumer and user group.
 - Authoritative classification and entitlement patterns.
 - Pilot repository, artifact, model, and regional deployment choices.
-- Profile v0.1 field and taxonomy approval.
+- VerityKF profile v0.2 field and taxonomy approval.
 - Benchmark, success thresholds, and risk-acceptance authorities.
 - Content exclusions and incident/escalation process.
 

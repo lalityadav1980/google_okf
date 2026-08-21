@@ -24,11 +24,11 @@ explicit aware clock before reading it into a release. Validation errors prevent
 all packaging.
 
 The archive contains the bundle plus a canonical JSON manifest at
-`META-INF/xyz-okf-release-manifest.json`. Manifest schema `1.0` records:
+`META-INF/verity-kf-release-manifest.json`. Manifest schema `1.0` records:
 
 - bundle and release IDs;
 - explicit creation/validation time and source Git commit;
-- active OKF and XYZ profile versions;
+- active OKF and VerityKF Enterprise Profile versions;
 - optional prior exact release-archive digest;
 - highest concept classification in the bundle; and
 - a sorted file inventory with byte size and exact SHA-256.

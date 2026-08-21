@@ -9,8 +9,8 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
-from xyz_okf import __version__
-from xyz_okf.framework_evidence import (
+from verity_kf import __version__
+from verity_kf.framework_evidence import (
     FRAMEWORK_EVIDENCE_NAME,
     FRAMEWORK_SBOM_NAME,
     FrameworkEvidenceError,
@@ -19,7 +19,7 @@ from xyz_okf.framework_evidence import (
     normalize_cyclonedx_sbom,
     verify_framework_wheel,
 )
-from xyz_okf.identity import sha256_bytes
+from verity_kf.identity import sha256_bytes
 
 _UV_VERSION = re.compile(r"^uv ([0-9A-Za-z.+-]+)(?: .*)?$")
 
@@ -88,15 +88,15 @@ def main() -> int:
     raw_sbom = json.loads(export.stdout)
     sbom_bytes = normalize_cyclonedx_sbom(
         raw_sbom,
-        package_name="xyz-bank-okf",
+        package_name="verity-knowledge-fabric",
         package_version=__version__,
         uv_lock_sha256=lock_sha256,
     )
     sbom_path = dist_dir / FRAMEWORK_SBOM_NAME
     sbom_path.write_bytes(sbom_bytes)
 
-    wheel = _one_match(dist_dir, "xyz_bank_okf-*.whl")
-    source_distribution = _one_match(dist_dir, "xyz_bank_okf-*.tar.gz")
+    wheel = _one_match(dist_dir, "verity_knowledge_fabric-*.whl")
+    source_distribution = _one_match(dist_dir, "verity_knowledge_fabric-*.tar.gz")
     verify_framework_wheel(wheel)
     evidence = build_framework_evidence(
         [wheel, source_distribution, sbom_path],

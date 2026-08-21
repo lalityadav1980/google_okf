@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from xyz_okf.framework_evidence import (
+from verity_kf.framework_evidence import (
     FRAMEWORK_EVIDENCE_NAME,
     FRAMEWORK_SBOM_NAME,
     REQUIRED_WHEEL_CONTRACTS,
@@ -39,9 +39,9 @@ def _raw_sbom(*, serial: str = "urn:uuid:random", timestamp: str = "now") -> dic
             "tools": [{"name": "uv", "version": "0.11.7"}],
             "component": {
                 "type": "library",
-                "bom-ref": "xyz-bank-okf@0.1.0",
-                "name": "xyz-bank-okf",
-                "version": "0.1.0",
+                "bom-ref": "verity-knowledge-fabric@0.2.0",
+                "name": "verity-knowledge-fabric",
+                "version": "0.2.0",
                 "properties": [{"name": "uv:package:is_project_root", "value": "true"}],
             },
         },
@@ -59,8 +59,8 @@ def _raw_sbom(*, serial: str = "urn:uuid:random", timestamp: str = "now") -> dic
 def _normalize(payload: dict[str, object], lock_sha256: str = LOCK_SHA256) -> bytes:
     return normalize_cyclonedx_sbom(
         payload,
-        package_name="xyz-bank-okf",
-        package_version="0.1.0",
+        package_name="verity-knowledge-fabric",
+        package_version="0.2.0",
         uv_lock_sha256=lock_sha256,
     )
 
@@ -75,16 +75,16 @@ def _write_valid_evidence(
     root: Path, *, source_content: bytes = b"source distribution"
 ) -> FrameworkBuildEvidence:
     root.mkdir()
-    wheel = root / "xyz_bank_okf-0.1.0-py3-none-any.whl"
-    source = root / "xyz_bank_okf-0.1.0.tar.gz"
+    wheel = root / "verity_knowledge_fabric-0.2.0-py3-none-any.whl"
+    source = root / "verity_knowledge_fabric-0.2.0.tar.gz"
     sbom = root / FRAMEWORK_SBOM_NAME
-    _write_wheel(wheel, set(REQUIRED_WHEEL_CONTRACTS) | {"xyz_okf/__init__.py"})
+    _write_wheel(wheel, set(REQUIRED_WHEEL_CONTRACTS) | {"verity_kf/__init__.py"})
     source.write_bytes(source_content)
     sbom.write_bytes(_normalize(_raw_sbom()))
     evidence = build_framework_evidence(
         [wheel, source, sbom],
         artifact_root=root,
-        package_version="0.1.0",
+        package_version="0.2.0",
         source_commit="c" * 40,
         created_at=datetime(2026, 8, 21, tzinfo=UTC),
         python_version="3.13.7",
@@ -105,7 +105,7 @@ def test_cyclonedx_normalization_is_deterministic_and_binds_lock() -> None:
     assert payload["components"][0]["name"] == "a"
     assert payload["dependencies"][0]["ref"] == "a@1"
     assert {
-        "name": "xyz-bank-okf:uv-lock-sha256",
+        "name": "verity-knowledge-fabric:uv-lock-sha256",
         "value": LOCK_SHA256,
     } in payload["metadata"]["component"]["properties"]
     assert _normalize(_raw_sbom(), "b" * 64) != first
@@ -128,8 +128,8 @@ def test_cyclonedx_normalization_rejects_wrong_format_or_root() -> None:
 
 
 def test_framework_evidence_hashes_and_sorts_artifacts(tmp_path: Path) -> None:
-    wheel = tmp_path / "xyz_bank_okf-0.1.0-py3-none-any.whl"
-    source = tmp_path / "xyz_bank_okf-0.1.0.tar.gz"
+    wheel = tmp_path / "verity_knowledge_fabric-0.2.0-py3-none-any.whl"
+    source = tmp_path / "verity_knowledge_fabric-0.2.0.tar.gz"
     sbom = tmp_path / FRAMEWORK_SBOM_NAME
     wheel.write_bytes(b"wheel")
     source.write_bytes(b"source")
@@ -138,7 +138,7 @@ def test_framework_evidence_hashes_and_sorts_artifacts(tmp_path: Path) -> None:
     evidence = build_framework_evidence(
         [wheel, source, sbom],
         artifact_root=tmp_path,
-        package_version="0.1.0",
+        package_version="0.2.0",
         source_commit="c" * 40,
         created_at=datetime(2026, 8, 21, tzinfo=UTC),
         python_version="3.13.7",
@@ -156,13 +156,13 @@ def test_framework_evidence_hashes_and_sorts_artifacts(tmp_path: Path) -> None:
 def test_framework_evidence_rejects_outside_and_symlink_artifacts(tmp_path: Path) -> None:
     root = tmp_path / "dist"
     root.mkdir()
-    outside = tmp_path / "xyz_bank_okf-0.1.0-py3-none-any.whl"
+    outside = tmp_path / "verity_knowledge_fabric-0.2.0-py3-none-any.whl"
     outside.write_bytes(b"wheel")
-    symlink = root / "xyz_bank_okf-0.1.0-py3-none-any.whl"
+    symlink = root / "verity_knowledge_fabric-0.2.0-py3-none-any.whl"
     symlink.symlink_to(outside)
     common = {
         "artifact_root": root,
-        "package_version": "0.1.0",
+        "package_version": "0.2.0",
         "source_commit": "c" * 40,
         "created_at": datetime(2026, 8, 21, tzinfo=UTC),
         "python_version": "3.13.7",
@@ -180,7 +180,7 @@ def test_framework_evidence_model_rejects_unsorted_artifacts() -> None:
     with pytest.raises(ValidationError, match="sorted by path"):
         FrameworkBuildEvidence.model_validate(
             {
-                "package_version": "0.1.0",
+                "package_version": "0.2.0",
                 "source_commit": "c" * 40,
                 "created_at": "2026-08-21T00:00:00Z",
                 "python_version": "3.13.7",
@@ -201,12 +201,12 @@ def test_framework_evidence_model_rejects_unsorted_artifacts() -> None:
 
 def test_framework_wheel_requires_contracts_and_rejects_unsafe_members(tmp_path: Path) -> None:
     valid = tmp_path / "valid.whl"
-    _write_wheel(valid, set(REQUIRED_WHEEL_CONTRACTS) | {"xyz_okf/__init__.py"})
+    _write_wheel(valid, set(REQUIRED_WHEEL_CONTRACTS) | {"verity_kf/__init__.py"})
     names = verify_framework_wheel(valid)
     assert REQUIRED_WHEEL_CONTRACTS.issubset(names)
 
     missing = tmp_path / "missing.whl"
-    _write_wheel(missing, {"xyz_okf/__init__.py"})
+    _write_wheel(missing, {"verity_kf/__init__.py"})
     with pytest.raises(FrameworkEvidenceError, match="missing runtime contracts"):
         verify_framework_wheel(missing)
 
@@ -254,7 +254,7 @@ def test_framework_evidence_directory_rejects_tamper_and_unexpected_files(
 ) -> None:
     root = tmp_path / "evidence"
     _write_valid_evidence(root)
-    wheel = root / "xyz_bank_okf-0.1.0-py3-none-any.whl"
+    wheel = root / "verity_knowledge_fabric-0.2.0-py3-none-any.whl"
     wheel.write_bytes(wheel.read_bytes() + b"tampered")
 
     with pytest.raises(FrameworkEvidenceError, match="digest/size mismatch"):
@@ -294,8 +294,8 @@ def test_framework_build_comparison_requires_all_four_files_to_match(tmp_path: P
     assert set(digests) == {
         FRAMEWORK_EVIDENCE_NAME,
         FRAMEWORK_SBOM_NAME,
-        "xyz_bank_okf-0.1.0-py3-none-any.whl",
-        "xyz_bank_okf-0.1.0.tar.gz",
+        "verity_knowledge_fabric-0.2.0-py3-none-any.whl",
+        "verity_knowledge_fabric-0.2.0.tar.gz",
     }
 
     third = tmp_path / "third"

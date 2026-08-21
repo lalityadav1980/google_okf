@@ -24,7 +24,7 @@ tracked source + uv.lock
 It does not assert that the repository has an approved license, that every
 dependency is legally approved, that a package is signed, or that a GitHub run
 is production provenance. Those conclusions require `DEC-001`, `DEC-002`, and
-the bank trust decisions in `DEC-005`.
+the adopting organisation's trust decisions in `DEC-005`.
 
 ## 2. Implemented controls
 
@@ -53,10 +53,10 @@ One framework build creates exactly:
 
 | File | Purpose | Integrity boundary |
 |---|---|---|
-| `xyz_bank_okf-<version>-py3-none-any.whl` | Installable runtime library plus policy/schema contracts | SHA-256 in build evidence |
-| `xyz_bank_okf-<version>.tar.gz` | Reviewable source distribution | SHA-256 in build evidence |
-| `xyz-bank-okf-runtime.cdx.json` | CycloneDX 1.5 inventory of locked non-development Python dependencies | Deterministic UUID and `uv.lock` SHA-256 property |
-| `xyz-bank-okf-build-evidence.json` | Canonical inventory tying artifacts to source/toolchain/lock | Its own digest is reported by CI output |
+| `verity_knowledge_fabric-<version>-py3-none-any.whl` | Installable runtime library plus policy/schema contracts | SHA-256 in build evidence |
+| `verity_knowledge_fabric-<version>.tar.gz` | Reviewable source distribution | SHA-256 in build evidence |
+| `verity-knowledge-fabric-runtime.cdx.json` | CycloneDX 1.5 inventory of locked non-development Python dependencies | Deterministic UUID and `uv.lock` SHA-256 property |
+| `verity-knowledge-fabric-build-evidence.json` | Canonical inventory tying artifacts to source/toolchain/lock | Its own digest is reported by CI output |
 
 The build-evidence file deliberately does not hash itself. A signed OCI
 attestation or approved provenance service must sign/retain its digest at the
@@ -67,12 +67,12 @@ can also be pinned by the caller.
 
 The runtime wheel must contain:
 
-- `xyz_okf/assets/policies/release_admission.rego`; and
-- every versioned contract under `xyz_okf/assets/schemas/`, including the
+- `verity_kf/assets/policies/release_admission.rego`; and
+- every versioned contract under `verity_kf/assets/schemas/`, including the
   release manifest, serving OpenAPI, discovery, benchmark, and framework-build
   evidence schemas.
 
-Profile examples, test policy, bank content, credentials, and environment
+Profile examples, test policy, enterprise content, credentials, and environment
 configuration are not runtime wheel assets.
 
 ## 4. Reproducibility contract
@@ -90,7 +90,7 @@ collections, and uses canonical compact JSON with one final newline.
 Run a framework evidence build:
 
 ```bash
-evidence_dir="$(mktemp -d /tmp/xyz-okf-framework.XXXXXX)"
+evidence_dir="$(mktemp -d /tmp/verity-kf-framework.XXXXXX)"
 uv build --no-build-isolation --no-create-gitignore --out-dir "$evidence_dir"
 uv run python scripts/build_framework_evidence.py \
   --dist-dir "$evidence_dir" \
@@ -143,7 +143,7 @@ and the Dependabot API reported zero open alerts. Enhanced non-provider pattern
 and validity-check modes remain disabled pending repository/security-owner
 review of false positives and external verification behavior.
 
-## 6. Remaining bank-owned controls
+## 6. Remaining organisation-owned controls
 
 The following are intentionally not inferred or implemented with placeholder
 authority:
@@ -154,7 +154,7 @@ authority:
    administrator enforcement.
 3. `DEC-005`: approved registry and signing/provenance trust. The JSON evidence
    manifest is unsigned until that decision is implemented.
-4. Retention: CI's 14-day convenience retention is not a bank records schedule.
+4. Retention: CI's 14-day convenience retention is not an organisational records schedule.
 5. Scope expansion: container/base-image, operating-system, workflow-action,
    infrastructure, and production-service SBOM/scanning must be added when
    those artifacts exist.
@@ -162,7 +162,7 @@ authority:
    penetration testing, source review, legal approval, or control attestation.
 
 Safe default: framework artifacts can be reviewed and reproduced, but must not
-be described as an approved, signed, production, compliant, or open-source bank
+be described as an approved, signed, production, compliant, or open-source enterprise
 release until the relevant decisions and evidence exist.
 
 ## 7. Primary tool references

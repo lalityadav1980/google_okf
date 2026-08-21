@@ -62,20 +62,20 @@ jobs:
 
       - name: Validate sample OKF bundle
         run: >-
-          uv run --locked xyz-okf validate examples/pilot-bundle
-          --profile profiles/xyz-bank-pilot.yaml
+          uv run --locked verity-kf validate examples/pilot-bundle
+          --profile profiles/verity-kf-pilot.yaml
           --now 2026-08-21T00:00:00Z
 
       - name: Build and verify reproducible sample release
         run: |
-          uv run --locked xyz-okf build-release examples/pilot-bundle \
-            --profile profiles/xyz-bank-pilot.yaml \
-            --bundle-id xyz-bank-pilot \
+          uv run --locked verity-kf build-release examples/pilot-bundle \
+            --profile profiles/verity-kf-pilot.yaml \
+            --bundle-id verity-kf-pilot \
             --release-id ci-sample \
             --source-commit 0000000000000000000000000000000000000000 \
             --created-at 2026-08-21T00:00:00Z \
             --output-dir dist/ci-release
-          uv run --locked xyz-okf verify-release dist/ci-release/ci-sample.tar.gz
+          uv run --locked verity-kf verify-release dist/ci-release/ci-sample.tar.gz
 
       - name: Build framework distributions, SBOM, and digest evidence
         run: |
@@ -97,7 +97,7 @@ jobs:
       - name: Retain framework supply-chain evidence
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: xyz-bank-okf-framework-${{ github.sha }}
+          name: verity-knowledge-fabric-framework-${{ github.sha }}
           path: dist/framework/*
           if-no-files-found: error
           retention-days: 14

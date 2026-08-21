@@ -1,14 +1,13 @@
 oras:
   supported_version: ">=1.3,<2"
-  artifact_type: application/vnd.xyz-bank.okf.release.v1+tar+gzip
-  layer_media_type: application/vnd.xyz-bank.okf.release.layer.v1+tar+gzip
+  artifact_type: application/vnd.verity.kf.release.v1+tar+gzip
+  layer_media_type: application/vnd.verity.kf.release.layer.v1+tar+gzip
 cosign:
   supported_version: ">=3.1,<4"
-  trust_mode: BANK_DECISION_REQUIRED
+  trust_mode: ORGANISATION_DECISION_REQUIRED
 registry:
-  repository: BANK_DECISION_REQUIRED
+  repository: ORGANISATION_DECISION_REQUIRED
   immutable_tags: true
   delete_enabled_for_publisher: false
   production_plain_http: false
   production_skip_tls_verify: false
-

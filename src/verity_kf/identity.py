@@ -14,19 +14,19 @@ from uuid import UUID, uuid5
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from xyz_okf.connectors import SourceRecord
-from xyz_okf.parser import split_frontmatter
+from verity_kf.connectors import SourceRecord
+from verity_kf.parser import split_frontmatter
 
 _SOURCE_SYSTEM = re.compile(r"^[a-z][a-z0-9_-]{1,31}$")
 _RESERVED_NAMES = {"index.md", "log.md"}
-CONCEPT_CANONICALIZATION_PROFILE = "xyz-okf-concept-c14n-v1"
-SOURCE_CANONICALIZATION_PROFILE = "xyz-okf-source-c14n-v1"
+CONCEPT_CANONICALIZATION_PROFILE = "verity-kf-concept-c14n-v1"
+SOURCE_CANONICALIZATION_PROFILE = "verity-kf-source-c14n-v1"
 _CONCEPT_HASH_DOMAIN = f"{CONCEPT_CANONICALIZATION_PROFILE}\n".encode()
 _SOURCE_HASH_DOMAIN = f"{SOURCE_CANONICALIZATION_PROFILE}\n".encode()
 
 
 class CanonicalizationError(ValueError):
-    """Input cannot be represented by the XYZ OKF canonicalization profile."""
+    """Input cannot be represented by the VerityKF canonicalization profile."""
 
 
 class SourceAnchor(BaseModel):
@@ -70,7 +70,7 @@ class IdentityPolicy(BaseModel):
     policy_id: str = Field(min_length=1)
     policy_version: str = Field(min_length=1)
     namespace_uuid: UUID
-    uid_prefix: str = Field(default="urn:xyz-bank:okf:concept:", min_length=1)
+    uid_prefix: str = Field(default="urn:verity-kf:concept:", min_length=1)
     default_directory: str = Field(default="concepts", min_length=1)
     type_directories: dict[str, str] = Field(default_factory=dict)
     max_slug_length: int = Field(default=72, ge=16, le=160)

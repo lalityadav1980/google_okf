@@ -5,8 +5,8 @@ from pathlib import Path
 
 import yaml
 
-from xyz_okf.connectors import SourceRecord
-from xyz_okf.identity import (
+from verity_kf.connectors import SourceRecord
+from verity_kf.identity import (
     IdentityPolicy,
     SourceAnchor,
     allocate_identity,
@@ -17,7 +17,7 @@ from xyz_okf.identity import (
 
 PROJECT_ROOT = Path(__file__).parents[1]
 POLICY = IdentityPolicy.model_validate(
-    yaml.safe_load((PROJECT_ROOT / "profiles/xyz-bank-identity.yaml").read_text(encoding="utf-8"))
+    yaml.safe_load((PROJECT_ROOT / "profiles/verity-kf-identity.yaml").read_text(encoding="utf-8"))
 )
 
 
@@ -117,6 +117,6 @@ def test_identity_and_hash_vectors_are_stable() -> None:
         policy=POLICY,
     )
 
-    assert identity.concept_uid == "urn:xyz-bank:okf:concept:e744428b-1161-5368-8868-c666d67a80f2"
-    expected_digest = "46c4f9204e473ccd4d3cca934f3a8f92498885bec6822a95d729da25db2f2cd3"  # pragma: allowlist secret  # noqa: E501
+    assert identity.concept_uid == "urn:verity-kf:concept:e744428b-1161-5368-8868-c666d67a80f2"
+    expected_digest = "f21b05422b657c51602fd714fbe69458ae06a23101da299d8c8d1cb1890fd84d"  # pragma: allowlist secret  # noqa: E501
     assert canonical_source_record_sha256(_record()) == expected_digest

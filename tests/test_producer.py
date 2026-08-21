@@ -6,8 +6,8 @@ from datetime import UTC, datetime
 
 import pytest
 
-from xyz_okf.connectors import ChangeBatch, ChangeKind, SourceChange, SourceRecord
-from xyz_okf.producer import (
+from verity_kf.connectors import ChangeBatch, ChangeKind, SourceChange, SourceRecord
+from verity_kf.producer import (
     ChangePlanner,
     Checkpoint,
     InMemoryCheckpointStore,

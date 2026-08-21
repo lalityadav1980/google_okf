@@ -3,8 +3,8 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from xyz_okf.framework_evidence import verify_framework_evidence_directory
-from xyz_okf.identity import sha256_bytes
+from verity_kf.framework_evidence import verify_framework_evidence_directory
+from verity_kf.identity import sha256_bytes
 
 
 def main() -> int:

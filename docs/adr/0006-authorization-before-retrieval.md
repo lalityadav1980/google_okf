@@ -8,7 +8,7 @@
 ## Context
 
 OKF releases preserve source classifications and ACL references, but the format
-does not authenticate a caller or evaluate current bank entitlements. Searching
+does not authenticate a caller or evaluate current enterprise entitlements. Searching
 an unauthorized body, returning a snippet, exposing a link, computing an
 embedding, or expanding a relationship can leak content even when the final
 body endpoint later denies access. Release channels and derived indexes also
@@ -21,7 +21,7 @@ create mutable routing state around immutable knowledge artifacts.
 2. Keep OCI manifest digest and exact archive-layer digest as separate values.
 3. Resolve a human or workload through an explicit enterprise identity adapter;
    never treat unverified request headers as principal attributes.
-4. Invoke the enterprise PDP for every concept and action before reading bodies
+4. Invoke the adopting organisation's PDP for every concept and action before reading bodies
    or derived content. Apply this to discovery, search, snippets, direct reads,
    links, embeddings, and graph expansion.
 5. Deny missing ACLs, unknown principals/actions, PDP failures, and

@@ -1,7 +1,7 @@
 [project]
-name = "xyz-bank-okf"
-version = "0.1.0"
-description = "Portable validation and producer framework for XYZ Bank OKF bundles"
+name = "verity-knowledge-fabric"
+version = "0.2.0"
+description = "Governed, versioned knowledge fabric for enterprise agents"
 readme = "README.md"
 requires-python = ">=3.13,<3.15"
 dependencies = [
@@ -15,7 +15,7 @@ dependencies = [
 ]
 
 [project.scripts]
-xyz-okf = "xyz_okf.cli:app"
+verity-kf = "verity_kf.cli:app"
 
 [dependency-groups]
 dev = [
@@ -36,11 +36,11 @@ requires = ["hatchling>=1.27,<2"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/xyz_okf"]
+packages = ["src/verity_kf"]
 
 [tool.hatch.build.targets.wheel.force-include]
-"policies/release_admission.rego" = "xyz_okf/assets/policies/release_admission.rego"
-"schemas" = "xyz_okf/assets/schemas"
+"policies/release_admission.rego" = "verity_kf/assets/policies/release_admission.rego"
+"schemas" = "verity_kf/assets/schemas"
 
 [tool.uv]
 required-version = ">=0.11.7,<0.13"
@@ -56,14 +56,14 @@ select = ["B", "C4", "E", "F", "I", "RUF", "S", "SIM", "UP"]
 "tests/**" = ["S101"]
 
 [tool.pytest.ini_options]
-addopts = "-ra --strict-markers --cov=xyz_okf --cov-report=term-missing --cov-fail-under=85"
+addopts = "-ra --strict-markers --cov=verity_kf --cov-report=term-missing --cov-fail-under=85"
 testpaths = ["tests"]
 
 [tool.coverage.run]
 branch = true
-source = ["xyz_okf"]
+source = ["verity_kf"]
 
 [tool.mypy]
 python_version = "3.13"
 strict = true
-packages = ["xyz_okf"]
+packages = ["verity_kf"]

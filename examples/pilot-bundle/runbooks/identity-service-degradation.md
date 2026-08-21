@@ -11,14 +11,14 @@ sources:
     author: team:identity-platform
     last_modified: 2026-08-19T08:00:00Z
 generated:
-  by: xyz-okf-confluence-producer/0.1.0
+  by: verity-kf-confluence-producer/0.2.0
   at: 2026-08-19T08:05:00Z
 verified:
   - by: human:service-owner-id
     at: 2026-08-19T09:00:00Z
 status: stable
 stale_after: 2030-09-19T00:00:00Z
-xyz_profile_version: "0.1"
+verity_profile_version: "0.2"
 concept_uid: kb:runbook:identity-service-degradation
 domain: enterprise-platforms
 owner: team:identity-platform

@@ -7,7 +7,7 @@ The machine-readable source for delivery actions is
 created from those IDs when work is assigned. Do not create a second ID or
 silently change acceptance criteria in a project board.
 
-Bank-owned choices and unblock evidence are tracked separately in
+Organisation-owned choices and unblock evidence are tracked separately in
 [`tracking/decision-register.yaml`](../tracking/decision-register.yaml). Every
 blocked action must map to at least one open decision with a safe deferred default.
 
@@ -43,7 +43,7 @@ Current evidence:
 - OKF/profile validator CLI;
 - deterministic source-to-concept renderer and golden output fixture;
 - stable identity, canonical hashes, change events, retry, and durable local checkpoints;
-- sample bank bundle;
+- sample enterprise bundle;
 - unit and CLI tests;
 - baseline-free secret and security lint gates;
 - hash-checked runtime advisory audit;
@@ -106,7 +106,7 @@ Scope:
 
 - YODA/RACK capability decision;
 - serving OpenAPI contract;
-- bank identity and policy-decision integration;
+- enterprise identity and policy-decision integration;
 - release-aware lexical/hybrid retrieval;
 - citations and trace IDs;
 - negative entitlement tests; and
@@ -131,7 +131,7 @@ Scope:
 | Epic | Outcome | Lead role | Dependency |
 |---|---|---|---|
 | E00 Foundation and governance | Buildable, reviewable, legally governable repository | Platform product owner | Sponsor and governance |
-| E10 Profile and validation | Stable bank profile and conformance engine | Knowledge architecture | OKF v0.2 |
+| E10 Profile and validation | Stable enterprise profile and conformance engine | Knowledge architecture | OKF v0.2 |
 | E20 Producer SDK | Deterministic source-to-concept framework | Platform engineering | E10 |
 | E30 Confluence producer | Controlled Confluence source changes | Connector team/source owner | E20, API access |
 | E31 SharePoint producer | Controlled SharePoint source changes | Connector team/source owner | E20, API access |
@@ -162,14 +162,14 @@ backlog file.
    source owners using the producer contract and discovery evidence checklist.
 6. **OKF-402/403:** supply the approved OCI registry, signing identity/trust,
    protected channel, retention, withdrawal, and recovery decisions.
-7. **OKF-502:** bind the provider-neutral authorization port to the enterprise
+7. **OKF-502:** bind the provider-neutral authorization port to the adopting organisation's
    principal resolver and PDP, then certify revocation and fail-closed behavior.
 8. **OKF-701 and OKF-702:** complete YODA and RACK capability maps and select
    the pilot consumer without assuming either product's current responsibilities.
 9. **OKF-801/901:** wire the approved telemetry backend and select the pilot
    users, tasks, expected concepts, ownership, and baseline.
 
-## 5. Blocked actions requiring XYZ Bank input
+## 5. Inputs required from the adopting organisation
 
 | Action | Blocker | Required decision/evidence |
 |---|---|---|

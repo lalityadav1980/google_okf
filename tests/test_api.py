@@ -7,16 +7,16 @@ from pathlib import Path
 from fastapi import Request
 from fastapi.testclient import TestClient
 
-from xyz_okf.api import create_app
-from xyz_okf.authorization import (
+from verity_kf.api import create_app
+from verity_kf.authorization import (
     AclBinding,
     PrincipalContext,
     PrincipalType,
     ReferencePolicyDecisionPoint,
 )
-from xyz_okf.profile import load_profile
-from xyz_okf.release import build_release
-from xyz_okf.serving import AdmissionEvidence, ReleaseCatalog, ServingService, WithdrawalRecord
+from verity_kf.profile import load_profile
+from verity_kf.release import build_release
+from verity_kf.serving import AdmissionEvidence, ReleaseCatalog, ServingService, WithdrawalRecord
 
 PROJECT_ROOT = Path(__file__).parents[1]
 NOW = datetime(2026, 8, 22, tzinfo=UTC)
@@ -41,8 +41,8 @@ def _principal(groups: tuple[str, ...]) -> PrincipalContext:
 def _client(*, groups: tuple[str, ...] = ("group:pilot",)) -> tuple[TestClient, ReleaseCatalog]:
     artifact = build_release(
         PROJECT_ROOT / "examples/pilot-bundle",
-        load_profile(PROJECT_ROOT / "profiles/xyz-bank-pilot.yaml"),
-        bundle_id="xyz-bank-pilot",
+        load_profile(PROJECT_ROOT / "profiles/verity-kf-pilot.yaml"),
+        bundle_id="verity-kf-pilot",
         release_id="2026.08.21.1",
         source_commit="a" * 40,
         created_at=datetime(2026, 8, 21, tzinfo=UTC),

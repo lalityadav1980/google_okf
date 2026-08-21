@@ -13,22 +13,22 @@ from typing import Any, Literal
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, model_validator
 
-from xyz_okf.identity import sha256_bytes
+from verity_kf.identity import sha256_bytes
 
-FRAMEWORK_SBOM_NAME = "xyz-bank-okf-runtime.cdx.json"
-FRAMEWORK_EVIDENCE_NAME = "xyz-bank-okf-build-evidence.json"
-FRAMEWORK_EVIDENCE_MEDIA_TYPE: Literal["application/vnd.xyz-bank.okf.build-evidence.v1+json"] = (
-    "application/vnd.xyz-bank.okf.build-evidence.v1+json"
+FRAMEWORK_SBOM_NAME = "verity-knowledge-fabric-runtime.cdx.json"
+FRAMEWORK_EVIDENCE_NAME = "verity-knowledge-fabric-build-evidence.json"
+FRAMEWORK_EVIDENCE_MEDIA_TYPE: Literal["application/vnd.verity.kf.build-evidence.v1+json"] = (
+    "application/vnd.verity.kf.build-evidence.v1+json"
 )
 SBOM_MEDIA_TYPE = "application/vnd.cyclonedx+json; version=1.5"
 REQUIRED_WHEEL_CONTRACTS = frozenset(
     {
-        "xyz_okf/assets/policies/release_admission.rego",
-        "xyz_okf/assets/schemas/framework-build-evidence-v1.schema.json",
-        "xyz_okf/assets/schemas/pilot-benchmark-v1.schema.json",
-        "xyz_okf/assets/schemas/release-manifest-v1.schema.json",
-        "xyz_okf/assets/schemas/serving-api-v1.openapi.json",
-        "xyz_okf/assets/schemas/source-discovery-v1.schema.json",
+        "verity_kf/assets/policies/release_admission.rego",
+        "verity_kf/assets/schemas/framework-build-evidence-v1.schema.json",
+        "verity_kf/assets/schemas/pilot-benchmark-v1.schema.json",
+        "verity_kf/assets/schemas/release-manifest-v1.schema.json",
+        "verity_kf/assets/schemas/serving-api-v1.openapi.json",
+        "verity_kf/assets/schemas/source-discovery-v1.schema.json",
     }
 )
 
@@ -55,7 +55,7 @@ class FrameworkBuildEvidence(BaseModel):
         frozen=True,
         json_schema_extra={
             "$id": (
-                "https://schemas.xyz-bank.example.invalid/okf/"
+                "https://schemas.verity-kf.example.invalid/okf/"
                 "framework-build-evidence-v1.schema.json"
             ),
             "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -63,10 +63,10 @@ class FrameworkBuildEvidence(BaseModel):
     )
 
     schema_version: Literal["1.0"] = "1.0"
-    media_type: Literal["application/vnd.xyz-bank.okf.build-evidence.v1+json"] = (
+    media_type: Literal["application/vnd.verity.kf.build-evidence.v1+json"] = (
         FRAMEWORK_EVIDENCE_MEDIA_TYPE
     )
-    package_name: Literal["xyz-bank-okf"] = "xyz-bank-okf"
+    package_name: Literal["verity-knowledge-fabric"] = "verity-knowledge-fabric"
     package_version: str = Field(pattern=r"^[0-9A-Za-z][0-9A-Za-z.+-]*$")
     source_commit: str = Field(pattern=r"^[0-9a-f]{7,64}$")
     created_at: AwareDatetime
@@ -119,7 +119,7 @@ def normalize_cyclonedx_sbom(
     normalized["serialNumber"] = "urn:uuid:" + str(
         uuid.uuid5(
             uuid.NAMESPACE_URL,
-            f"urn:xyz-bank:okf:framework:{package_name}:{package_version}:{uv_lock_sha256}",
+            f"urn:verity-kf:framework:{package_name}:{package_version}:{uv_lock_sha256}",
         )
     )
     metadata = normalized.get("metadata")
@@ -137,9 +137,12 @@ def normalize_cyclonedx_sbom(
     properties[:] = [
         value
         for value in properties
-        if not (isinstance(value, dict) and value.get("name") == "xyz-bank-okf:uv-lock-sha256")
+        if not (
+            isinstance(value, dict)
+            and value.get("name") == "verity-knowledge-fabric:uv-lock-sha256"
+        )
     ]
-    properties.append({"name": "xyz-bank-okf:uv-lock-sha256", "value": uv_lock_sha256})
+    properties.append({"name": "verity-knowledge-fabric:uv-lock-sha256", "value": uv_lock_sha256})
     _sort_properties(component)
 
     components = normalized.get("components", [])

@@ -1,4 +1,4 @@
-suite_id: xyz-okf-conformance
+suite_id: verity-kf-conformance
 suite_version: "1.0"
 cases:
   - id: minimal-v02

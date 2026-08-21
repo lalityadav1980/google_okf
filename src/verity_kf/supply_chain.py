@@ -7,9 +7,9 @@ from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from xyz_okf.release import RELEASE_MEDIA_TYPE, ReleaseArtifact, VerifiedRelease
+from verity_kf.release import RELEASE_MEDIA_TYPE, ReleaseArtifact, VerifiedRelease
 
-RELEASE_LAYER_MEDIA_TYPE = "application/vnd.xyz-bank.okf.release.layer.v1+tar+gzip"
+RELEASE_LAYER_MEDIA_TYPE = "application/vnd.verity.kf.release.layer.v1+tar+gzip"
 _TAG = re.compile(r"^[A-Za-z0-9_][A-Za-z0-9._-]{0,127}$")
 _DIGEST_REFERENCE = re.compile(r"^([^@\s]+)@sha256:([0-9a-f]{64})$")
 _ANNOTATION_KEY = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._/-]{0,127}$")
@@ -122,9 +122,9 @@ def oras_push_command(
         "org.opencontainers.image.created": manifest.created_at.isoformat(),
         "org.opencontainers.image.revision": manifest.source_commit,
         "org.opencontainers.image.title": manifest.release_id,
-        "xyz.bank.okf.archive.sha256": archive_sha256,
-        "xyz.bank.okf.bundle.id": manifest.bundle_id,
-        "xyz.bank.okf.profile": f"{manifest.profile.profile_id}/{manifest.profile.profile_version}",
+        "verity.kf.archive.sha256": archive_sha256,
+        "verity.kf.bundle.id": manifest.bundle_id,
+        "verity.kf.profile": f"{manifest.profile.profile_id}/{manifest.profile.profile_version}",
     }
     return (
         "oras",

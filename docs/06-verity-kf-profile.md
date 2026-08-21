@@ -1,15 +1,15 @@
-# XYZ Bank OKF Organizational Profile
+# VerityKF Enterprise Profile
 
 ## 1. Purpose and status
 
-This document proposes an organizational profile layered on top of OKF v0.2.
-It is a design input, not an approved bank standard. Field names, classifications,
-identity conventions, and concept types must be reconciled with existing XYZ
-Bank taxonomies before implementation.
+This document proposes an enterprise profile layered on top of OKF v0.2.
+It is a design input, not an approved enterprise standard. Field names, classifications,
+identity conventions, and concept types must be reconciled with existing enterprise
+taxonomies before implementation.
 
-The base OKF specification intentionally requires only `type`. XYZ Bank requires
+The base OKF specification intentionally requires only `type`. The adopting organisation requires
 additional metadata for production use. A document may therefore be valid OKF
-but fail the stricter XYZ Bank production profile.
+but fail the stricter VerityKF Enterprise Profile.
 
 ## 2. Compatibility rules
 
@@ -20,11 +20,11 @@ but fail the stricter XYZ Bank production profile.
 4. Do not redefine `verified` as authorization or formal policy approval.
 5. Do not redefine `stale_after` as the legal effective-until date.
 6. Declare `okf_version: "0.2"` only in the root `index.md` frontmatter.
-7. Carry bank profile and bundle release information in the release manifest,
+7. Carry Enterprise Profile and bundle release information in the release manifest,
    not by changing the meaning of `okf_version`.
-8. Consumers must degrade gracefully when they do not understand a bank
-   extension; bank production consumers may reject content that does not meet
-   the bank profile.
+8. Consumers must degrade gracefully when they do not understand a VerityKF
+   extension; enterprise production consumers may reject content that does not meet
+   the Enterprise Profile.
 
 ## 3. Controlled concept types
 
@@ -54,7 +54,7 @@ control.
 | `Attested Computation` | OKF v0.2 sanctioned-computation contract; later-stage use only |
 
 Consumers must still tolerate unknown types to remain OKF-compatible. Production
-publication of a new bank type requires profile-owner approval.
+publication of a new enterprise type requires profile-owner approval.
 
 ## 4. Metadata requirements
 
@@ -73,19 +73,19 @@ publication of a new bank type requires profile-owner approval.
 | `status` | Required | `draft`, `stable`, or `deprecated` |
 | `stale_after` | Required for production concepts | Absolute freshness deadline |
 
-### 4.2 Proposed XYZ Bank extensions
+### 4.2 Proposed VerityKF extensions
 
 These fields are extensions, not part of the base OKF v0.2 vocabulary.
 
 | Field | Pilot requirement | Purpose |
 |---|---|---|
-| `xyz_profile_version` | Required | Bank profile used to validate the concept |
-| `concept_uid` | Required | Bank-stable identity resilient to path changes |
+| `verity_profile_version` | Required | VerityKF Enterprise Profile used to validate the concept |
+| `concept_uid` | Required | Enterprise-stable identity resilient to path changes |
 | `domain` | Required | Accountable knowledge domain |
 | `owner` | Required | Group or role accountable for meaning and freshness |
-| `classification` | Required | Bank information-classification label |
+| `classification` | Required | Enterprise information-classification label |
 | `acl_ref` | Required | Reference to enforceable authorization policy; not an ACL itself |
-| `criticality` | Required | `low`, `moderate`, `high`, or bank-approved equivalent |
+| `criticality` | Required | `low`, `moderate`, `high`, or organisation-approved equivalent |
 | `jurisdictions` | Conditional | Geographic applicability |
 | `legal_entities` | Conditional | Legal-entity applicability |
 | `effective_from` | Conditional | Start of business or policy applicability |
@@ -95,7 +95,7 @@ These fields are extensions, not part of the base OKF v0.2 vocabulary.
 | `source_version` | Required | Upstream document, page, schema, or commit version |
 | `relationships` | Optional | Machine-readable typed relationship extension |
 
-The bank should consider using an extension namespace if shared tooling risks
+The adopting organisation should consider using an extension namespace if shared tooling risks
 collisions with future OKF fields. That decision belongs in profile v1.0.
 
 Per-concept digests should normally live in the release manifest. This avoids a
@@ -107,7 +107,7 @@ verified before parsing a concept.
 Follow OKF v0.2 actor syntax:
 
 - tools and agents: `<producer>/<version>`, for example
-  `xyz-okf-sharepoint-producer/1.2.0`;
+  `verity-kf-sharepoint-producer/1.2.0`;
 - people: `human:<stable-id>`; and
 - automated processes: `process:<stable-id>`.
 
@@ -116,7 +116,7 @@ enterprise subject identifier or role can provide accountability.
 
 ## 6. Typed relationship extension
 
-OKF links are intentionally untyped. XYZ Bank may add a `relationships` list for
+OKF links are intentionally untyped. An adopting organisation may add a `relationships` list for
 machine routing while retaining a normal Markdown link in the body:
 
 ```yaml
@@ -147,7 +147,7 @@ create a typed relationship merely because an LLM inferred a plausible link.
 
 ## 7. Illustrative concept
 
-The following is an example of structure only. It is not an XYZ Bank policy or
+The following is an example of structure only. It is not a policy or
 approved control statement.
 
 ```markdown
@@ -164,14 +164,14 @@ sources:
     author: team:technology-risk
     last_modified: 2026-08-18T09:00:00Z
 generated:
-  by: xyz-okf-sharepoint-producer/0.1.0
+  by: verity-kf-sharepoint-producer/0.2.0
   at: 2026-08-18T09:05:00Z
 verified:
   - by: human:standard-owner-id
     at: 2026-08-18T12:00:00Z
 status: stable
 stale_after: 2027-08-18T00:00:00Z
-xyz_profile_version: "0.1"
+verity_profile_version: "0.2"
 concept_uid: kb:standard:production-change
 domain: technology-risk
 owner: team:technology-risk
@@ -249,7 +249,7 @@ okf_version: "0.2"
 
 ### 8.1 Release manifest
 
-The release manifest is an XYZ Bank control artifact, not part of OKF v0.2. An
+The release manifest is a VerityKF control artifact, not part of OKF v0.2. An
 illustrative shape is:
 
 ```yaml
@@ -257,10 +257,10 @@ manifest_version: "1.0"
 bundle_id: global-technology-internal
 release_id: global-technology-internal-2026.08.21.1
 okf_version: "0.2"
-xyz_profile_version: "0.1"
+verity_profile_version: "0.2"
 git_commit: 0123456789abcdef0123456789abcdef01234567
 created_at: 2026-08-21T10:00:00Z
-created_by: process:xyz-okf-release
+created_by: process:verity-kf-release
 previous_release: global-technology-internal-2026.08.14.1
 classification: INTERNAL
 artifact:
@@ -286,9 +286,9 @@ and rollback semantics.
 - `index.md` and `log.md` follow reserved-file rules.
 - Unknown fields and types are preserved.
 
-### Tier 2: XYZ Bank profile conformance
+### Tier 2: VerityKF Enterprise Profile conformance
 
-- All required bank fields are present and valid.
+- All required enterprise fields are present and valid.
 - Concept type, relationship type, classification, criticality, and domain are
   approved values.
 - Source entries contain valid resources and required source metadata.
@@ -316,5 +316,5 @@ and rollback semantics.
 - Producers validate against the target and previous supported profile during
   migration.
 - Production releases retain the exact validator and profile artifact used.
-- Changes to the base OKF specification are assessed separately from bank-profile
+- Changes to the base OKF specification are assessed separately from VerityKF profile
   changes.

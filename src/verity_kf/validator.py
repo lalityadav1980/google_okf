@@ -8,15 +8,15 @@ from urllib.parse import unquote, urlsplit
 
 from pydantic import ValidationError
 
-from xyz_okf.issues import IssueCode
-from xyz_okf.models import (
+from verity_kf.issues import IssueCode
+from verity_kf.models import (
     ConceptFrontmatter,
     ProfileDefinition,
     Severity,
     ValidationIssue,
     ValidationReport,
 )
-from xyz_okf.parser import (
+from verity_kf.parser import (
     DocumentParseError,
     ParsedDocument,
     parse_concept,

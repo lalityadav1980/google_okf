@@ -6,15 +6,15 @@ from pathlib import Path
 
 import pytest
 
-from xyz_okf.authorization import (
+from verity_kf.authorization import (
     AclBinding,
     PrincipalContext,
     PrincipalType,
     ReferencePolicyDecisionPoint,
 )
-from xyz_okf.profile import load_profile
-from xyz_okf.release import build_release
-from xyz_okf.serving import (
+from verity_kf.profile import load_profile
+from verity_kf.release import build_release
+from verity_kf.serving import (
     AdmissionEvidence,
     ConceptNotFound,
     InMemoryBodyStore,
@@ -27,7 +27,7 @@ from xyz_okf.serving import (
 )
 
 PROJECT_ROOT = Path(__file__).parents[1]
-PROFILE = load_profile(PROJECT_ROOT / "profiles/xyz-bank-pilot.yaml")
+PROFILE = load_profile(PROJECT_ROOT / "profiles/verity-kf-pilot.yaml")
 BUNDLE = PROJECT_ROOT / "examples/pilot-bundle"
 CREATED_AT = datetime(2026, 8, 21, tzinfo=UTC)
 SERVE_AT = datetime(2026, 8, 22, tzinfo=UTC)
@@ -44,7 +44,7 @@ def _artifact(bundle: Path = BUNDLE, *, release_id: str = "2026.08.21.1"):
     return build_release(
         bundle,
         PROFILE,
-        bundle_id="xyz-bank-pilot",
+        bundle_id="verity-kf-pilot",
         release_id=release_id,
         source_commit="a" * 40,
         created_at=CREATED_AT,
@@ -176,7 +176,7 @@ def test_authorized_fetch_returns_release_context_citations_and_only_authorized_
     )
 
     assert concept.release_digest == DIGEST
-    assert concept.profile_id == "xyz-bank-okf"
+    assert concept.profile_id == "verity-kf"
     assert concept.citations[0].resource.startswith("https://confluence.example.invalid/")
     assert concept.links == ()
     assert concept.authorization.allowed is True

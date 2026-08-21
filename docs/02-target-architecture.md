@@ -12,7 +12,7 @@ existing systems and agentic consumers. It separates six concerns:
 5. authorized serving and retrieval; and
 6. agent or human consumption.
 
-OKF owns concern 3. XYZ Bank must provide the production capabilities around
+OKF owns concern 3. The adopting organisation must provide the production capabilities around
 it.
 
 ## 2. Logical architecture
@@ -81,7 +81,7 @@ consumer or agent to update a production bundle directly.
 
 ### 3.1 Source and authoring systems
 
-These platforms remain authoritative according to the bank's existing records,
+These platforms remain authoritative according to the adopting organisation's existing records,
 content, data, application, and service ownership policies. The OKF layer stores
 an approved representation or reference, not necessarily the complete source
 artifact.
@@ -123,7 +123,7 @@ access boundaries. It provides:
 
 - protected main branches;
 - pull-request review and `CODEOWNERS`-style domain approval;
-- machine validation against the XYZ Bank OKF profile;
+- machine validation against the VerityKF profile;
 - secret, sensitive-data, malware, link, and policy scanning;
 - source-drift and freshness checks;
 - immutable release tags and artifacts;
@@ -142,7 +142,7 @@ The published release is transformed into consumer-specific views:
 - a frontmatter index for filtering and routing;
 - lexical search for exact names, identifiers, and terminology;
 - vector search for semantic discovery;
-- an optional relationship index built from links and bank-defined relationship
+- an optional relationship index built from links and organisation-defined relationship
   metadata; and
 - a release catalog recording available bundles, versions, schemas, digests,
   classifications, and compatibility.
@@ -196,11 +196,11 @@ Four identifiers must remain separate:
 | Identifier | Purpose | Example |
 |---|---|---|
 | OKF specification version | Declares external syntax compatibility | `0.2` |
-| XYZ Bank profile version | Declares bank-required schema and policy | `1.0` |
+| VerityKF Enterprise Profile version | Declares enterprise-required schema and policy | `1.0` |
 | Bundle release ID | Identifies immutable published knowledge | `global-technology-2026.08.21.1` plus Git SHA |
 | Source/resource version | Identifies the upstream fact or document | SharePoint version, source commit, or catalog version |
 
-The root `index.md` may declare `okf_version: "0.2"`. Bank profile and release
+The root `index.md` may declare `okf_version: "0.2"`. VerityKF Enterprise Profile and release
 metadata should be declared in an accompanying release manifest and, where
 appropriate, approved custom frontmatter.
 
@@ -212,7 +212,7 @@ Recommended rules:
 - Promote the same immutable artifact through test and production.
 - Pin each consumer to an explicit release or approved release channel.
 - Record the previous release and provide automated rollback.
-- Use profile major versions for consumer-breaking bank-profile changes.
+- Use profile major versions for consumer-breaking VerityKF profile changes.
 - Use chronological immutable IDs for content releases; do not imply that a
   policy correction is equivalent to a software semantic-version change.
 
@@ -273,10 +273,10 @@ architecture should support:
 ## 9. Architecture constraints and cautions
 
 - OKF concept identity is based on the file path. Renames require redirects,
-  aliases, or a bank-defined stable-ID extension.
+  aliases, or an organisation-defined stable-ID extension.
 - Standard Markdown links create untyped graph edges. Typed relationships require
-  a bank extension while preserving normal links for interoperability.
-- Broken links are tolerated by the base specification; XYZ Bank may enforce
+  a VerityKF extension while preserving normal links for interoperability.
+- Broken links are tolerated by the base specification; an adopting organisation may enforce
   stricter rules for production releases.
 - A Git repository containing hundreds of thousands of concepts may require
   domain partitioning and sparse/incremental build strategies.
@@ -284,4 +284,4 @@ architecture should support:
   eliminate prompt injection, malicious links, or data-exfiltration risk.
 - OKF attestation records how a computation may be checked; it does not execute
   it. The v0.2 specification defers parts of the runtime protocol and attester
-  ABI, so production use requires a bank-owned design and assurance process.
+  ABI, so production use requires an organisation-owned design and assurance process.

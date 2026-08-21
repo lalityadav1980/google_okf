@@ -8,7 +8,7 @@ from typing import Protocol
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from xyz_okf.release import Classification
+from verity_kf.release import Classification
 
 _CLASSIFICATION_RANK: dict[Classification, int] = {
     "PUBLIC": 0,

@@ -23,8 +23,8 @@ uv run --locked python scripts/check_secrets.py
 uv run --locked python scripts/audit_runtime_dependencies.py
 uv run --locked mypy src
 uv run --locked pytest
-uv run xyz-okf validate examples/pilot-bundle \
-  --profile profiles/xyz-bank-pilot.yaml
+uv run verity-kf validate examples/pilot-bundle \
+  --profile profiles/verity-kf-pilot.yaml
 ```
 
 To apply formatting locally:
@@ -57,7 +57,7 @@ fix/OKF-103-link-resolution
 - Preserve unknown OKF frontmatter fields.
 - Add stable issue codes and tests for validation rules.
 - Put source-specific behavior behind the connector contract.
-- Do not include credentials, real customer data, or confidential bank content.
+- Do not include credentials, real customer data, or confidential enterprise content.
 - Record public contract or platform changes in an ADR.
 - Pin dependencies and CI actions; update `uv.lock` with dependency changes.
 - Add security, privacy, records, authorization, and rollback analysis to the PR.

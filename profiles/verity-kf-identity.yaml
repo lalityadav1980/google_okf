@@ -1,7 +1,7 @@
-policy_id: xyz-bank-concept-identity
-policy_version: "1.0"
+policy_id: verity-kf-concept-identity
+policy_version: "2.0"
 namespace_uuid: 98d593b2-a2ab-5b5d-8a70-a8f59ea04c3a
-uid_prefix: "urn:xyz-bank:okf:concept:"
+uid_prefix: "urn:verity-kf:concept:"
 default_directory: concepts
 max_slug_length: 72
 type_directories:
@@ -22,4 +22,3 @@ type_directories:
   Runbook: runbooks
   Architecture Decision: decisions
   Reference: references
-

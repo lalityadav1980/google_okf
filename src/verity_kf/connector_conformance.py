@@ -7,8 +7,8 @@ from urllib.parse import urlparse
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
 
-from xyz_okf.connectors import ChangeKind, KnowledgeSource, SourceChange, SourceRecord
-from xyz_okf.identity import canonical_source_record_sha256
+from verity_kf.connectors import ChangeKind, KnowledgeSource, SourceChange, SourceRecord
+from verity_kf.identity import canonical_source_record_sha256
 
 
 class ConnectorIssueCode(StrEnum):
@@ -266,7 +266,7 @@ def _check_record(
         findings.append(
             ConnectorFinding(
                 code=ConnectorIssueCode.CLASSIFICATION_INVALID,
-                message="record classification is not in the bank profile vocabulary",
+                message="record classification is not in the enterprise profile vocabulary",
                 page=page,
                 record_fingerprint=record_fingerprint,
             )

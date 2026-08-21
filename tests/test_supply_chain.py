@@ -7,9 +7,9 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from xyz_okf.profile import load_profile
-from xyz_okf.release import RELEASE_MEDIA_TYPE, build_release
-from xyz_okf.supply_chain import (
+from verity_kf.profile import load_profile
+from verity_kf.release import RELEASE_MEDIA_TYPE, build_release
+from verity_kf.supply_chain import (
     OciTarget,
     SignatureVerificationPolicy,
     SupplyChainError,
@@ -26,8 +26,8 @@ PROJECT_ROOT = Path(__file__).parents[1]
 def _artifact():
     return build_release(
         PROJECT_ROOT / "examples/pilot-bundle",
-        load_profile(PROJECT_ROOT / "profiles/xyz-bank-pilot.yaml"),
-        bundle_id="xyz-bank-pilot",
+        load_profile(PROJECT_ROOT / "profiles/verity-kf-pilot.yaml"),
+        bundle_id="verity-kf-pilot",
         release_id="2026.08.21.1",
         source_commit="a" * 40,
         created_at=datetime(2026, 8, 21, tzinfo=UTC),
@@ -40,7 +40,7 @@ def test_oras_push_command_uses_typed_layer_and_no_credentials() -> None:
 
     assert command[:3] == ("oras", "push", "--no-tty")
     assert RELEASE_MEDIA_TYPE in command
-    assert "release.tar.gz:application/vnd.xyz-bank.okf.release.layer.v1+tar+gzip" in command
+    assert "release.tar.gz:application/vnd.verity.kf.release.layer.v1+tar+gzip" in command
     assert "--username" not in command and "--password" not in command
     annotation_pairs = [
         command[index + 1] for index, value in enumerate(command) if value == "--annotation"

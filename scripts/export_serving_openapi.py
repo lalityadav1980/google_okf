@@ -7,9 +7,9 @@ from pathlib import Path
 
 from fastapi import Request
 
-from xyz_okf.api import create_app
-from xyz_okf.authorization import PrincipalContext, PrincipalType, ReferencePolicyDecisionPoint
-from xyz_okf.serving import ReleaseCatalog, ServingService
+from verity_kf.api import create_app
+from verity_kf.authorization import PrincipalContext, PrincipalType, ReferencePolicyDecisionPoint
+from verity_kf.serving import ReleaseCatalog, ServingService
 
 PROJECT_ROOT = Path(__file__).parents[1]
 

@@ -4,8 +4,8 @@ import asyncio
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 
-from xyz_okf.connector_conformance import ConnectorIssueCode, certify_connector
-from xyz_okf.connectors import ChangeBatch, ChangeKind, SourceChange, SourceRecord
+from verity_kf.connector_conformance import ConnectorIssueCode, certify_connector
+from verity_kf.connectors import ChangeBatch, ChangeKind, SourceChange, SourceRecord
 
 NOW = datetime(2026, 8, 21, tzinfo=UTC)
 

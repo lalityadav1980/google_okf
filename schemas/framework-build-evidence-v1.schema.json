@@ -33,7 +33,7 @@
       "type": "object"
     }
   },
-  "$id": "https://schemas.xyz-bank.example.invalid/okf/framework-build-evidence-v1.schema.json",
+  "$id": "https://schemas.verity-kf.example.invalid/okf/framework-build-evidence-v1.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "properties": {
@@ -51,14 +51,14 @@
       "type": "string"
     },
     "media_type": {
-      "const": "application/vnd.xyz-bank.okf.build-evidence.v1+json",
-      "default": "application/vnd.xyz-bank.okf.build-evidence.v1+json",
+      "const": "application/vnd.verity.kf.build-evidence.v1+json",
+      "default": "application/vnd.verity.kf.build-evidence.v1+json",
       "title": "Media Type",
       "type": "string"
     },
     "package_name": {
-      "const": "xyz-bank-okf",
-      "default": "xyz-bank-okf",
+      "const": "verity-knowledge-fabric",
+      "default": "verity-knowledge-fabric",
       "title": "Package Name",
       "type": "string"
     },

@@ -9,7 +9,7 @@ import yaml
 from markdown_it import MarkdownIt
 from markdown_it.token import Token
 
-from xyz_okf.issues import IssueCode
+from verity_kf.issues import IssueCode
 
 _MARKDOWN = MarkdownIt("commonmark")
 

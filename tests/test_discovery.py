@@ -7,7 +7,7 @@ import pytest
 import yaml
 from pydantic import ValidationError
 
-from xyz_okf.discovery import SourceDiscoveryProfile
+from verity_kf.discovery import SourceDiscoveryProfile
 
 PROJECT_ROOT = Path(__file__).parents[1]
 

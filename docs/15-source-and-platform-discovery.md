@@ -48,7 +48,7 @@ version; connector design must not mix their API assumptions.
 For Confluence Cloud, current official REST v2 documentation demonstrates
 version resources and attachment APIs with explicit view permissions, while
 current rate-limit guidance describes points/quota limits and `Retry-After`.
-These are discovery inputs, not proof of the bank tenant's configuration:
+These are discovery inputs, not proof of the adopting organisation's tenant configuration:
 
 - [Atlassian Confluence REST API v2 version resources](https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-version/)
 - [Atlassian Confluence REST API v2 attachments](https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-attachment/)

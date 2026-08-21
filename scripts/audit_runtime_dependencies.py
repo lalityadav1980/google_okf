@@ -17,7 +17,7 @@ def main() -> int:
     if uv is None:
         print("uv is not installed", file=sys.stderr)
         return 2
-    with tempfile.TemporaryDirectory(prefix="xyz-okf-audit-") as temporary_directory:
+    with tempfile.TemporaryDirectory(prefix="verity-kf-audit-") as temporary_directory:
         requirements = Path(temporary_directory) / "runtime-requirements.txt"
         export_code = _run(
             [

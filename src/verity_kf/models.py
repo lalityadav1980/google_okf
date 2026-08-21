@@ -7,7 +7,7 @@ from typing import Any, Literal
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, field_validator
 
-from xyz_okf.issues import IssueCode
+from verity_kf.issues import IssueCode
 
 _TOOL_ACTOR = re.compile(r"^[^\s/:]+(?:[-_.][^\s/:]+)*/[^\s/]+$")
 
@@ -136,7 +136,7 @@ class IssueCatalogEntry(BaseModel):
     code: IssueCode
     default_severity: Severity
     severity_source: Literal["fixed", "profile"]
-    scope: Literal["okf", "xyz-profile"]
+    scope: Literal["okf", "verity-profile"]
     rationale: str = Field(min_length=1)
     remediation: str = Field(min_length=1)
     test_references: list[str] = Field(min_length=1)

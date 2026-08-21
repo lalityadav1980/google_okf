@@ -12,7 +12,7 @@ support deterministic validation, expose CLI and API contracts, and remain
 independent of YODA, RACK, cloud, search, orchestration, and model vendors.
 
 The Google OKF reference implementation uses Python 3.13, but OKF itself does
-not require Python. XYZ Bank needs a productive pilot implementation without
+not require Python. The adopting organisation needs a productive pilot implementation without
 making the bundle format or consumer contract language-specific.
 
 ## Decision
@@ -50,7 +50,7 @@ Agent frameworks and model SDKs are adapters, not core dependencies.
 
 ### Negative
 
-- The bank must approve Python packaging and dependency operations.
+- The adopting organisation must approve Python packaging and dependency operations.
 - Runtime performance may require profiling for very large bundles.
 - Connector authors in other language communities need API or artifact
   contracts rather than direct library reuse.
@@ -59,12 +59,12 @@ Agent frameworks and model SDKs are adapters, not core dependencies.
 
 ## Alternatives considered
 
-- **Java core:** strong bank ecosystem but slower for the first Markdown/YAML and
+- **Java core:** strong enterprise ecosystem but slower for the first Markdown/YAML and
   source-connector iteration; remains viable for consumers.
 - **Go core:** excellent static binary and OCI ecosystem, but less productive for
   initial knowledge transformation; remains viable for high-throughput services.
 - **TypeScript core:** good platform/API integration but weaker alignment with
-  the Google reference producer and bank data/knowledge tooling.
+  the Google reference producer and enterprise data/knowledge tooling.
 - **Agent-framework core:** rejected because it couples deterministic knowledge
   controls to model/runtime choices.
 
@@ -73,8 +73,7 @@ Agent frameworks and model SDKs are adapters, not core dependencies.
 Revisit the decision if:
 
 - measured bundle size or throughput cannot meet approved objectives;
-- the strategic bank runtime disallows supported Python deployment;
+- the strategic enterprise runtime disallows supported Python deployment;
 - YODA or RACK requires a different public integration boundary;
 - dependency or license risk becomes unacceptable; or
 - a stable OKF SDK in another language materially reduces lifecycle cost.
-

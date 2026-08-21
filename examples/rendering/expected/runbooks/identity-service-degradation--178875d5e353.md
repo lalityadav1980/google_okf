@@ -14,15 +14,15 @@ sources:
   author: team:identity-platform
   last_modified: '2026-08-20T02:35:00Z'
 generated:
-  by: xyz-okf-confluence-producer/0.1.0
+  by: verity-kf-confluence-producer/0.2.0
   at: '2026-08-20T02:35:00Z'
 verified:
 - by: human:service-owner-id
   at: '2026-08-20T09:00:00Z'
 status: stable
 stale_after: '2027-08-20T02:35:00Z'
-xyz_profile_version: '0.1'
-concept_uid: urn:xyz-bank:okf:concept:178875d5-e353-5376-87a8-ec463b6a4913
+verity_profile_version: '0.2'
+concept_uid: urn:verity-kf:concept:178875d5-e353-5376-87a8-ec463b6a4913
 domain: enterprise-platforms
 owner: team:identity-platform
 classification: INTERNAL
@@ -33,9 +33,9 @@ source_record_id: confluence:pilot:identity-service-degradation
 source_version: '29'
 source_hash:
   algorithm: sha256
-  profile: xyz-okf-source-c14n-v1
-  digest: f13e157253664fccdd21543d33aa28a60e31d79daa85876d67fc748ca16071e0
-canonicalization_profile: xyz-okf-concept-c14n-v1
+  profile: verity-kf-source-c14n-v1
+  digest: 5f3f8c5e0e8953b3c3067dabcd2606c7189f27a16cc95ebafedda86b3c47a6d0
+canonicalization_profile: verity-kf-concept-c14n-v1
 producer_mapping:
   id: confluence-runbook-v1
   version: 1.0.0
@@ -50,7 +50,7 @@ jurisdictions:
 
 # Scope
 
-This synthetic runbook applies to the enterprise identity service.
+This synthetic runbook applies to an enterprise identity service.
 
 # Diagnostic sequence
 

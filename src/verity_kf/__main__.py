@@ -1,4 +1,4 @@
-from xyz_okf.cli import app
+from verity_kf.cli import app
 
 if __name__ == "__main__":
     app()

@@ -1,4 +1,4 @@
-package xyz.okf.release_admission
+package verity.kf.release_admission
 
 default allow := false
 
@@ -51,7 +51,7 @@ deny contains {"code": "REGISTRY_DIGEST_INVALID", "message": "registry reference
 }
 
 deny contains {"code": "ARTIFACT_TYPE_INVALID", "message": "OCI artifact type is not the approved OKF release type"} if {
-	not input.artifact.artifact_type == "application/vnd.xyz-bank.okf.release.v1+tar+gzip"
+	not input.artifact.artifact_type == "application/vnd.verity.kf.release.v1+tar+gzip"
 }
 
 deny contains {"code": "SIGNER_NOT_ALLOWED", "message": "signature identity or issuer is not approved"} if {

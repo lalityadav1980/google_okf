@@ -12,10 +12,10 @@ from pydantic import BaseModel, ValidationError
 from rich.console import Console
 from rich.table import Table
 
-from xyz_okf.connector_conformance import ConnectorCertificationReport
-from xyz_okf.discovery import SourceDiscoveryProfile
-from xyz_okf.evaluation import EvaluationBenchmark, EvaluationRun, score_evaluation
-from xyz_okf.identity import (
+from verity_kf.connector_conformance import ConnectorCertificationReport
+from verity_kf.discovery import SourceDiscoveryProfile
+from verity_kf.evaluation import EvaluationBenchmark, EvaluationRun, score_evaluation
+from verity_kf.identity import (
     IdentityPolicy,
     SourceAnchor,
     allocate_identity,
@@ -23,27 +23,27 @@ from xyz_okf.identity import (
     canonical_source_record_sha256,
     sha256_bytes,
 )
-from xyz_okf.models import ProfileDefinition, Severity
-from xyz_okf.parser import DocumentParseError, parse_concept
-from xyz_okf.profile import load_profile
-from xyz_okf.release import (
+from verity_kf.models import ProfileDefinition, Severity
+from verity_kf.parser import DocumentParseError, parse_concept
+from verity_kf.profile import load_profile
+from verity_kf.release import (
     ReleaseBuildError,
     ReleaseManifest,
     build_release,
     verify_release,
 )
-from xyz_okf.renderer import (
+from verity_kf.renderer import (
     RenderError,
     RenderMapping,
     SourceRecordDocument,
     render_concept,
 )
-from xyz_okf.validator import validate_bundle
+from verity_kf.validator import validate_bundle
 
 app = typer.Typer(
-    name="xyz-okf",
+    name="verity-kf",
     no_args_is_help=True,
-    help="Render, validate, and inspect OKF bundles against the XYZ Bank profile.",
+    help="Render, validate, and inspect OKF bundles against the VerityKF Enterprise Profile.",
 )
 console = Console()
 
@@ -60,7 +60,7 @@ ProfileOption = Annotated[
         file_okay=True,
         dir_okay=False,
         resolve_path=True,
-        help="XYZ Bank profile definition.",
+        help="VerityKF Enterprise Profile definition.",
     ),
 ]
 YamlArgument = Annotated[
@@ -173,7 +173,7 @@ def allocate_identity_command(
         typer.Option(help="Previously approved path to retain across title/type changes."),
     ] = None,
 ) -> None:
-    """Allocate a stable bank concept UID and initial OKF path."""
+    """Allocate a stable enterprise concept UID and initial OKF path."""
     source_document = _load_yaml_or_exit(source_record_path, SourceRecordDocument)
     policy = _load_yaml_or_exit(identity_policy_path, IdentityPolicy)
     anchor = SourceAnchor(
@@ -221,7 +221,7 @@ def hash_concept_command(concept_path: YamlArgument) -> None:
     typer.echo(
         json.dumps(
             {
-                "canonical_profile": "xyz-okf-concept-c14n-v1",
+                "canonical_profile": "verity-kf-concept-c14n-v1",
                 "canonical_sha256": canonical_digest,
                 "exact_sha256": sha256_bytes(content),
                 "path": str(concept_path),
@@ -239,7 +239,7 @@ def hash_source_command(source_record_path: YamlArgument) -> None:
     typer.echo(
         json.dumps(
             {
-                "canonical_profile": "xyz-okf-source-c14n-v1",
+                "canonical_profile": "verity-kf-source-c14n-v1",
                 "canonical_sha256": canonical_source_record_sha256(
                     source_document.to_source_record()
                 ),
@@ -255,7 +255,7 @@ def hash_source_command(source_record_path: YamlArgument) -> None:
 @app.command("build-release")
 def build_release_command(
     bundle: BundleArgument,
-    profile_path: ProfileOption = Path("profiles/xyz-bank-pilot.yaml"),
+    profile_path: ProfileOption = Path("profiles/verity-kf-pilot.yaml"),
     bundle_id: Annotated[str, typer.Option(help="Portable bundle identifier.")] = "",
     release_id: Annotated[str, typer.Option(help="Portable immutable release identifier.")] = "",
     source_commit: Annotated[
@@ -396,7 +396,7 @@ def score_benchmark_command(
 @app.command("validate")
 def validate_command(
     bundle: BundleArgument,
-    profile_path: ProfileOption = Path("profiles/xyz-bank-pilot.yaml"),
+    profile_path: ProfileOption = Path("profiles/verity-kf-pilot.yaml"),
     output_format: Annotated[
         Literal["text", "json"],
         typer.Option("--format", help="Validation report format."),
@@ -486,5 +486,5 @@ def inspect_command(bundle: BundleArgument) -> None:
 
 @app.command("profile-schema")
 def profile_schema_command() -> None:
-    """Print the JSON Schema for an XYZ Bank profile definition."""
+    """Print the JSON Schema for a VerityKF Enterprise Profile definition."""
     typer.echo(json.dumps(ProfileDefinition.model_json_schema(), indent=2, sort_keys=True))

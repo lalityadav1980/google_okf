@@ -9,7 +9,7 @@ from urllib.parse import unquote
 import yaml
 from markdown_it import MarkdownIt
 
-from xyz_okf import __version__
+from verity_kf import __version__
 
 PROJECT_ROOT = Path(__file__).parents[1]
 
@@ -110,6 +110,42 @@ def test_package_version_matches_project_metadata() -> None:
     with (PROJECT_ROOT / "pyproject.toml").open("rb") as handle:
         project = tomllib.load(handle)
     assert __version__ == project["project"]["version"]
+
+
+def test_verity_project_identity_is_consistent() -> None:
+    with (PROJECT_ROOT / "pyproject.toml").open("rb") as handle:
+        project = tomllib.load(handle)
+
+    assert project["project"]["name"] == "verity-knowledge-fabric"
+    assert project["project"]["scripts"] == {"verity-kf": "verity_kf.cli:app"}
+    assert (PROJECT_ROOT / "src/verity_kf").is_dir()
+
+    pilot_profile = _load_yaml(PROJECT_ROOT / "profiles/verity-kf-pilot.yaml")
+    identity_profile = _load_yaml(PROJECT_ROOT / "profiles/verity-kf-identity.yaml")
+    assert pilot_profile["profile_id"] == "verity-kf"
+    assert identity_profile["uid_prefix"] == "urn:verity-kf:concept:"
+
+    forbidden_fragments = {
+        "x" + "yz" + " " + "ba" + "nk",
+        "x" + "yz_okf",
+        "x" + "yz-okf",
+        "google" + "_okf",
+    }
+    text_suffixes = {".json", ".md", ".py", ".rego", ".toml", ".yaml", ".yml"}
+    for path in PROJECT_ROOT.rglob("*"):
+        if (
+            not path.is_file()
+            or path.suffix not in text_suffixes
+            or any(
+                part in {".git", ".mypy_cache", ".pytest_cache", ".ruff_cache", ".venv"}
+                for part in path.parts
+            )
+        ):
+            continue
+        content = path.read_text(encoding="utf-8").casefold()
+        assert not any(fragment in content for fragment in forbidden_fragments), (
+            f"former project identity remains in {path.relative_to(PROJECT_ROOT)}"
+        )
 
 
 def test_local_markdown_links_resolve() -> None:

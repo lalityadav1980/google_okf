@@ -55,7 +55,7 @@ class EvaluationBenchmark(BaseModel):
         extra="forbid",
         frozen=True,
         json_schema_extra={
-            "$id": "https://schemas.xyz-bank.example.invalid/okf/pilot-benchmark-v1.schema.json",
+            "$id": "https://schemas.verity-kf.example.invalid/okf/pilot-benchmark-v1.schema.json",
             "$schema": "https://json-schema.org/draft/2020-12/schema",
         },
     )

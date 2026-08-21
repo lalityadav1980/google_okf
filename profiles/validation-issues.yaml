@@ -1,5 +1,5 @@
-catalog_id: xyz-bank-okf-validation-issues
-catalog_version: "1.0"
+catalog_id: verity-kf-validation-issues
+catalog_version: "2.0"
 entries:
   - code: OKF_UTF8
     default_severity: error
@@ -39,15 +39,15 @@ entries:
   - code: OKF_ROOT_INDEX_MISSING
     default_severity: error
     severity_source: fixed
-    scope: xyz-profile
-    rationale: The XYZ profile uses a root index as the bundle entry point and version declaration.
+    scope: verity-profile
+    rationale: The VerityKF Enterprise Profile uses a root index as the bundle entry point and version declaration.
     remediation: Add a root index.md with the approved okf_version.
     test_references: [unit:root-index-missing]
   - code: OKF_VERSION_MISSING
     default_severity: error
     severity_source: fixed
     scope: okf
-    rationale: When a root index exists, the XYZ validator requires its target OKF version.
+    rationale: When a root index exists, the VerityKF validator requires its target OKF version.
     remediation: Add only the approved okf_version key to root index frontmatter.
     test_references: [conformance:version-missing-v02]
   - code: OKF_INDEX_FRONTMATTER_KEYS
@@ -81,85 +81,84 @@ entries:
   - code: OKF_LINK_ESCAPES_BUNDLE
     default_severity: error
     severity_source: profile
-    scope: xyz-profile
+    scope: verity-profile
     rationale: Escaped local paths can expose unintended files to consumers.
     remediation: Use a contained bundle-relative path or an explicit authorized URI.
     test_references: [conformance:escaped-link-v02]
   - code: OKF_LINK_BROKEN
     default_severity: error
     severity_source: profile
-    scope: xyz-profile
-    rationale: The bank release profile requires internally resolvable citations.
+    scope: verity-profile
+    rationale: The VerityKF Enterprise Profile requires internally resolvable citations.
     remediation: Add the target, correct the path, or remove the link before release.
     test_references: [conformance:broken-link-v02]
   - code: OKF_CONCEPT_STALE
     default_severity: warning
     severity_source: profile
-    scope: xyz-profile
+    scope: verity-profile
     rationale: Consumers must be warned when the approved freshness boundary has passed.
     remediation: Reconcile with the source and publish a new generated or verified timestamp.
     test_references: [unit:stale-concept]
   - code: PROFILE_REQUIRED_FIELD
     default_severity: error
     severity_source: fixed
-    scope: xyz-profile
-    rationale: Bank governance and retrieval controls depend on the organizational metadata set.
+    scope: verity-profile
+    rationale: Enterprise governance and retrieval controls depend on the organizational metadata set.
     remediation: Populate the named field from an authoritative mapping.
     test_references: [unit:profile-required-field]
   - code: PROFILE_UNKNOWN_TYPE
     default_severity: error
     severity_source: profile
-    scope: xyz-profile
+    scope: verity-profile
     rationale: Controlled types enable consistent ownership, policy, and retrieval behavior.
     remediation: Map to an approved type or submit a profile vocabulary change.
     test_references: [unit:profile-unknown-type]
   - code: PROFILE_ENUM_VALUE
     default_severity: error
     severity_source: fixed
-    scope: xyz-profile
+    scope: verity-profile
     rationale: Controlled field values prevent ambiguous policy interpretation.
     remediation: Use an approved value from the active profile version.
     test_references: [unit:profile-enum-value]
   - code: PROFILE_VERIFICATION_REQUIRED
     default_severity: error
     severity_source: fixed
-    scope: xyz-profile
+    scope: verity-profile
     rationale: High-criticality knowledge requires independent verification evidence.
     remediation: Add an approved verification event or lower criticality with owner approval.
     test_references: [unit:profile-verification-required]
   - code: PROFILE_RELATIONSHIPS_LIST
     default_severity: error
     severity_source: fixed
-    scope: xyz-profile
+    scope: verity-profile
     rationale: Relationship traversal requires a predictable collection structure.
     remediation: Encode relationships as a YAML list of mappings.
     test_references: [unit:profile-relationships-list]
   - code: PROFILE_RELATIONSHIP_MAPPING
     default_severity: error
     severity_source: fixed
-    scope: xyz-profile
+    scope: verity-profile
     rationale: Each relationship needs explicit type and target fields.
     remediation: Replace the entry with a relationship mapping.
     test_references: [unit:profile-relationship-mapping]
   - code: PROFILE_RELATIONSHIP_TYPE
     default_severity: error
     severity_source: fixed
-    scope: xyz-profile
+    scope: verity-profile
     rationale: Controlled relationship semantics make graph expansion predictable.
     remediation: Use an approved relationship type or propose a profile update.
     test_references: [unit:profile-relationship-type]
   - code: PROFILE_RELATIONSHIP_TARGET
     default_severity: error
     severity_source: fixed
-    scope: xyz-profile
+    scope: verity-profile
     rationale: A relationship without a target cannot be resolved or audited.
     remediation: Add a non-empty bundle path or URI target.
     test_references: [unit:profile-relationship-target]
   - code: PROFILE_DUPLICATE_CONCEPT_UID
     default_severity: error
     severity_source: fixed
-    scope: xyz-profile
+    scope: verity-profile
     rationale: A stable concept UID must identify exactly one current concept.
     remediation: Correct the source-anchor allocation and never reuse an issued UID.
     test_references: [unit:duplicate-concept-uid]
-

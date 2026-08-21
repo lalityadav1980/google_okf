@@ -3,7 +3,7 @@
 ## 1. Status
 
 The local command/validation contract is implemented and tested. Remote
-publication is deliberately blocked until XYZ Bank supplies an approved OCI
+publication is deliberately blocked until the adopting organisation supplies an approved OCI
 repository, publisher workload identity, and signature trust decision.
 
 This stage never sends credentials on command arguments. ORAS and Cosign use
@@ -32,9 +32,9 @@ Authoritative documentation:
 
 | Object | Media type |
 |---|---|
-| OCI artifact | `application/vnd.xyz-bank.okf.release.v1+tar+gzip` |
-| Release layer | `application/vnd.xyz-bank.okf.release.layer.v1+tar+gzip` |
-| Embedded manifest | `application/vnd.xyz-bank.okf.manifest.v1+json` |
+| OCI artifact | `application/vnd.verity.kf.release.v1+tar+gzip` |
+| Release layer | `application/vnd.verity.kf.release.layer.v1+tar+gzip` |
+| Embedded manifest | `application/vnd.verity.kf.manifest.v1+json` |
 
 The outer OCI manifest digest is distinct from the exact archive-layer digest.
 Both are retained. The layer digest proves the bytes built under `OKF-401`; the
@@ -49,7 +49,7 @@ validated reproducible archive
   -> verify repository, artifact type and sha256 manifest digest
   -> address artifact only as repository@sha256:<digest>
   -> Cosign sign immutable digest
-  -> Cosign verify with explicit bank trust policy
+  -> Cosign verify with explicit organisational trust policy
   -> ORAS pull by digest into a clean workspace
   -> verify embedded manifest and exact/canonical file digests
   -> record registry/layer/manifest/signature evidence
@@ -68,9 +68,9 @@ and verification without an explicit key or certificate identity/issuer.
 - `org.opencontainers.image.created`
 - `org.opencontainers.image.revision`
 - `org.opencontainers.image.title`
-- `xyz.bank.okf.archive.sha256`
-- `xyz.bank.okf.bundle.id`
-- `xyz.bank.okf.profile`
+- `verity.kf.archive.sha256`
+- `verity.kf.bundle.id`
+- `verity.kf.profile`
 
 Annotations contain routing and integrity metadata only. They must not contain
 knowledge content, entitlements, user identifiers, credentials, or secrets.
@@ -79,7 +79,7 @@ knowledge content, entitlements, user identifiers, credentials, or secrets.
 
 ### KMS-backed Cosign key — initial technical recommendation
 
-Use an approved non-exportable KMS/HSM signing key when the bank already has a
+Use an approved non-exportable KMS/HSM signing key when the adopting organisation already has a
 managed key lifecycle, separation of duties, audit logging, and workload
 identity. Verification pins the approved KMS/public-key reference. Rotation
 creates a controlled overlap period; it does not rewrite old release evidence.
@@ -89,7 +89,7 @@ creates a controlled overlap period; it does not rewrite old release evidence.
 Use only when the OIDC issuer, certificate identity, Fulcio trust root, Rekor or
 private transparency service, availability model, and metadata-disclosure risk
 are approved. Verification must specify both certificate identity and issuer;
-"any valid Sigstore identity" is not an acceptable bank policy.
+"any valid Sigstore identity" is not an acceptable enterprise policy.
 
 Private Sigstore services remain an option but introduce operated platform
 components. The framework does not assume that public transparency logging of
@@ -105,7 +105,7 @@ internal repository metadata is acceptable.
 - publisher denied delete in protected environments;
 - retention/legal-hold and malware/scanning behavior agreed;
 - OCI 1.1 referrer support certified for signatures; and
-- audit events exported to the bank monitoring platform.
+- audit events exported to the adopting organisation's monitoring platform.
 
 ## 8. Promotion and rollback
 
@@ -128,4 +128,3 @@ withdrawal authority, rollback SLO, and environment topology are supplied.
 6. Retention, deletion, promotion, withdrawal, and audit-log owners.
 
 No real publication or signature is attempted before these inputs are approved.
-

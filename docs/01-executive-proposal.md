@@ -2,7 +2,7 @@
 
 ## 1. Executive summary
 
-XYZ Bank's knowledge is distributed across collaboration platforms,
+The adopting organisation's knowledge is distributed across collaboration platforms,
 repositories, catalogs, internal platforms, operational systems, and the
 experience of subject-matter experts. Confluence, SharePoint, YODA, RACK, and
 other platforms each solve valuable parts of the knowledge lifecycle, but they
@@ -14,14 +14,14 @@ provenance, inconsistent freshness, platform-specific integrations, and an
 inability to reproduce exactly what an agent knew when it produced an answer or
 took an action.
 
-The proposal is to adopt Open Knowledge Format (OKF) v0.2 as XYZ Bank's
+The proposal is to adopt Open Knowledge Format (OKF) v0.2 as the adopting organisation's
 enterprise knowledge **interchange and release standard**. OKF represents a
 knowledge bundle as Markdown documents with YAML frontmatter and links between
 concepts. The format is human-readable, agent-readable, portable, and suitable
 for Git-based version control. The standard defines provenance, verification,
 freshness, lifecycle, and optional attested-computation vocabulary, while
 deliberately leaving storage, retrieval, authorization, and execution to the
-adopting organization.
+adopting organisation.
 
 OKF complements the current estate:
 
@@ -116,7 +116,7 @@ Git is the recommended distribution mechanism because it supplies attribution,
 history, diffs, review, and rollback. The specification remains a format rather
 than a platform: it does not define a central registry, access control,
 retrieval infrastructure, workflow engine, scheduler, or full execution
-runtime. This separation allows XYZ Bank to use its existing strategic
+runtime. This separation allows the adopting organisation to use its existing strategic
 platforms and security controls.
 
 Sources: [OKF v0.2 specification](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md),
@@ -160,8 +160,8 @@ The proposed program has ten objectives.
   the platform team owns formats, tooling, reliability, and common guardrails.
 - **Progressive disclosure.** Consumers discover a small index, then retrieve
   only the concepts necessary for a task.
-- **Open core, bank profile.** XYZ Bank adopts the permissive OKF standard and
-  overlays a stricter organizational profile.
+- **Open core, enterprise profile.** The adopting organisation adopts the permissive OKF standard and
+  overlays the stricter VerityKF Enterprise Profile.
 - **Evidence before autonomy.** Retrieval and answer quality are proven before
   write-back or action-taking capabilities are expanded.
 
@@ -169,7 +169,7 @@ The proposed program has ten objectives.
 
 ### In scope
 
-- An XYZ Bank OKF organizational profile and controlled concept taxonomy.
+- A VerityKF Enterprise Profile and controlled concept taxonomy.
 - Producer adapters for approved enterprise knowledge sources.
 - Git-based validation, review, release, signing, retention, and rollback.
 - Entitlement-aware publication, serving, and indexing.
@@ -197,7 +197,7 @@ The proposed program has ten objectives.
 | Option | Description | Benefits | Limitations | Assessment |
 |---|---|---|---|---|
 | A. Maintain current state | Continue platform-specific ingestion and retrieval | No transformation cost | Duplication, weak portability and inconsistent controls remain | Not strategic |
-| B. Select one existing platform as the enterprise repository | Migrate or synchronize all knowledge to one product | Single user experience | High migration cost, lock-in, authorization and record-boundary complexity | Not recommended as a prerequisite |
+| B. Select one existing platform as the adopting organisation's repository | Migrate or synchronize all knowledge to one product | Single user experience | High migration cost, lock-in, authorization and record-boundary complexity | Not recommended as a prerequisite |
 | C. Adopt OKF as interchange and release format | Existing systems produce and consume a common versioned representation | Portable, incremental, reviewable, compatible with current estate | Requires profile, adapters, governance, and serving controls | **Recommended** |
 | D. Build a new end-to-end knowledge platform | Replace authoring, storage, retrieval, and agent layers | Maximum theoretical control | Highest cost, risk, and time; duplicates strategic platforms | Not recommended |
 
@@ -205,7 +205,7 @@ The proposed program has ten objectives.
 
 Adopt option C through five capabilities:
 
-1. **Enterprise OKF profile** — bank-required metadata, taxonomy, relationship
+1. **VerityKF Enterprise Profile** — enterprise-required metadata, taxonomy, relationship
    vocabulary, quality rules, security labels, lifecycle, and compatibility.
 2. **Producer framework** — reusable source connectors, deterministic extraction,
    content decomposition, enrichment, provenance, and change detection.
@@ -254,5 +254,5 @@ critical pilot content:
 Authorize discovery and a bounded pilot with architecture, platform, knowledge
 management, security, privacy, records management, risk, YODA, RACK, and two
 domain representatives. The pilot should produce evidence for a subsequent
-production decision; it should not be interpreted as approval for bank-wide
+production decision; it should not be interpreted as approval for enterprise-wide
 migration or autonomous publication.

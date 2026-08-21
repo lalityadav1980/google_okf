@@ -6,7 +6,7 @@ title: Identity Service Degradation
 body: |
   # Scope
 
-  This synthetic runbook applies to the enterprise identity service.
+  This synthetic runbook applies to an enterprise identity service.
 
   # Diagnostic sequence
 
@@ -23,4 +23,3 @@ entitlement_refs:
   - authz-policy:technology-runbook-readers
 metadata:
   source_content_type: page
-
