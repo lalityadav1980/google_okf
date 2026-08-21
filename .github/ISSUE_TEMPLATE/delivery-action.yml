@@ -1,0 +1,55 @@
+name: Delivery action
+description: Track an implementation or discovery action from tracking/backlog.yaml.
+title: "[OKF-000] "
+labels: [delivery]
+body:
+  - type: input
+    id: action_id
+    attributes:
+      label: Action ID
+      description: Use the existing ID from tracking/backlog.yaml.
+      placeholder: OKF-201
+    validations:
+      required: true
+  - type: input
+    id: owner
+    attributes:
+      label: Accountable owner role
+      placeholder: Platform Engineering
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Outcome and scope
+      description: State the user/control outcome, included work, and exclusions.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance evidence
+      description: Use objective, testable criteria and link retained evidence.
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies and blockers
+      description: Include action IDs, decisions, access, data, and external teams.
+    validations:
+      required: true
+  - type: textarea
+    id: controls
+    attributes:
+      label: Security, privacy, records, and authorization impact
+      description: State impact or explain why there is none.
+    validations:
+      required: true
+  - type: textarea
+    id: tests
+    attributes:
+      label: Test and rollback plan
+    validations:
+      required: true
+

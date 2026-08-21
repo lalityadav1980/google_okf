@@ -1,0 +1,69 @@
+profile_id: xyz-bank-okf
+profile_version: "0.1"
+okf_version: "0.2"
+
+required_fields:
+  - type
+  - title
+  - description
+  - resource
+  - sources
+  - generated
+  - status
+  - stale_after
+  - xyz_profile_version
+  - concept_uid
+  - domain
+  - owner
+  - classification
+  - acl_ref
+  - criticality
+  - source_record_id
+  - source_version
+
+allowed_types:
+  - Policy
+  - Standard
+  - Procedure
+  - Control
+  - Regulatory Obligation
+  - Business Term
+  - Business Capability
+  - Application
+  - Technology Service
+  - API
+  - Event
+  - Data Product
+  - Dataset
+  - Metric
+  - Pipeline
+  - Runbook
+  - Architecture Decision
+  - Reference
+  - Attested Computation
+
+enum_fields:
+  status: [draft, stable, deprecated]
+  classification: [PUBLIC, INTERNAL, CONFIDENTIAL, RESTRICTED]
+  criticality: [low, moderate, high]
+
+allowed_relationship_types:
+  - governed-by
+  - implements
+  - supersedes
+  - depends-on
+  - produces
+  - consumes
+  - operated-by
+  - owned-by
+  - evidenced-by
+  - applies-to
+
+policy:
+  require_root_index: true
+  broken_internal_links: error
+  escaped_bundle_links: error
+  stale_concepts: warning
+  unknown_types: error
+  verified_required_for_criticality: [high]
+

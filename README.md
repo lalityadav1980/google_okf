@@ -44,6 +44,53 @@ indexing services.
    discovery assumptions, architecture decisions, and open questions.
 8. [ADR-0001](docs/adr/0001-okf-as-knowledge-interchange.md) — formal decision
    record for adopting OKF as an interchange and release format.
+9. [Open-source technology stack](docs/08-open-source-technology-stack.md) —
+   selected tools, alternatives, licensing considerations, and adoption points.
+10. [Framework design](docs/09-framework-design.md) — executable components,
+    contracts, validation layers, and planned producer/release/consumer design.
+11. [Development plan and tracker](docs/10-development-plan-and-tracker.md) —
+    increments, epics, actions, blockers, acceptance, and delivery governance.
+12. [ADR-0002](docs/adr/0002-python-core-and-open-platform.md) — initial
+    framework-language and open-platform-interface decision.
+
+## Framework quick start
+
+Prerequisites: Python 3.13 and `uv` 0.11.7 or later, below 0.13.
+
+```bash
+uv sync --locked
+uv run xyz-okf render \
+  examples/rendering/source-record.yaml \
+  examples/rendering/mapping.yaml \
+  --output-root /tmp/xyz-okf-render
+uv run xyz-okf inspect examples/pilot-bundle
+uv run xyz-okf validate examples/pilot-bundle \
+  --profile profiles/xyz-bank-pilot.yaml
+```
+
+Run all local quality gates:
+
+```bash
+uv run ruff format --check src tests
+uv run ruff check src tests
+uv run mypy src
+uv run pytest
+```
+
+The first vertical slice includes:
+
+- typed OKF v0.2 and XYZ Bank profile models;
+- deterministic source-record rendering with golden byte-level tests;
+- a CLI validator with text and JSON output;
+- controlled type, metadata, verification, freshness, link, and relationship checks;
+- a portable connector contract for Confluence, SharePoint, YODA, and RACK;
+- a conformant synthetic pilot bundle; and
+- automated CI, tests, issue forms, and pull-request controls.
+
+Delivery state is tracked in
+[`tracking/backlog.yaml`](tracking/backlog.yaml). The repository is currently
+unlicensed; action `OKF-004` must be completed before treating the project code
+as open-source software.
 
 ## Decision requested
 

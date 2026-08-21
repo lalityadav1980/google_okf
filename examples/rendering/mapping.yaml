@@ -1,0 +1,31 @@
+mapping_id: confluence-runbook-v1
+mapping_version: "1.0.0"
+output_path: runbooks/identity-service-degradation-rendered.md
+concept_uid: kb:runbook:identity-service-degradation-rendered
+type: Runbook
+description: Synthetic diagnostic guidance for reduced enterprise identity service availability.
+domain: enterprise-platforms
+owner: team:identity-platform
+criticality: high
+profile_version: "0.1"
+generated_by: xyz-okf-confluence-producer/0.1.0
+stale_after_days: 365
+tags:
+  - runbook
+  - operations
+  - identity
+  - operations
+status: stable
+source_author: team:identity-platform
+verified:
+  - by: human:service-owner-id
+    at: 2026-08-20T09:00:00Z
+relationships:
+  - type: operated-by
+    target: /runbooks/identity-service-degradation.md
+  - type: applies-to
+    target: /services/enterprise-identity.md
+frontmatter_extensions:
+  jurisdictions:
+    - global
+

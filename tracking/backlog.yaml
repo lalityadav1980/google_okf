@@ -1,0 +1,317 @@
+tracker_version: "1.0"
+last_updated: 2026-08-21
+statuses: [BACKLOG, READY, IN_PROGRESS, BLOCKED, IN_REVIEW, DONE]
+
+milestones:
+  - id: M0
+    name: Repository and architecture foundation
+    status: IN_PROGRESS
+    exit_criteria:
+      - Local quality gates pass.
+      - Remote CI succeeds on the protected branch.
+      - Repository license decision has a named owner.
+  - id: M1
+    name: Validator and producer SDK
+    status: IN_PROGRESS
+    exit_criteria:
+      - Conformance fixture pack passes.
+      - Deterministic source-to-concept rendering is demonstrated.
+      - Connector contract tests cover version, deletion, entitlement, and retry behavior.
+  - id: M2
+    name: Controlled source producers
+    status: BACKLOG
+    exit_criteria:
+      - One Confluence and one SharePoint collection produce reviewable concepts.
+      - Source versions, classifications, deletions, and entitlements are preserved.
+  - id: M3
+    name: Immutable release supply chain
+    status: BACKLOG
+    exit_criteria:
+      - A validated bundle is packaged, signed, verified, promoted, and rolled back by digest.
+  - id: M4
+    name: Authorized consumer pilot
+    status: BACKLOG
+    exit_criteria:
+      - One YODA or RACK consumer retrieves cited concepts from a named release.
+      - Negative entitlement tests return no unauthorized content.
+  - id: M5
+    name: Assurance and production decision
+    status: BACKLOG
+    exit_criteria:
+      - Quality, security, resilience, privacy, records, and operating evidence is approved.
+
+actions:
+  - id: OKF-001
+    epic: E00
+    milestone: M0
+    title: Publish enterprise OKF architecture proposal
+    owner_role: Enterprise Architecture
+    priority: P0
+    status: DONE
+    depends_on: []
+    acceptance: Proposal, architecture, governance, roadmap, profile, and ADR are versioned in Git.
+  - id: OKF-002
+    epic: E00
+    milestone: M0
+    title: Select open-source reference stack
+    owner_role: Enterprise Architecture
+    priority: P0
+    status: DONE
+    depends_on: [OKF-001]
+    acceptance: Selected and deferred technologies have rationale, phase, license, and exit strategy.
+  - id: OKF-003
+    epic: E00
+    milestone: M0
+    title: Enable CI quality gates and branch protection
+    owner_role: Platform Engineering
+    priority: P0
+    status: IN_PROGRESS
+    depends_on: [OKF-002]
+    acceptance: Pinned CI runs format, lint, type, test, and sample-bundle validation as required checks.
+  - id: OKF-004
+    epic: E00
+    milestone: M0
+    title: Approve repository license and dependency policy
+    owner_role: Open Source Program Office
+    priority: P0
+    status: BLOCKED
+    blocker: Decision owner and approved repository license are not yet known.
+    depends_on: [OKF-002]
+    acceptance: Approved LICENSE file, dependency policy, and distribution boundary are committed.
+  - id: OKF-101
+    epic: E10
+    milestone: M1
+    title: Implement OKF v0.2 parser and typed frontmatter
+    owner_role: Platform Engineering
+    priority: P0
+    status: DONE
+    depends_on: [OKF-002]
+    acceptance: UTF-8, YAML frontmatter, actor, source, lifecycle, verification, and Markdown link tests pass.
+  - id: OKF-102
+    epic: E10
+    milestone: M1
+    title: Implement XYZ Bank pilot profile validation
+    owner_role: Knowledge Architecture
+    priority: P0
+    status: DONE
+    depends_on: [OKF-101]
+    acceptance: Required fields, enums, controlled types, criticality verification, and relationships are validated.
+  - id: OKF-103
+    epic: E10
+    milestone: M1
+    title: Implement bundle integrity validation
+    owner_role: Platform Engineering
+    priority: P0
+    status: DONE
+    depends_on: [OKF-101, OKF-102]
+    acceptance: Root version, duplicate UIDs, broken links, escaped paths, and stale concepts produce stable issue codes.
+  - id: OKF-104
+    epic: E10
+    milestone: M1
+    title: Define stable validation issue catalog
+    owner_role: Knowledge Architecture
+    priority: P1
+    status: READY
+    depends_on: [OKF-103]
+    acceptance: Every rule has documented code, severity, rationale, remediation, and golden test.
+  - id: OKF-105
+    epic: E10
+    milestone: M1
+    title: Build OKF conformance fixture pack
+    owner_role: Quality Engineering
+    priority: P0
+    status: READY
+    depends_on: [OKF-103]
+    acceptance: Valid and invalid v0.1/v0.2, reserved-file, link, extension, and attested-computation fixtures run in CI.
+  - id: OKF-201
+    epic: E20
+    milestone: M1
+    title: Implement deterministic SourceRecord-to-concept renderer
+    owner_role: Platform Engineering
+    priority: P0
+    status: IN_REVIEW
+    depends_on: [OKF-102]
+    acceptance: Identical source and mapping versions produce byte-identical deterministic concept output.
+    evidence:
+      - tests/test_renderer.py
+      - tests/test_cli.py::test_render_command_matches_golden_output
+      - examples/rendering/expected/runbooks/identity-service-degradation-rendered.md
+  - id: OKF-202
+    epic: E20
+    milestone: M1
+    title: Define stable concept identity and canonical hashing
+    owner_role: Knowledge Architecture
+    priority: P0
+    status: READY
+    depends_on: [OKF-201]
+    acceptance: UID, path, rename, source anchor, canonicalization, and SHA-256 rules have tests and an ADR.
+  - id: OKF-203
+    epic: E20
+    milestone: M1
+    title: Implement checkpoint, deletion, retry, and dry-run contracts
+    owner_role: Platform Engineering
+    priority: P0
+    status: READY
+    depends_on: [OKF-201]
+    acceptance: Contract tests prove restart, partial failure, rate limit, tombstone, and no-op behavior.
+  - id: OKF-301
+    epic: E30
+    milestone: M2
+    title: Complete Confluence API, content, version, and ACL discovery
+    owner_role: Confluence Source Owner
+    priority: P0
+    status: BLOCKED
+    blocker: Pilot spaces, API identity, and source owner are not confirmed.
+    depends_on: [OKF-203]
+    acceptance: Approved mapping covers stable IDs, versions, changes, deletes, attachments, ACLs, classification, and rate limits.
+  - id: OKF-302
+    epic: E30
+    milestone: M2
+    title: Implement and certify Confluence producer
+    owner_role: Connector Engineering
+    priority: P0
+    status: BLOCKED
+    blocker: OKF-301 discovery is incomplete.
+    depends_on: [OKF-301]
+    acceptance: Connector contract, sandbox integration, entitlement, deletion, idempotency, and load tests pass.
+  - id: OKF-311
+    epic: E31
+    milestone: M2
+    title: Complete SharePoint API, record, version, and ACL discovery
+    owner_role: SharePoint Source Owner
+    priority: P0
+    status: BLOCKED
+    blocker: Pilot sites/libraries, API identity, and records owner are not confirmed.
+    depends_on: [OKF-203]
+    acceptance: Approved mapping covers IDs, versions, changes, deletes, records, ACLs, classification, attachments, and throttling.
+  - id: OKF-312
+    epic: E31
+    milestone: M2
+    title: Implement and certify SharePoint producer
+    owner_role: Connector Engineering
+    priority: P0
+    status: BLOCKED
+    blocker: OKF-311 discovery is incomplete.
+    depends_on: [OKF-311]
+    acceptance: Connector contract, sandbox integration, entitlement, deletion, idempotency, and load tests pass.
+  - id: OKF-401
+    epic: E40
+    milestone: M3
+    title: Implement release manifest and deterministic archive
+    owner_role: Platform Engineering
+    priority: P0
+    status: READY
+    depends_on: [OKF-103, OKF-202]
+    acceptance: Manifest schema, canonical file digests, prior release, profile, classification, and reproducible archive tests pass.
+  - id: OKF-402
+    epic: E40
+    milestone: M3
+    title: Publish and verify signed OCI bundle artifact
+    owner_role: Platform Security Engineering
+    priority: P0
+    status: READY
+    depends_on: [OKF-401]
+    acceptance: ORAS push/pull and Cosign sign/verify succeed using an approved identity/KMS trust model and immutable digest.
+  - id: OKF-403
+    epic: E40
+    milestone: M3
+    title: Implement promotion, retention, withdrawal, and rollback
+    owner_role: Platform Engineering
+    priority: P0
+    status: BACKLOG
+    depends_on: [OKF-402]
+    acceptance: Same digest is promoted; withdrawal and rollback meet agreed SLO with retained evidence.
+  - id: OKF-501
+    epic: E50
+    milestone: M3
+    title: Implement OPA release-admission policy
+    owner_role: Information Security
+    priority: P0
+    status: READY
+    depends_on: [OKF-401]
+    acceptance: Policy gates classification, verification, source, profile, signature, and consumer compatibility with deny-by-default tests.
+  - id: OKF-502
+    epic: E50
+    milestone: M4
+    title: Integrate enterprise authorization for concept retrieval
+    owner_role: Identity and Access Management
+    priority: P0
+    status: BLOCKED
+    blocker: Enterprise PDP/PEP and entitlement data contracts are not confirmed.
+    depends_on: [OKF-501]
+    acceptance: Current user/workload authorization is enforced before retrieval, links, snippets, embeddings, and graph expansion.
+  - id: OKF-601
+    epic: E60
+    milestone: M4
+    title: Define and implement release-aware serving API
+    owner_role: Platform Engineering
+    priority: P1
+    status: READY
+    depends_on: [OKF-402, OKF-502]
+    acceptance: Versioned OpenAPI supports authorized bundle, release, concept, lifecycle, freshness, citation, and withdrawal operations.
+  - id: OKF-602
+    epic: E60
+    milestone: M4
+    title: Benchmark existing retrieval against OpenSearch hybrid index
+    owner_role: Search Engineering
+    priority: P1
+    status: BACKLOG
+    depends_on: [OKF-601, OKF-901]
+    acceptance: Relevance, authorization, latency, rebuild, operations, and cost evidence supports a documented decision.
+  - id: OKF-701
+    epic: E70
+    milestone: M4
+    title: Complete YODA capability and integration map
+    owner_role: YODA Product Owner
+    priority: P0
+    status: BLOCKED
+    blocker: YODA product owner, current capabilities, interfaces, and roadmap are not documented.
+    depends_on: []
+    acceptance: Authoring, catalog, index, retrieval, agent, UX, identity, audit, and roadmap responsibilities are approved.
+  - id: OKF-702
+    epic: E70
+    milestone: M4
+    title: Complete RACK capability and integration map
+    owner_role: RACK Product Owner
+    priority: P0
+    status: BLOCKED
+    blocker: RACK product owner, current capabilities, interfaces, and roadmap are not documented.
+    depends_on: []
+    acceptance: Authoring, catalog, index, retrieval, agent, UX, identity, audit, and roadmap responsibilities are approved.
+  - id: OKF-703
+    epic: E70
+    milestone: M4
+    title: Integrate one approved YODA or RACK pilot consumer
+    owner_role: Consumer Platform Engineering
+    priority: P0
+    status: BACKLOG
+    depends_on: [OKF-601, OKF-701, OKF-702]
+    acceptance: Consumer pins a release, retrieves only authorized concepts, preserves citations, and records trace evidence.
+  - id: OKF-801
+    epic: E80
+    milestone: M5
+    title: Instrument publication and serving with OpenTelemetry
+    owner_role: Site Reliability Engineering
+    priority: P1
+    status: BACKLOG
+    depends_on: [OKF-402, OKF-601]
+    acceptance: Traces and metrics cover source lag, validation, release, policy, indexing, retrieval, errors, and cost without content leakage.
+  - id: OKF-901
+    epic: E90
+    milestone: M5
+    title: Define pilot benchmark and current baseline
+    owner_role: Pilot Product Owner
+    priority: P0
+    status: BLOCKED
+    blocker: Pilot users, tasks, expected sources, and outcome owner are not selected.
+    depends_on: []
+    acceptance: Approved benchmark covers answer quality, citations, refusal, entitlement, freshness, task time, and current baseline.
+  - id: OKF-902
+    epic: E90
+    milestone: M5
+    title: Execute security, resilience, privacy, records, and AI-risk assurance
+    owner_role: Independent Assurance
+    priority: P0
+    status: BACKLOG
+    depends_on: [OKF-302, OKF-312, OKF-403, OKF-703, OKF-801, OKF-901]
+    acceptance: Required evidence is approved and every residual risk has a named acceptance authority.

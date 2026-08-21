@@ -1,0 +1,55 @@
+[project]
+name = "xyz-bank-okf"
+version = "0.1.0"
+description = "Portable validation and producer framework for XYZ Bank OKF bundles"
+readme = "README.md"
+requires-python = ">=3.13,<3.15"
+dependencies = [
+  "markdown-it-py>=4.0,<5",
+  "pydantic>=2.12,<3",
+  "pyyaml>=6.0,<7",
+  "rich>=14.0,<15",
+  "typer>=0.20,<1",
+]
+
+[project.scripts]
+xyz-okf = "xyz_okf.cli:app"
+
+[dependency-groups]
+dev = [
+  "mypy>=1.18,<2",
+  "pytest>=9.0,<10",
+  "pytest-cov>=7.0,<8",
+  "ruff>=0.15,<1",
+  "types-pyyaml>=6.0,<7",
+]
+
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/xyz_okf"]
+
+[tool.uv]
+required-version = ">=0.11.7,<0.13"
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["B", "C4", "E", "F", "I", "RUF", "SIM", "UP"]
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers --cov=xyz_okf --cov-report=term-missing"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["xyz_okf"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+packages = ["xyz_okf"]

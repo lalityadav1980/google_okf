@@ -1,0 +1,46 @@
+name: Risk or blocker
+description: Record a delivery, architecture, control, or operational risk.
+title: "[RISK] "
+labels: [risk]
+body:
+  - type: textarea
+    id: statement
+    attributes:
+      label: Risk statement
+      description: If cause occurs, then consequence may occur, resulting in impact.
+    validations:
+      required: true
+  - type: dropdown
+    id: likelihood
+    attributes:
+      label: Likelihood
+      options: [Low, Medium, High]
+    validations:
+      required: true
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Impact
+      options: [Low, Medium, High, Critical]
+    validations:
+      required: true
+  - type: input
+    id: owner
+    attributes:
+      label: Risk owner
+    validations:
+      required: true
+  - type: textarea
+    id: mitigation
+    attributes:
+      label: Mitigation, contingency, and evidence
+    validations:
+      required: true
+  - type: input
+    id: due
+    attributes:
+      label: Review or decision date
+      placeholder: YYYY-MM-DD
+    validations:
+      required: true
+
