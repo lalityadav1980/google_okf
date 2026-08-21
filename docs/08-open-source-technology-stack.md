@@ -79,7 +79,7 @@ Official project references:
 | Artifact integrity | Sigstore Cosign | Signs/verifies OCI artifacts or blobs; supports identity/KMS-based models | Pilot release milestone |
 | Release registry | Existing OCI-compatible registry; Harbor or Zot are open-source options | Avoids introducing a separate proprietary knowledge artifact store | Reuse existing bank platform first |
 | Release catalog | PostgreSQL | Durable metadata, transactions, mature operations, portable SQL | Production hardening |
-| Serving API | FastAPI | OpenAPI/JSON Schema generated from the same Pydantic contracts | After immutable release works |
+| Serving API | FastAPI `>=0.141,<0.142` | Implemented OpenAPI/JSON Schema boundary from the same Pydantic contracts; enterprise identity/PDP integration remains external | Consumer contract implemented; production wiring after IAM approval |
 | Hybrid retrieval | OpenSearch | One Apache-2.0 engine for lexical and vector/hybrid retrieval | Consumer pilot, if current YODA/RACK search is unsuitable |
 | Workflow orchestration | CI for pilot; Argo Workflows on Kubernetes at scale | Keeps pilot small; Argo supports container DAGs, retries, schedules, artifacts, and audit history | Add only after connector count/volume justifies it |
 | Telemetry | OpenTelemetry | Vendor-neutral traces, metrics, and logs | Instrument from first hosted service |

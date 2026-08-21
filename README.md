@@ -64,6 +64,10 @@ indexing services.
     Cosign, media types, trust options, registry controls, and unblock inputs.
 18. [Release admission policy](docs/13-release-admission-policy.md) — OPA input,
     denial catalog, environment policy, evidence, tests, and lifecycle use.
+19. [Authorization and serving](docs/14-authorization-and-serving.md) —
+    authorize-before-retrieval invariant, catalog lifecycle, OpenAPI, and tests.
+20. [ADR-0006](docs/adr/0006-authorization-before-retrieval.md) — retrieval
+    authorization, immutable routing, withdrawal, and public error decisions.
 
 ## Framework quick start
 
@@ -108,6 +112,9 @@ The first vertical slice includes:
 - a CLI validator with text and JSON output;
 - controlled type, metadata, verification, freshness, link, and relationship checks;
 - a portable connector contract for Confluence, SharePoint, YODA, and RACK;
+- a verified-release catalog with promotion, rollback, and withdrawal behavior;
+- a provider-neutral authorization port and deny-by-default reference evaluator;
+- an OpenID Connect-declared, release-aware FastAPI/OpenAPI serving contract;
 - a conformant synthetic pilot bundle; and
 - automated CI, tests, issue forms, and pull-request controls.
 

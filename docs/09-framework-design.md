@@ -43,8 +43,8 @@ Planned:
 - source checkpoint store;
 - Confluence and SharePoint adapters;
 - release manifest, canonical hashing, archive, OCI, and Cosign integration;
-- entitlement adapter;
-- serving API and hybrid index adapter;
+- production enterprise entitlement adapter;
+- production catalog and hybrid index adapter;
 - YODA and RACK adapters; and
 - OpenTelemetry instrumentation and operational dashboards.
 
@@ -261,9 +261,9 @@ catalog.
 The packager must not push an artifact when validation errors exist. Promotion
 uses the same digest across environments.
 
-## 9. Planned consumer contract
+## 9. Consumer contract
 
-A serving adapter will expose, at minimum:
+The reference serving adapter now exposes:
 
 - list authorized bundles/releases;
 - resolve release channel to immutable digest;
@@ -273,8 +273,18 @@ A serving adapter will expose, at minimum:
 - record release/profile/policy versions in trace events; and
 - support emergency withdrawal without deleting audit evidence.
 
-FastAPI is the proposed implementation, but the contract will be specified in
-OpenAPI so YODA, RACK, and other consumers are not tied to Python.
+FastAPI implements the HTTP boundary, while the committed OpenAPI contract keeps
+YODA, RACK, and other consumers independent of Python. The application cannot be
+constructed without an explicit principal resolver and HTTPS OpenID Connect
+discovery URL. The provider-neutral PDP port authorizes candidates before body,
+snippet, citation, or link-target retrieval.
+
+`ReleaseCatalog` verifies archives admitted under signature/archive/OPA
+evidence, keeps OCI and archive digests separate, promotes the same digest via a
+channel pointer, rolls back to a prior admitted digest, and denies withdrawn
+digests without deleting evidence. Its in-memory implementation and lexical
+search are reference adapters, not the production persistence or retrieval
+decision. See [authorization and serving](14-authorization-and-serving.md).
 
 ## 10. Testing strategy
 

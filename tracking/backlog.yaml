@@ -25,12 +25,12 @@ milestones:
       - Source versions, classifications, deletions, and entitlements are preserved.
   - id: M3
     name: Immutable release supply chain
-    status: BACKLOG
+    status: IN_PROGRESS
     exit_criteria:
       - A validated bundle is packaged, signed, verified, promoted, and rolled back by digest.
   - id: M4
     name: Authorized consumer pilot
-    status: BACKLOG
+    status: IN_PROGRESS
     exit_criteria:
       - One YODA or RACK consumer retrieves cited concepts from a named release.
       - Negative entitlement tests return no unauthorized content.
@@ -250,9 +250,15 @@ actions:
     title: Implement promotion, retention, withdrawal, and rollback
     owner_role: Platform Engineering
     priority: P0
-    status: BACKLOG
+    status: BLOCKED
+    blocker: Registry retention, protected-channel ownership, catalog persistence, withdrawal authority, and rollback/withdrawal SLO are not yet approved; local same-digest lifecycle contracts are complete.
     depends_on: [OKF-402]
     acceptance: Same digest is promoted; withdrawal and rollback meet agreed SLO with retained evidence.
+    partial_evidence:
+      - docs/14-authorization-and-serving.md
+      - docs/adr/0006-authorization-before-retrieval.md
+      - src/xyz_okf/serving.py
+      - tests/test_serving.py::test_catalog_promotes_same_digest_rolls_back_and_withdraws_immediately
   - id: OKF-501
     epic: E50
     milestone: M3
@@ -277,15 +283,30 @@ actions:
     blocker: Enterprise PDP/PEP and entitlement data contracts are not confirmed.
     depends_on: [OKF-501]
     acceptance: Current user/workload authorization is enforced before retrieval, links, snippets, embeddings, and graph expansion.
+    partial_evidence:
+      - docs/14-authorization-and-serving.md
+      - docs/adr/0006-authorization-before-retrieval.md
+      - src/xyz_okf/authorization.py
+      - tests/test_authorization.py
+      - tests/test_serving.py::test_unauthorized_search_never_reads_concept_bodies
+      - tests/test_serving.py::test_unauthorized_fetch_is_indistinguishable_from_missing_and_does_not_read_body
   - id: OKF-601
     epic: E60
     milestone: M4
     title: Define and implement release-aware serving API
     owner_role: Platform Engineering
     priority: P1
-    status: READY
+    status: IN_REVIEW
     depends_on: [OKF-402, OKF-502]
     acceptance: Versioned OpenAPI supports authorized bundle, release, concept, lifecycle, freshness, citation, and withdrawal operations.
+    evidence:
+      - docs/14-authorization-and-serving.md
+      - docs/adr/0006-authorization-before-retrieval.md
+      - schemas/serving-api-v1.openapi.json
+      - src/xyz_okf/api.py
+      - src/xyz_okf/serving.py
+      - tests/test_api.py
+      - tests/test_serving.py
   - id: OKF-602
     epic: E60
     milestone: M4

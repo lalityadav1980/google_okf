@@ -1,0 +1,707 @@
+{
+  "components": {
+    "schemas": {
+      "AuthorizationDecision": {
+        "additionalProperties": false,
+        "properties": {
+          "allowed": {
+            "title": "Allowed",
+            "type": "boolean"
+          },
+          "decision_id": {
+            "pattern": "^authz:[0-9a-f]{64}$",
+            "title": "Decision Id",
+            "type": "string"
+          },
+          "policy_version": {
+            "minLength": 1,
+            "title": "Policy Version",
+            "type": "string"
+          },
+          "reason_codes": {
+            "items": {
+              "$ref": "#/components/schemas/AuthorizationReason"
+            },
+            "title": "Reason Codes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "allowed",
+          "decision_id",
+          "policy_version",
+          "reason_codes"
+        ],
+        "title": "AuthorizationDecision",
+        "type": "object"
+      },
+      "AuthorizationReason": {
+        "enum": [
+          "ALLOW",
+          "ACL_NOT_FOUND",
+          "ACTION_NOT_ALLOWED",
+          "CLASSIFICATION_EXCEEDS_CLEARANCE",
+          "PRINCIPAL_NOT_ENTITLED",
+          "PRINCIPAL_TYPE_NOT_ALLOWED"
+        ],
+        "title": "AuthorizationReason",
+        "type": "string"
+      },
+      "AuthorizedLink": {
+        "additionalProperties": false,
+        "properties": {
+          "concept_path": {
+            "title": "Concept Path",
+            "type": "string"
+          },
+          "concept_uid": {
+            "title": "Concept Uid",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "concept_uid",
+          "concept_path",
+          "title"
+        ],
+        "title": "AuthorizedLink",
+        "type": "object"
+      },
+      "AuthorizedReleaseSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "archive_sha256": {
+            "title": "Archive Sha256",
+            "type": "string"
+          },
+          "authorized_concept_count": {
+            "minimum": 1.0,
+            "title": "Authorized Concept Count",
+            "type": "integer"
+          },
+          "bundle_id": {
+            "title": "Bundle Id",
+            "type": "string"
+          },
+          "channels": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Channels",
+            "type": "array"
+          },
+          "profile_id": {
+            "title": "Profile Id",
+            "type": "string"
+          },
+          "profile_version": {
+            "title": "Profile Version",
+            "type": "string"
+          },
+          "release_digest": {
+            "title": "Release Digest",
+            "type": "string"
+          },
+          "release_id": {
+            "title": "Release Id",
+            "type": "string"
+          },
+          "state": {
+            "$ref": "#/components/schemas/ReleaseState"
+          }
+        },
+        "required": [
+          "bundle_id",
+          "release_id",
+          "release_digest",
+          "archive_sha256",
+          "profile_id",
+          "profile_version",
+          "state",
+          "channels",
+          "authorized_concept_count"
+        ],
+        "title": "AuthorizedReleaseSummary",
+        "type": "object"
+      },
+      "ConceptEnvelope": {
+        "additionalProperties": false,
+        "properties": {
+          "authorization": {
+            "$ref": "#/components/schemas/AuthorizationDecision"
+          },
+          "body": {
+            "title": "Body",
+            "type": "string"
+          },
+          "bundle_id": {
+            "title": "Bundle Id",
+            "type": "string"
+          },
+          "canonical_sha256": {
+            "title": "Canonical Sha256",
+            "type": "string"
+          },
+          "citations": {
+            "items": {
+              "$ref": "#/components/schemas/SourceCitation"
+            },
+            "title": "Citations",
+            "type": "array"
+          },
+          "classification": {
+            "title": "Classification",
+            "type": "string"
+          },
+          "concept_path": {
+            "title": "Concept Path",
+            "type": "string"
+          },
+          "concept_type": {
+            "title": "Concept Type",
+            "type": "string"
+          },
+          "concept_uid": {
+            "title": "Concept Uid",
+            "type": "string"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "exact_sha256": {
+            "title": "Exact Sha256",
+            "type": "string"
+          },
+          "lifecycle_status": {
+            "title": "Lifecycle Status",
+            "type": "string"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/AuthorizedLink"
+            },
+            "title": "Links",
+            "type": "array"
+          },
+          "profile_id": {
+            "title": "Profile Id",
+            "type": "string"
+          },
+          "profile_version": {
+            "title": "Profile Version",
+            "type": "string"
+          },
+          "release_digest": {
+            "title": "Release Digest",
+            "type": "string"
+          },
+          "release_id": {
+            "title": "Release Id",
+            "type": "string"
+          },
+          "stale_after": {
+            "format": "date-time",
+            "title": "Stale After",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "bundle_id",
+          "release_id",
+          "release_digest",
+          "profile_id",
+          "profile_version",
+          "concept_uid",
+          "concept_path",
+          "concept_type",
+          "title",
+          "classification",
+          "lifecycle_status",
+          "stale_after",
+          "exact_sha256",
+          "canonical_sha256",
+          "body",
+          "citations",
+          "links",
+          "authorization"
+        ],
+        "title": "ConceptEnvelope",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "HealthResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "default": "ok",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "title": "HealthResponse",
+        "type": "object"
+      },
+      "ReleaseState": {
+        "enum": [
+          "candidate",
+          "active",
+          "withdrawn"
+        ],
+        "title": "ReleaseState",
+        "type": "string"
+      },
+      "SearchHit": {
+        "additionalProperties": false,
+        "properties": {
+          "authorization": {
+            "$ref": "#/components/schemas/AuthorizationDecision"
+          },
+          "citations": {
+            "items": {
+              "$ref": "#/components/schemas/SourceCitation"
+            },
+            "title": "Citations",
+            "type": "array"
+          },
+          "classification": {
+            "title": "Classification",
+            "type": "string"
+          },
+          "concept_path": {
+            "title": "Concept Path",
+            "type": "string"
+          },
+          "concept_type": {
+            "title": "Concept Type",
+            "type": "string"
+          },
+          "concept_uid": {
+            "title": "Concept Uid",
+            "type": "string"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "exact_sha256": {
+            "title": "Exact Sha256",
+            "type": "string"
+          },
+          "lifecycle_status": {
+            "title": "Lifecycle Status",
+            "type": "string"
+          },
+          "score": {
+            "minimum": 1.0,
+            "title": "Score",
+            "type": "integer"
+          },
+          "snippet": {
+            "title": "Snippet",
+            "type": "string"
+          },
+          "stale_after": {
+            "format": "date-time",
+            "title": "Stale After",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "concept_uid",
+          "concept_path",
+          "concept_type",
+          "title",
+          "classification",
+          "lifecycle_status",
+          "stale_after",
+          "exact_sha256",
+          "score",
+          "snippet",
+          "citations",
+          "authorization"
+        ],
+        "title": "SearchHit",
+        "type": "object"
+      },
+      "SearchRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "default": 10,
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Limit",
+            "type": "integer"
+          },
+          "query": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Query",
+            "type": "string"
+          },
+          "release": {
+            "description": "Immutable sha256 digest or protected channel",
+            "minLength": 1,
+            "title": "Release",
+            "type": "string"
+          }
+        },
+        "required": [
+          "release",
+          "query"
+        ],
+        "title": "SearchRequest",
+        "type": "object"
+      },
+      "SearchResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "bundle_id": {
+            "title": "Bundle Id",
+            "type": "string"
+          },
+          "hits": {
+            "items": {
+              "$ref": "#/components/schemas/SearchHit"
+            },
+            "title": "Hits",
+            "type": "array"
+          },
+          "profile_id": {
+            "title": "Profile Id",
+            "type": "string"
+          },
+          "profile_version": {
+            "title": "Profile Version",
+            "type": "string"
+          },
+          "query": {
+            "title": "Query",
+            "type": "string"
+          },
+          "release_digest": {
+            "title": "Release Digest",
+            "type": "string"
+          },
+          "release_id": {
+            "title": "Release Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "bundle_id",
+          "release_id",
+          "release_digest",
+          "profile_id",
+          "profile_version",
+          "query",
+          "hits"
+        ],
+        "title": "SearchResponse",
+        "type": "object"
+      },
+      "SourceCitation": {
+        "additionalProperties": false,
+        "properties": {
+          "last_modified": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Modified"
+          },
+          "resource": {
+            "minLength": 1,
+            "title": "Resource",
+            "type": "string"
+          },
+          "source_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Id"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          }
+        },
+        "required": [
+          "resource"
+        ],
+        "title": "SourceCitation",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "EnterpriseOIDC": {
+        "description": "Enterprise-issued human or workload bearer token",
+        "openIdConnectUrl": "https://identity.example.invalid/.well-known/openid-configuration",
+        "type": "openIdConnect"
+      }
+    }
+  },
+  "info": {
+    "description": "Release-pinned, deny-by-default retrieval contract. The application must be constructed with an approved authenticated-principal resolver.",
+    "title": "XYZ Bank OKF Serving API",
+    "version": "1.0.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "health",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health",
+        "tags": [
+          "operations"
+        ]
+      }
+    },
+    "/v1/releases": {
+      "get": {
+        "operationId": "listAuthorizedReleases",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AuthorizedReleaseSummary"
+                  },
+                  "title": "Response Listauthorizedreleases",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "EnterpriseOIDC": []
+          }
+        ],
+        "summary": "List Releases",
+        "tags": [
+          "retrieval"
+        ]
+      }
+    },
+    "/v1/releases/{digest_or_channel}/concepts/{concept_uid}": {
+      "get": {
+        "operationId": "getAuthorizedConcept",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "digest_or_channel",
+            "required": true,
+            "schema": {
+              "title": "Digest Or Channel",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "concept_uid",
+            "required": true,
+            "schema": {
+              "title": "Concept Uid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConceptEnvelope"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "description": "Not found or not authorized"
+          },
+          "410": {
+            "description": "Release withdrawn"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "EnterpriseOIDC": []
+          }
+        ],
+        "summary": "Get Concept",
+        "tags": [
+          "retrieval"
+        ]
+      }
+    },
+    "/v1/search": {
+      "post": {
+        "operationId": "searchAuthorizedConcepts",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "EnterpriseOIDC": []
+          }
+        ],
+        "summary": "Search",
+        "tags": [
+          "retrieval"
+        ]
+      }
+    }
+  }
+}

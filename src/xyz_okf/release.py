@@ -5,9 +5,11 @@ import io
 import json
 import re
 import tarfile
+from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path, PurePosixPath
+from types import MappingProxyType
 from typing import Literal, cast
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, model_validator
@@ -113,6 +115,7 @@ class VerifiedRelease:
     manifest: ReleaseManifest
     manifest_sha256: str
     archive_sha256: str
+    files: Mapping[str, bytes]
 
 
 def _safe_archive_path(value: str) -> PurePosixPath:
@@ -368,4 +371,5 @@ def verify_release(
         manifest=manifest,
         manifest_sha256=sha256_bytes(manifest_content),
         archive_sha256=sha256_bytes(archive_bytes),
+        files=MappingProxyType(extracted),
     )

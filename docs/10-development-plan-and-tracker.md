@@ -136,26 +136,27 @@ Scope:
 
 ## 4. Immediate action queue
 
-These are the next actions in execution order. IDs match the backlog file.
+The locally achievable reference contracts through authorized serving are now
+implemented. These are the next actions in execution order; IDs match the
+backlog file.
 
-1. **OKF-003:** enable the repository CI workflow and confirm the first protected
-   branch check succeeds.
+1. **OKF-003:** confirm the remote CI workflow and protected-branch required
+   checks after each published reference stage.
 2. **OKF-004:** assign Legal/Open Source Office ownership and choose the
    repository license; Apache-2.0 is the technical recommendation.
-3. **OKF-105:** add official OKF v0.2 conformance and regression fixtures.
-4. **OKF-201 (in review):** deterministic `SourceRecord` rendering, fail-closed
-   entitlement mapping, CLI, and byte-level golden evidence are implemented.
-5. **OKF-202:** define canonical source/output hashing and stable concept-path
-   allocation. **Implementation is in review.**
-6. **OKF-203:** checkpoint, deletion, bounded retry, idempotent publication, and
-   dry-run contracts are implemented and in review.
-7. **OKF-301 and OKF-311:** run Confluence and SharePoint API/ACL discovery in
-   parallel with source owners.
-8. **OKF-401:** specify and implement the release manifest and canonical archive.
-9. **OKF-501:** create OPA policies for profile, classification, verification,
-   and release admission.
-10. **OKF-701 and OKF-702:** complete YODA and RACK capability maps and select
-    the pilot consumer.
+3. **OKF-104/105, OKF-201/202/203, OKF-401/501/601 (in review):** obtain
+   knowledge architecture, platform, security, and IAM review of the committed
+   conformance, producer, release, admission, authorization, and OpenAPI evidence.
+4. **OKF-301 and OKF-311:** run Confluence and SharePoint API/ACL discovery with
+   source owners using the producer contract and discovery evidence checklist.
+5. **OKF-402/403:** supply the approved OCI registry, signing identity/trust,
+   protected channel, retention, withdrawal, and recovery decisions.
+6. **OKF-502:** bind the provider-neutral authorization port to the enterprise
+   principal resolver and PDP, then certify revocation and fail-closed behavior.
+7. **OKF-701 and OKF-702:** complete YODA and RACK capability maps and select
+   the pilot consumer without assuming either product's current responsibilities.
+8. **OKF-801/901:** wire the approved telemetry backend and select the pilot
+   users, tasks, expected concepts, ownership, and baseline.
 
 ## 5. Blocked actions requiring XYZ Bank input
 
@@ -164,6 +165,7 @@ These are the next actions in execution order. IDs match the backlog file.
 | OKF-004 | Repository has no approved license | Owner and approved license |
 | OKF-301/302 | Confluence scope and API identity unknown | Pilot spaces, API access, versions, ACL/change-feed evidence |
 | OKF-311/312 | SharePoint scope and API identity unknown | Pilot sites/libraries, Graph/API access, records and ACL evidence |
+| OKF-402/403 | Registry, signing trust, and lifecycle controls unspecified | OCI repository, publisher/verifier identity, KMS/issuer, retention, channel and withdrawal owners/SLO |
 | OKF-502 | Enterprise authorization service unspecified | PDP/PEP design, identity attributes, group/relationship data and SLO |
 | OKF-701 | YODA capabilities not defined | Product owner, interfaces, data flow, control and roadmap map |
 | OKF-702 | RACK capabilities not defined | Product owner, interfaces, data flow, control and roadmap map |
